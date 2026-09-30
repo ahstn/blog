@@ -1,0 +1,37 @@
+.github/workflows/update-ades.yml
+  s_1e8b4df78a517a::t_b0e2fddada64b0 1,28-31
+astro.config.mjs
+  s_1e8b4df78a517a::t_67ef3c3956f445 9-14,50-52
+package.json
+  s_1e8b4df78a517a::t_4b12ba8ab08b43 15
+scripts/update-ades.mjs
+  s_1e8b4df78a517a::t_5ec06435994e25 3,5-11,35-39,46-64,76-91
+src/components/AdeControls.astro
+  s_1e8b4df78a517a::t_e46b30819e6c31 12,19,38,79-90,287-296,298,319-322,446-454,458-460,475-476,478-479,683,744-773
+src/components/AdeTable.astro
+  s_1e8b4df78a517a::t_e22778e96eb35e 10-11,14,29,55-56,82-85,100,102,120-124,178-198,217,434-445,447-458
+src/content.config.ts
+  s_1e8b4df78a517a::t_4f07c38562a407 11,39,42-47,51,54-60
+src/data/agentic-dev-envs.yml
+  s_1e8b4df78a517a::t_767ee982493df2 5,7-10,23,26-27,30,32-34,49-53,58-60,71,74-75,80-82,96,99-100,105-107,122-126,129,131-133,148-151,167-168,170-171,174,176-178,192-196,199,201-203,220-221,224,226-228,242-246,249,251-253,264-268,273-275,291-292,297-299,311-314,319-321,336-340,343,345-347,361,364-365,368,370-372,383,386-387,392-394,405-409,414-416,442,445-446,451-453,464,467-468,473-475,491-494,497,499-501,516-519,522,524-526,540-543,546,548-550
+src/pages/agentic-dev-envs.astro
+  s_1e8b4df78a517a::t_0322b61d8f067a 14,18-19,41,57-65,84,143
+src/utils/ades.ts
+  s_1e8b4df78a517a::t_86e7831963a11a 25-59,73-74,107-110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "899dd46217b50d815e832cc85e31f77b1b888259",
+  "prompts": {},
+  "sessions": {
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
