@@ -11,3 +11,4 @@ data.db
 .dev.vars
 .dev.vars.*
 .wrangler
+.emdash
