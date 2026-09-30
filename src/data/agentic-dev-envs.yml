@@ -1,0 +1,440 @@
+# Agentic Development Environments, rendered at /agentic-dev-envs.
+#
+# Schema: src/content.config.ts (validated at build time).
+# category: "ui" or "terminal". GUI apps that also embed terminals are "ui".
+# features: see FEATURES in src/utils/ades.ts.
+# agents: at most ~8 named; the rest counted in agents_more.
+# stars / stars_updated_at: written by `pnpm ades:update`, don't edit by hand.
+
+- id: t3-code
+  name: T3 Code
+  category: ui
+  website: https://t3.codes/
+  repo: pingdotgg/t3code
+  links:
+    discord: https://discord.gg/jn4EGJjrvv
+  platforms: [macos, windows, linux, web, ios, android]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [Claude Code, Codex, OpenCode, Cursor CLI, Grok Build, Antigravity]
+  agents_more: 0
+  features: [multi-agent, worktrees, remote-control, browser, diff-review, terminal, mobile-app]
+  first_seen: 2026-03
+  stars: 23985
+  stars_updated_at: 2026-09-30
+
+- id: emdash
+  name: Emdash
+  category: ui
+  website: https://emdash.com/
+  repo: generalaction/emdash
+  links:
+    discord: https://discord.gg/f2fv7YxuR2
+    x: https://x.com/emdashsh
+    docs: https://emdash.com/docs
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [TypeScript, Electron, React]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Amp, Copilot CLI, Droid]
+  agents_more: 29
+  features: [multi-agent, worktrees, automations, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2025-09
+  stars: 5889
+  stars_updated_at: 2026-09-30
+
+- id: pi-gui
+  name: pi-gui
+  category: ui
+  website: https://www.pi-gui.com/
+  repo: minghinmatthewlam/pi-gui
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [Pi]
+  agents_more: 0
+  features: [multi-agent, worktrees, automations, plugins, diff-review, terminal]
+  first_seen: 2026-04
+  stars: 1059
+  stars_updated_at: 2026-09-30
+
+- id: helmor
+  name: Helmor
+  category: ui
+  website: https://helmor.ai/
+  repo: dohooo/helmor
+  links:
+    discord: https://discord.gg/ukyyuNfnDp
+    docs: https://docs.helmor.ai/
+  platforms: [macos, windows]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [TypeScript, Rust, Tauri, React]
+  agents: [Claude Code, Codex, Cursor CLI, OpenCode, Kimi CLI]
+  agents_more: 0
+  features: [multi-agent, worktrees, remote-control, diff-review, terminal]
+  first_seen: 2026-04
+  stars: 1308
+  stars_updated_at: 2026-09-30
+
+- id: orca
+  name: Orca
+  category: ui
+  website: https://www.onorca.dev/
+  repo: stablyai/orca
+  links:
+    discord: https://discord.gg/fzjDKHxv8Q
+    x: https://x.com/orca_build
+    docs: https://www.onorca.dev/docs
+  platforms: [macos, windows, linux, ios, android]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp]
+  agents_more: 19
+  features: [multi-agent, worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-03
+  stars: 82232
+  stars_updated_at: 2026-09-30
+
+- id: superconductor
+  name: Superconductor
+  note: Now branded super.engineering.
+  category: ui
+  website: https://super.engineering/
+  links:
+    discord: https://discord.gg/3uRuntNU2K
+    x: https://x.com/superdoteng
+    docs: https://super.engineering/docs
+  platforms: [macos]
+  price: free
+  open_source: false
+  tech: [Rust, Metal]
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Droid]
+  agents_more: 7
+  features: [multi-agent, worktrees, browser, diff-review, terminal]
+  first_seen: 2026-04
+
+- id: synara
+  name: Synara
+  category: ui
+  website: https://www.trysynara.com/
+  repo: Emanuele-web04/synara
+  links:
+    x: https://x.com/trySynara
+    docs: https://www.trysynara.com/docs
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Droid, Grok Build, Antigravity]
+  agents_more: 1
+  features: [multi-agent, worktrees, kanban, remote-control, automations, browser, diff-review, terminal]
+  first_seen: 2026-04
+  stars: 1919
+  stars_updated_at: 2026-09-30
+
+- id: paseo
+  name: Paseo
+  category: ui
+  website: https://paseo.sh/
+  repo: getpaseo/paseo
+  links:
+    discord: https://discord.gg/jz8T2uahpH
+    docs: https://paseo.sh/docs
+  platforms: [macos, windows, linux, web, ios, android]
+  price: freemium
+  open_source: true
+  license: Apache-2.0
+  tech: [TypeScript, Electron, React Native, Expo]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Copilot CLI, Gemini CLI, Amp]
+  agents_more: 33
+  features: [multi-agent, worktrees, remote-control, mobile-app, automations, plugins, diff-review, terminal]
+  first_seen: 2026-02
+  stars: 19098
+  stars_updated_at: 2026-09-30
+
+- id: zeron
+  name: Zeron
+  note: Formerly Comet.
+  category: ui
+  website: https://zeron.sh/
+  repo: zeronsh/zeron
+  links:
+    discord: https://discord.gg/rnynTdgZ24
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [Rust, GPUI]
+  agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi]
+  agents_more: 4
+  features: [multi-agent, remote-control, browser, diff-review, terminal]
+  first_seen: 2026-07
+  stars: 2504
+  stars_updated_at: 2026-09-30
+
+- id: bb
+  name: bb
+  category: ui
+  website: https://getbb.app/
+  repo: get-bb/bb
+  links:
+    discord: https://discord.gg/kvBU6tJhcJ
+    x: https://x.com/get_bb_app
+  platforms: [macos, linux, web]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [Claude Code, Codex, Cursor CLI, Pi, OpenCode]
+  agents_more: 8
+  features: [multi-agent, worktrees, plugins, automations, remote-control, browser, diff-review, cloud-sandboxes]
+  first_seen: 2026-05
+  stars: 4023
+  stars_updated_at: 2026-09-30
+
+- id: gooey-pi
+  name: GooeyPi
+  category: ui
+  website: https://github.com/am-will/gooey-pi
+  repo: am-will/gooey-pi
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [Pi]
+  agents_more: 2
+  features: [multi-agent, worktrees, automations, browser, diff-review, terminal]
+  first_seen: 2026-08
+  stars: 941
+  stars_updated_at: 2026-09-30
+
+- id: diri
+  name: Diri
+  category: ui
+  website: https://diri.sh/
+  repo: cristicretu/diri
+  links:
+    docs: https://diri.sh/guides/
+  platforms: [macos, linux, ios]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [Rust, GPUI]
+  agents: [Claude Code, Codex, Cursor CLI, Gemini CLI, OpenCode, Pi, Copilot CLI, Amp]
+  agents_more: 14
+  features: [multi-agent, worktrees, remote-control, diff-review, terminal, mobile-app]
+  first_seen: 2026-08
+  stars: 338
+  stars_updated_at: 2026-09-30
+
+- id: waku
+  name: Waku
+  category: ui
+  website: https://waku.sh/
+  repo: egoist/waku
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: GPL-3.0-only
+  tech: [Rust, GPUI]
+  agents: [Claude Code, Codex, OpenCode, Pi, Amp, Cursor CLI, Kimi CLI]
+  agents_more: 2
+  features: [multi-agent, diff-review, terminal, browser]
+  first_seen: 2026-08
+  stars: 1549
+  stars_updated_at: 2026-09-30
+
+- id: agent-orchestrator
+  name: Agent Orchestrator
+  category: ui
+  website: https://orchestrator.inc/
+  repo: Untrivial-ai/agent-orchestrator
+  links:
+    discord: https://discord.com/invite/UZv7JjxbwG
+    x: https://x.com/ao_build
+    docs: https://docs.orchestrator.inc/
+  platforms: [macos, windows, linux, ios, android]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [Go, TypeScript, Electron, React]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Gemini CLI, Amp, Copilot CLI]
+  agents_more: 24
+  features: [multi-agent, worktrees, kanban, remote-control, mobile-app, browser, diff-review, terminal, plugins]
+  first_seen: 2026-02
+  stars: 12570
+  stars_updated_at: 2026-09-30
+
+- id: openchamber
+  name: OpenChamber
+  category: ui
+  website: https://openchamber.dev/
+  repo: openchamber/openchamber
+  links:
+    discord: https://discord.gg/ZYRSdnwwKA
+    docs: https://docs.openchamber.dev/
+  platforms: [macos, windows, linux, web, ios, android]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron, React]
+  agents: [OpenCode]
+  agents_more: 0
+  features: [multi-agent, worktrees, remote-control, automations, browser, diff-review, terminal, mobile-app]
+  first_seen: 2025-12
+  stars: 10969
+  stars_updated_at: 2026-09-30
+
+- id: opensession
+  name: Open Session
+  category: ui
+  website: https://www.opensession.com/
+  repo: tellahq/opensession
+  platforms: [macos, linux, web, ios]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Bun, React, Electron, Swift]
+  agents: [Pi, Claude Code, Codex]
+  agents_more: 0
+  features: [multi-agent, worktrees, kanban, remote-control, automations, browser, diff-review, mobile-app, cloud-sandboxes]
+  first_seen: 2026-07
+  stars: 388
+  stars_updated_at: 2026-09-30
+
+- id: monocode
+  name: MonoCode
+  category: ui
+  website: https://usemono.dev/
+  repo: hardbeat920/monocode
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Rust, Tauri, React]
+  agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi]
+  agents_more: 5
+  features: [multi-agent, worktrees, remote-control]
+  first_seen: 2026-08
+  stars: 1763
+  stars_updated_at: 2026-09-30
+
+- id: fractal
+  name: Fractal
+  category: ui
+  website: https://tryfractal.co/
+  links:
+    x: https://x.com/TryFractalCo
+  price: waitlist
+  open_source: false
+  features: [multi-agent, kanban, automations, plugins]
+  first_seen: 2026-05
+
+- id: zuse
+  name: Zuse
+  category: ui
+  website: https://www.zuse.sh/
+  repo: swarajbachu/zuse
+  links:
+    discord: https://discord.gg/cvGpmMGd5
+    x: https://x.com/zuse_sh
+    docs: https://docs.zuse.sh
+  platforms: [macos, linux]
+  price: free
+  open_source: true
+  license: AGPL-3.0
+  tech: [TypeScript, Electron, Effect]
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI]
+  agents_more: 2
+  features: [multi-agent, worktrees, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-05
+  stars: 218
+  stars_updated_at: 2026-09-30
+
+- id: dray
+  name: Dray
+  category: ui
+  website: https://www.drayhq.com/
+  repo: monorepo-labs/dray
+  platforms: [macos]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [TypeScript, Rust, Tauri, React]
+  agents: [Claude Code, Codex, Pi]
+  agents_more: 2
+  features: [multi-agent, worktrees, browser, diff-review, terminal]
+  first_seen: 2026-08
+  stars: 103
+  stars_updated_at: 2026-09-30
+
+- id: herdr
+  name: herdr
+  category: terminal
+  website: https://herdr.dev/
+  repo: herdrdev/herdr
+  links:
+    discord: https://discord.gg/PsgRfzmUDg
+    x: https://x.com/herdrdev
+    docs: https://herdr.dev/docs/
+  platforms: [macos, linux, windows]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [Rust, Ratatui]
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Amp, Copilot CLI]
+  agents_more: 7
+  features: [multi-agent, plugins, terminal]
+  first_seen: 2026-03
+  stars: 41632
+  stars_updated_at: 2026-09-30
+
+- id: luvus
+  name: Luvus
+  category: terminal
+  website: https://luvus.dev/
+  repo: RizRiyz/luvus
+  links:
+    x: https://x.com/luvusdev
+    docs: https://luvus.dev/docs/
+  platforms: [macos, linux, windows, web]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [Rust, Ratatui]
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp]
+  agents_more: 15
+  features: [multi-agent, worktrees, remote-control, automations, plugins, diff-review, terminal]
+  first_seen: 2026-06
+  stars: 941
+  stars_updated_at: 2026-09-30
+
+- id: tty7
+  name: tty7
+  category: terminal
+  website: https://tty7.io/
+  repo: l0ng-ai/tty7
+  links:
+    discord: https://discord.gg/s3dethqz2V
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [Rust, GPUI]
+  agents: [Claude Code, Codex, OpenCode, Gemini CLI, Cursor CLI, Aider, Amp, Copilot CLI]
+  agents_more: 18
+  features: [multi-agent, diff-review, terminal]
+  first_seen: 2026-07
+  stars: 1181
+  stars_updated_at: 2026-09-30

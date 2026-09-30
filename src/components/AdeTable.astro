@@ -1,0 +1,313 @@
+---
+import type { Ade } from "../content.config";
+import {
+	type ColumnKey,
+	featureLabel,
+	type FilterRecord,
+	isColumnHiddenByDefault,
+	PLATFORM_LABELS,
+	sourceLabel,
+} from "../utils/ades";
+
+interface Props {
+	id: string;
+	caption: string;
+	entries: { id: string; data: Ade }[];
+}
+
+const { id, caption, entries } = Astro.props;
+
+const formatStars = (n: number) =>
+	n < 1000 ? String(n) : `${(n / 1000).toFixed(n < 10_000 ? 1 : 0).replace(/\.0$/, "")}k`;
+
+const formatMonth = (ym: string) =>
+	new Date(`${ym}-01T00:00:00Z`).toLocaleDateString("en-GB", {
+		month: "short",
+		year: "numeric",
+		timeZone: "UTC",
+	});
+
+const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, "");
+
+const filterRecord = (ade: Ade): FilterRecord => ({
+	name: ade.name,
+	platforms: ade.platforms,
+	tech: ade.tech,
+	agents: ade.agents,
+	features: ade.features,
+	"first-seen": ade.first_seen ?? null,
+	price: ade.price ?? null,
+	stars: ade.stars ?? null,
+	source: sourceLabel(ade),
+});
+
+// Spread onto every header/body cell so the Columns menu can toggle them.
+// Default-hidden columns are hidden server-side to avoid a flash on load.
+const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefault(key) });
+---
+
+<div class="ade-table-wrap">
+	<table class="ade-table" id={id} data-ade-table>
+		<caption class="visually-hidden">{caption}</caption>
+		<thead>
+			<tr>
+				<th scope="col" class="w-name" aria-sort="none" {...col("name")}>
+					<button type="button" data-sort="name">Name</button>
+				</th>
+				<th scope="col" class="w-platforms" {...col("platforms")}>Works on</th>
+				<th scope="col" class="w-tech" {...col("tech")}>Tech</th>
+				<th scope="col" class="w-list" {...col("agents")}>Agents</th>
+				<th scope="col" class="w-list" {...col("features")}>Features</th>
+				<th scope="col" aria-sort="none" {...col("first-seen")}>
+					<button type="button" data-sort="first-seen">First seen</button>
+				</th>
+				<th scope="col" {...col("price")}>Price</th>
+				<th scope="col" class="num" aria-sort="descending" {...col("stars")}>
+					<button type="button" data-sort="stars">Stars</button>
+				</th>
+				<th scope="col" {...col("source")}>Source</th>
+			</tr>
+		</thead>
+		<tbody>
+			{
+				entries.map(({ data: ade }) => (
+					<tr
+						data-name={ade.name.toLowerCase()}
+						data-stars={ade.stars ?? -1}
+						data-first-seen={ade.first_seen ?? ""}
+						data-filter={JSON.stringify(filterRecord(ade))}
+					>
+						<th scope="row" class="ade-name" {...col("name")}>
+							<a href={ade.website}>{ade.name}</a>
+							{ade.note && <span class="ade-note">{ade.note}</span>}
+							<span class="ade-links">
+								{ade.repo && <a href={`https://github.com/${ade.repo}`}>GitHub</a>}
+								{ade.links.docs && <a href={ade.links.docs}>Docs</a>}
+								{ade.links.discord && <a href={ade.links.discord}>Discord</a>}
+								{ade.links.x && <a href={ade.links.x}>X</a>}
+								{!ade.repo && !ade.links.docs && <span>{hostname(ade.website)}</span>}
+							</span>
+						</th>
+						<td class="ade-platforms" {...col("platforms")}>
+							{ade.platforms.length ? ade.platforms.map((p) => PLATFORM_LABELS[p]).join(", ") : "—"}
+						</td>
+						<td {...col("tech")}>
+							<ul class="chips">
+								{ade.tech.map((t) => <li class="chip chip-mono">{t}</li>)}
+							</ul>
+						</td>
+						<td class="ade-agents" {...col("agents")}>
+							{ade.agents.length ? ade.agents.join(", ") : "—"}
+							{ade.agents_more > 0 && <span class="muted"> +{ade.agents_more} more</span>}
+						</td>
+						<td class="ade-features" {...col("features")}>
+							{ade.features.length ? ade.features.map(featureLabel).join(", ") : "—"}
+						</td>
+						<td class="nowrap" {...col("first-seen")}>
+							{ade.first_seen ? formatMonth(ade.first_seen) : "—"}
+						</td>
+						<td class="capitalize" {...col("price")}>{ade.price ?? "—"}</td>
+						<td class="num" {...col("stars")}>
+							{ade.repo && ade.stars !== undefined ? (
+								<a
+									href={`https://github.com/${ade.repo}/stargazers`}
+									title={`${ade.stars.toLocaleString("en-GB")} stars as of ${ade.stars_updated_at}`}
+								>
+									{formatStars(ade.stars)}
+								</a>
+							) : (
+								"—"
+							)}
+						</td>
+						<td class="nowrap" {...col("source")}>{sourceLabel(ade)}</td>
+					</tr>
+				))
+			}
+			<tr class="ade-empty" data-empty-row hidden>
+				<td colspan="9">No entries match the current filters.</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<style>
+	/* Widths live on header cells (not <col>) so hiding a column can't shift
+	   widths onto its neighbours. */
+	.w-name {
+		width: 10rem;
+	}
+
+	.w-platforms {
+		width: 6.5rem;
+	}
+
+	.w-tech {
+		width: 8rem;
+	}
+
+	.w-list {
+		width: 12.5rem;
+	}
+
+	.ade-table-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.ade-table {
+		width: 100%;
+		min-width: 56rem;
+		border-collapse: collapse;
+		font-size: var(--font-size-sm);
+		line-height: var(--leading-snug);
+	}
+
+	.ade-table th,
+	.ade-table td {
+		padding: var(--spacing-3) var(--spacing-4);
+		text-align: left;
+		vertical-align: top;
+		border-bottom: 1px solid var(--color-border-subtle);
+	}
+
+	.ade-table tbody tr:last-child > * {
+		border-bottom: none;
+	}
+
+	.ade-table thead th {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		text-transform: uppercase;
+		letter-spacing: var(--tracking-wide);
+		color: var(--color-muted);
+		white-space: nowrap;
+		background: var(--color-bg-subtle);
+	}
+
+	.ade-table thead button {
+		all: unset;
+		cursor: pointer;
+	}
+
+	.ade-table thead button:focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 2px;
+	}
+
+	.ade-table th[aria-sort="ascending"] button::after {
+		content: " ↑";
+	}
+
+	.ade-table th[aria-sort="descending"] button::after {
+		content: " ↓";
+	}
+
+	.ade-table [hidden] {
+		display: none;
+	}
+
+	.ade-empty td {
+		padding: var(--spacing-8) var(--spacing-4);
+		text-align: center;
+		color: var(--color-muted);
+	}
+
+	.ade-name {
+		font-weight: var(--font-weight-heading);
+	}
+
+	.ade-name > a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.ade-name > a:hover {
+		color: var(--color-brand);
+	}
+
+	.ade-note {
+		display: block;
+		font-size: var(--font-size-xs);
+		font-weight: 400;
+		color: var(--color-text-secondary);
+	}
+
+	.ade-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 var(--spacing-2);
+		margin-top: var(--spacing-1);
+		font-size: var(--font-size-xs);
+		font-weight: 400;
+		color: var(--color-muted);
+	}
+
+	.ade-links a {
+		color: var(--color-muted);
+	}
+
+	.ade-links a:hover {
+		color: var(--color-brand);
+	}
+
+	.ade-agents {
+		color: var(--color-text-secondary);
+	}
+
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-1);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.chip {
+		padding: var(--tag-padding-y) var(--spacing-2);
+		font-size: var(--font-size-xs);
+		white-space: nowrap;
+		color: var(--color-text-secondary);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.ade-features {
+		color: var(--color-text-secondary);
+	}
+
+	.chip-mono {
+		font-family: var(--font-mono);
+	}
+
+	.num {
+		text-align: right !important;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.num a {
+		color: var(--color-text);
+	}
+
+	.nowrap {
+		white-space: nowrap;
+	}
+
+	.capitalize {
+		text-transform: capitalize;
+	}
+
+	.muted {
+		color: var(--color-muted);
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+</style>

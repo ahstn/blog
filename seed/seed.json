@@ -145,6 +145,11 @@
 					"type": "custom",
 					"label": "Posts",
 					"url": "/posts"
+				},
+				{
+					"type": "custom",
+					"label": "ADEs",
+					"url": "/agentic-dev-envs"
 				}
 			]
 		}

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "emdash-dev",
+      "runtimeExecutable": "corepack",
+      "runtimeArgs": ["pnpm", "astro", "dev"],
+      "port": 4321
+    }
+  ]
+}

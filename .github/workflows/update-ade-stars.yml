@@ -1,0 +1,33 @@
+name: Update ADE star counts
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm ades:update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/update-ade-stars
+          commit-message: "chore: update agentic dev env star counts"
+          title: "chore: update agentic dev env star counts"
+          body: Automated weekly refresh via `scripts/update-ade-stars.mjs`.
+          add-paths: src/data/agentic-dev-envs.yml
+          delete-branch: true
