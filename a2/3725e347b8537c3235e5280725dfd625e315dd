@@ -1,0 +1,16 @@
+astro.config.mjs
+  h_2f452a9c375069 17,27-28,35-38
+wrangler.jsonc
+  h_2f452a9c375069 7-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a23725e347b8537c3235e5280725dfd625e315dd",
+  "prompts": {},
+  "humans": {
+    "h_2f452a9c375069": {
+      "author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
