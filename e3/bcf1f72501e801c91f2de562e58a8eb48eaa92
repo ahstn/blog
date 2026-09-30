@@ -1,0 +1,19 @@
+src/components/AdeTable.astro
+  s_1e8b4df78a517a::t_aaa7fb9d113f36 79,82-83,86,89,232-234,244-260,504-505,507
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e3bcf1f72501e801c91f2de562e58a8eb48eaa92",
+  "prompts": {},
+  "sessions": {
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
