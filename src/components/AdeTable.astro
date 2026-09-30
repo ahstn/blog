@@ -1,0 +1,721 @@
+---
+import ChevronLeft from "@lucide/astro/icons/chevron-left";
+import ChevronRight from "@lucide/astro/icons/chevron-right";
+import type { Ade } from "../content.config";
+import { previewUrl } from "../utils/ade-previews";
+import { agentIcon, sortAgents } from "../utils/agent-icons";
+import { FEATURE_ICONS, sortFeatures } from "../utils/feature-icons";
+import {
+	type ColumnKey,
+	DEFAULT_PAGE_SIZE,
+	featureLabel,
+	type FilterRecord,
+	isColumnHiddenByDefault,
+	isMaintained,
+	MAINTAINED_MONTHS,
+	PAGE_SIZES,
+	PLATFORM_LABELS,
+	sourceDetail,
+	sourceKind,
+	TECH,
+} from "../utils/ades";
+
+interface Props {
+	id: string;
+	caption: string;
+	entries: { id: string; data: Ade }[];
+}
+
+const { id, caption, entries } = Astro.props;
+
+const formatStars = (n: number) =>
+	n < 1000 ? String(n) : `${(n / 1000).toFixed(n < 10_000 ? 1 : 0).replace(/\.0$/, "")}k`;
+
+const formatMonth = (ym: string) =>
+	new Date(`${ym}-01T00:00:00Z`).toLocaleDateString("en-US", {
+		month: "short",
+		year: "numeric",
+		timeZone: "UTC",
+	});
+
+const MAX_AGENT_ICONS = 6;
+
+const agentList = (ade: Ade) => {
+	const agents = sortAgents(ade.agents);
+	const shown = agents.slice(0, MAX_AGENT_ICONS);
+	const overflow = agents.slice(MAX_AGENT_ICONS);
+	const more = overflow.length + ade.agents_more;
+	const moreTitle = [...overflow, ...(ade.agents_more ? [`${ade.agents_more} others`] : [])].join(", ");
+	return { shown, more, moreTitle };
+};
+
+const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, "");
+
+const filterRecord = (ade: Ade): FilterRecord => ({
+	name: ade.name,
+	platforms: ade.platforms,
+	tech: ade.tech,
+	agents: ade.agents,
+	features: ade.features,
+	"first-seen": ade.first_seen ?? null,
+	release: ade.latest_release?.date.slice(0, 7) ?? null,
+	maintained: isMaintained(ade.latest_release?.date),
+	stars: ade.stars ?? null,
+	source: sourceKind(ade),
+});
+
+// Spread onto every header/body cell so the Columns menu can toggle them.
+// Default-hidden columns are hidden server-side to avoid a flash on load.
+const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefault(key) });
+
+// First page as the client will render it (maintained only, default page
+// size), so rows don't flash in and out on load.
+const matches = entries.map(({ data }) => isMaintained(data.latest_release?.date) !== false);
+const matchCount = matches.filter(Boolean).length;
+const firstPage = new Set(
+	entries.filter((_, i) => matches[i]).slice(0, DEFAULT_PAGE_SIZE).map((e) => e.id),
+);
+const pageCount = Math.max(1, Math.ceil(matchCount / DEFAULT_PAGE_SIZE));
+---
+
+<div class="ade-table-wrap">
+	<table class="ade-table" id={id} data-ade-table>
+		<caption class="visually-hidden">{caption}</caption>
+		<thead>
+			<tr>
+				<th scope="col" class="w-name" aria-sort="none" {...col("name")}>
+					<button type="button" data-sort="name">Name</button>
+				</th>
+				<th scope="col" class="w-platforms" {...col("platforms")}>Works on</th>
+				<th scope="col" class="w-tech" {...col("tech")}>Tech</th>
+				<th scope="col" class="w-icons" {...col("agents")}>Agents</th>
+				<th scope="col" class="w-icons" {...col("features")}>Features</th>
+				<th scope="col" class="w-first-seen" aria-sort="none" {...col("first-seen")}>
+					<button type="button" data-sort="first-seen">First seen</button>
+				</th>
+				<th scope="col" class="w-release" aria-sort="none" {...col("release")}>
+					<button type="button" data-sort="release">Release</button>
+				</th>
+				<th scope="col" {...col("maintained")}>Maintained</th>
+				<th scope="col" class="num w-stars" aria-sort="descending" {...col("stars")}>
+					<button type="button" data-sort="stars">Stars</button>
+				</th>
+				<th scope="col" class="w-source" {...col("source")}>Source</th>
+			</tr>
+		</thead>
+		<tbody>
+			{
+				entries.map(({ id: entryId, data: ade }, i) => (
+					<tr
+						data-name={ade.name.toLowerCase()}
+						data-stars={ade.stars ?? -1}
+						data-first-seen={ade.first_seen ?? ""}
+						data-release={ade.latest_release?.date ?? ""}
+						data-filter={JSON.stringify(filterRecord(ade))}
+						data-match={String(matches[i])}
+						hidden={!firstPage.has(entryId)}
+					>
+						<th scope="row" class="ade-name" data-preview={previewUrl(entryId)} {...col("name")}>
+							<a href={ade.website}>{ade.name}</a>
+							{ade.note && <span class="ade-note">{ade.note}</span>}
+							<span class="ade-links">
+								{ade.repo && <a href={`https://github.com/${ade.repo}`}>GitHub</a>}
+								{ade.links.docs && <a href={ade.links.docs}>Docs</a>}
+								{ade.links.x && <a href={ade.links.x}>X</a>}
+								{!ade.repo && !ade.links.docs && <span>{hostname(ade.website)}</span>}
+							</span>
+						</th>
+						<td class="ade-platforms" {...col("platforms")}>
+							{ade.platforms.length ? ade.platforms.map((p) => PLATFORM_LABELS[p]).join(", ") : "—"}
+						</td>
+						<td {...col("tech")}>
+							<ul class="chips">
+								{ade.tech.map((t) => (
+									<li class="chip chip-tech" style={`--tech: ${TECH[t]}`}>
+										{t}
+									</li>
+								))}
+							</ul>
+						</td>
+						<td class="ade-agents" {...col("agents")}>
+							{ade.agents.length ? (
+								(() => {
+									const { shown, more, moreTitle } = agentList(ade);
+									return (
+										<ul class="icon-list agent-icons">
+											{shown.map((name) => {
+												const svg = agentIcon(name);
+												return (
+													<li class="icon-badge" role="img" aria-label={name} data-tooltip={name}>
+														{svg ? (
+															<Fragment set:html={svg} />
+														) : (
+															<span class="agent-fallback" aria-hidden="true">
+																{name[0]}
+															</span>
+														)}
+													</li>
+												);
+											})}
+											{more > 0 && (
+												<li class="agent-more" data-tooltip={moreTitle}>
+													{ade.references.agents ? (
+														<a href={ade.references.agents} target="_blank" rel="noopener">
+															+{more} more
+														</a>
+													) : (
+														`+${more} more`
+													)}
+												</li>
+											)}
+										</ul>
+									);
+								})()
+							) : (
+								"—"
+							)}
+						</td>
+						<td {...col("features")}>
+							{ade.features.length ? (
+								<ul class="icon-list feature-icons">
+									{sortFeatures(ade.features).map((f) => {
+										const Icon = FEATURE_ICONS[f];
+										return (
+											<li class="icon-badge" role="img" aria-label={featureLabel(f)} data-tooltip={featureLabel(f)}>
+												<Icon size={14} aria-hidden="true" />
+											</li>
+										);
+									})}
+								</ul>
+							) : (
+								"—"
+							)}
+						</td>
+						<td class="nowrap" {...col("first-seen")}>
+							{ade.first_seen ? formatMonth(ade.first_seen) : "—"}
+						</td>
+						<td class="nowrap" {...col("release")}>
+							{ade.latest_release ? (
+								<a
+									class="release"
+									href={`https://github.com/${ade.repo}/releases/latest`}
+									title={`v${ade.latest_release.version}, released ${ade.latest_release.date}`}
+								>
+									<span class="release-version">v{ade.latest_release.version}</span>
+									<span class="release-date">{formatMonth(ade.latest_release.date.slice(0, 7))}</span>
+								</a>
+							) : (
+								"—"
+							)}
+						</td>
+						<td
+							class="nowrap"
+							title={`Released in the last ${MAINTAINED_MONTHS} months`}
+							{...col("maintained")}
+						>
+							{{ true: "Yes", false: "No", null: "—" }[String(isMaintained(ade.latest_release?.date))]}
+						</td>
+						<td class="num" {...col("stars")}>
+							{ade.repo && ade.stars !== undefined ? (
+								<a
+									href={`https://github.com/${ade.repo}/stargazers`}
+									title={`${ade.stars.toLocaleString("en-GB")} stars as of ${ade.stars_updated_at}`}
+								>
+									{formatStars(ade.stars)}
+								</a>
+							) : (
+								"—"
+							)}
+						</td>
+						<td class="nowrap" {...col("source")}>
+							{sourceKind(ade)}
+							{sourceDetail(ade) && <span class="source-detail">{sourceDetail(ade)}</span>}
+						</td>
+					</tr>
+				))
+			}
+			<tr class="ade-empty" data-empty-row hidden={matchCount > 0}>
+				<td colspan="10">No entries match the current filters.</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<nav class="ade-pager" aria-label={`${caption}: pages`} data-pager={id}>
+	<label class="pager-size">
+		Rows per page
+		<select data-page-size>
+			{
+				PAGE_SIZES.map((n) => (
+					<option value={n} selected={n === DEFAULT_PAGE_SIZE}>
+						{n === 0 ? "All" : n}
+					</option>
+				))
+			}
+		</select>
+	</label>
+	<p class="pager-range" data-page-range aria-live="polite">
+		{matchCount ? `1–${Math.min(DEFAULT_PAGE_SIZE, matchCount)} of ${matchCount}` : "0 of 0"}
+	</p>
+	<div class="pager-nav">
+		<button type="button" class="pager-btn" data-page-prev aria-label="Previous page" disabled>
+			<ChevronLeft size={16} aria-hidden="true" />
+		</button>
+		<span class="pager-page" data-page-label>Page 1 of {pageCount}</span>
+		<button
+			type="button"
+			class="pager-btn"
+			data-page-next
+			aria-label="Next page"
+			disabled={pageCount === 1}
+		>
+			<ChevronRight size={16} aria-hidden="true" />
+		</button>
+	</div>
+</nav>
+
+<script>
+	// Paging sits on top of filtering: AdeControls marks rows with
+	// data-match and fires "ades:filter"; sorting fires "ades:sort" on the
+	// table. Here, only matching rows on the current page are shown.
+	for (const table of document.querySelectorAll<HTMLTableElement>("[data-ade-table]")) {
+		const pager = document.querySelector<HTMLElement>(`[data-pager="${table.id}"]`)!;
+		const sizeSelect = pager.querySelector<HTMLSelectElement>("[data-page-size]")!;
+		const prev = pager.querySelector<HTMLButtonElement>("[data-page-prev]")!;
+		const next = pager.querySelector<HTMLButtonElement>("[data-page-next]")!;
+		const tbody = table.tBodies[0];
+		let page = 0;
+
+		function render() {
+			const rows = [...tbody.querySelectorAll<HTMLTableRowElement>("tr[data-filter]")];
+			const matched = rows.filter((row) => row.dataset.match !== "false");
+			const size = Number(sizeSelect.value) || Math.max(matched.length, 1);
+			const pages = Math.max(1, Math.ceil(matched.length / size));
+			page = Math.min(page, pages - 1);
+			const start = page * size;
+			const end = Math.min(start + size, matched.length);
+			const visible = new Set(matched.slice(start, end));
+
+			for (const row of rows) row.hidden = !visible.has(row);
+			tbody.querySelector<HTMLElement>("[data-empty-row]")!.hidden = matched.length > 0;
+			pager.querySelector("[data-page-range]")!.textContent = matched.length
+				? `${start + 1}–${end} of ${matched.length}`
+				: "0 of 0";
+			pager.querySelector("[data-page-label]")!.textContent = `Page ${page + 1} of ${pages}`;
+			prev.disabled = page === 0;
+			next.disabled = page >= pages - 1;
+		}
+
+		function goTo(target: number) {
+			page = target;
+			render();
+			// Paging from the controls below a long table: bring its top back.
+			if (table.getBoundingClientRect().top < 0) {
+				table.closest("section")?.scrollIntoView({ block: "start" });
+			}
+		}
+
+		prev.addEventListener("click", () => goTo(page - 1));
+		next.addEventListener("click", () => goTo(page + 1));
+		sizeSelect.addEventListener("change", () => goTo(0));
+		table.addEventListener("ades:sort", () => goTo(0));
+		document.addEventListener("ades:filter", () => {
+			page = 0;
+			render();
+		});
+		render();
+	}
+</script>
+
+<style>
+	/* Widths live on header cells (not <col>) so hiding a column can't shift
+	   widths onto its neighbours. Every column has one sized to its typical
+	   content, so on wide screens the spare table width is shared out in
+	   proportion rather than pooling in one column. */
+	.w-name {
+		width: 10rem;
+	}
+
+	.w-platforms {
+		width: 6.5rem;
+	}
+
+	.w-tech {
+		width: 7.5rem;
+	}
+
+	.w-first-seen {
+		width: 6rem;
+	}
+
+	.w-release {
+		width: 5rem;
+	}
+
+	.w-stars {
+		width: 4.5rem;
+	}
+
+	.w-source {
+		width: 7rem;
+	}
+
+	/* Agents and features share the five-track icon grid width. */
+	.w-icons {
+		width: calc(5 * 1.5rem + 4 * var(--spacing-1));
+		box-sizing: content-box;
+	}
+
+	.ade-table-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.ade-table {
+		width: 100%;
+		min-width: 56rem;
+		border-collapse: collapse;
+		font-size: var(--font-size-sm);
+		line-height: var(--leading-snug);
+	}
+
+	.ade-table th,
+	.ade-table td {
+		padding: var(--spacing-3);
+		text-align: left;
+		vertical-align: top;
+		border-bottom: 1px solid var(--color-border-subtle);
+	}
+
+	.ade-table tbody tr:last-child > * {
+		border-bottom: none;
+	}
+
+	.ade-table thead th {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		text-transform: uppercase;
+		letter-spacing: var(--tracking-wide);
+		color: var(--color-muted);
+		white-space: nowrap;
+		background: var(--color-bg-subtle);
+	}
+
+	.ade-table thead button {
+		all: unset;
+		cursor: pointer;
+	}
+
+	.ade-table thead button:focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 2px;
+	}
+
+	.ade-table th[aria-sort="ascending"] button::after {
+		content: " ↑";
+	}
+
+	.ade-table th[aria-sort="descending"] button::after {
+		content: " ↓";
+	}
+
+	.ade-table [hidden] {
+		display: none;
+	}
+
+	.ade-empty td {
+		padding: var(--spacing-8) var(--spacing-4);
+		text-align: center;
+		color: var(--color-muted);
+	}
+
+	.ade-name {
+		font-weight: var(--font-weight-heading);
+	}
+
+	.ade-name > a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.ade-name > a:hover {
+		color: var(--color-brand);
+	}
+
+	.ade-note {
+		display: block;
+		font-size: var(--font-size-xs);
+		font-weight: 400;
+		color: var(--color-text-secondary);
+	}
+
+	.ade-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 var(--spacing-2);
+		margin-top: var(--spacing-1);
+		font-size: var(--font-size-xs);
+		font-weight: 400;
+		color: var(--color-muted);
+	}
+
+	.ade-links a {
+		color: var(--color-muted);
+	}
+
+	.ade-links a:hover {
+		color: var(--color-brand);
+	}
+
+	.icon-list {
+		display: grid;
+		gap: var(--spacing-1);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Five tracks for both lists, so the two columns line up: at most two
+	   rows of features, and six agents with "+N more" after the sixth. */
+	.agent-icons,
+	.feature-icons {
+		grid-template-columns: repeat(5, 1.5rem);
+	}
+
+	.agent-icons {
+		color: var(--color-text);
+	}
+
+	.feature-icons {
+		color: var(--color-text-secondary);
+	}
+
+	.icon-badge {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		font-size: 1rem; /* Lobe SVGs are sized 1em */
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.agent-fallback {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		line-height: 1;
+		color: var(--color-text-secondary);
+	}
+
+	.agent-more {
+		position: relative;
+		grid-column-end: span 2; /* after the last icon, or wraps if no room */
+		align-self: center;
+		justify-self: start;
+		font-size: var(--font-size-xs);
+		white-space: nowrap;
+		color: var(--color-muted);
+		cursor: default;
+	}
+
+	.agent-more a {
+		color: inherit;
+	}
+
+	.agent-more a:hover {
+		color: var(--color-brand);
+	}
+
+	/* Tooltips: shown on hover, positioned above the icon. */
+	[data-tooltip]::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: calc(100% + 6px);
+		left: 50%;
+		z-index: 10;
+		width: max-content;
+		max-width: 16rem;
+		padding: var(--spacing-1) var(--spacing-2);
+		font-size: var(--font-size-xs);
+		font-weight: 500;
+		line-height: var(--leading-snug);
+		white-space: normal;
+		color: var(--color-bg);
+		background: var(--color-text);
+		border-radius: var(--radius);
+		transform: translateX(-50%);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity var(--transition-fast);
+	}
+
+	[data-tooltip]:hover::after {
+		opacity: 1;
+	}
+
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-1);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.chip {
+		padding: var(--tag-padding-y) var(--spacing-2);
+		font-size: var(--font-size-xs);
+		white-space: nowrap;
+		color: var(--color-text-secondary);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	/* --tech is a per-chip light-dark() colour from TECH. */
+	.chip-tech {
+		font-size: 0.6875rem;
+		font-weight: 500;
+		color: var(--tech);
+		background: color-mix(in srgb, var(--tech) 8%, transparent);
+		border-color: color-mix(in srgb, var(--tech) 35%, transparent);
+	}
+
+	.release {
+		display: flex;
+		flex-direction: column;
+		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	/* Some projects tag date-stamped builds (v0.2026.06.03…); clip those
+	   rather than widen the column. The full version is in the title. */
+	.release-version {
+		max-width: 5rem; /* .w-release */
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.release:hover {
+		color: var(--color-brand);
+	}
+
+	.release-date {
+		font-family: var(--font-body);
+		color: var(--color-muted);
+	}
+
+	/* Centred: the header is about twice as wide as the values, and centring
+	   splits that slack across both sides instead of one gap. */
+	.num {
+		text-align: center !important;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.num a {
+		color: var(--color-text);
+	}
+
+	.source-detail {
+		display: block;
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+
+	.nowrap {
+		white-space: nowrap;
+	}
+
+	.muted {
+		color: var(--color-muted);
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.ade-pager {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--spacing-3) var(--spacing-6);
+		margin-top: var(--spacing-3);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.pager-size {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	.pager-range {
+		margin: 0;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pager-nav {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	.pager-page {
+		min-width: 5.5rem;
+		text-align: center;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pager-size select,
+	.pager-btn {
+		height: 2rem;
+		font: inherit;
+		color: var(--color-text);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-sm);
+		cursor: pointer;
+	}
+
+	.pager-size select {
+		padding: 0 var(--spacing-2);
+	}
+
+	.pager-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		padding: 0;
+	}
+
+	.pager-size select:hover,
+	.pager-btn:hover:not(:disabled) {
+		background: var(--color-surface);
+	}
+
+	.pager-btn:disabled {
+		color: var(--color-muted);
+		box-shadow: none;
+		cursor: default;
+		opacity: 0.5;
+	}
+
+	.pager-size select:focus-visible,
+	.pager-btn:focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 2px;
+	}
+</style>

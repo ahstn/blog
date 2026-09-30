@@ -1,0 +1,1045 @@
+---
+import Bot from "@lucide/astro/icons/bot";
+import Calendar from "@lucide/astro/icons/calendar";
+import Check from "@lucide/astro/icons/check";
+import ChevronDown from "@lucide/astro/icons/chevron-down";
+import Code from "@lucide/astro/icons/code";
+import Columns3 from "@lucide/astro/icons/columns-3";
+import Cpu from "@lucide/astro/icons/cpu";
+import EllipsisVertical from "@lucide/astro/icons/ellipsis-vertical";
+import ListFilter from "@lucide/astro/icons/list-filter";
+import Monitor from "@lucide/astro/icons/monitor";
+import Package from "@lucide/astro/icons/package";
+import Plus from "@lucide/astro/icons/plus";
+import Sparkles from "@lucide/astro/icons/sparkles";
+import Star from "@lucide/astro/icons/star";
+import Type from "@lucide/astro/icons/type";
+import X from "@lucide/astro/icons/x";
+import { COLUMNS, type FilterField, isColumnHiddenByDefault, MAINTAINED_MONTHS } from "../utils/ades";
+
+interface Props {
+	fields: FilterField[];
+	total: number;
+}
+
+const { fields, total } = Astro.props;
+
+// Icons needed by client-rendered filter chips; cloned from a <template>.
+const icons = {
+	bot: Bot,
+	calendar: Calendar,
+	check: Check,
+	"chevron-down": ChevronDown,
+	code: Code,
+	cpu: Cpu,
+	"ellipsis-vertical": EllipsisVertical,
+	monitor: Monitor,
+	package: Package,
+	sparkles: Sparkles,
+	star: Star,
+	type: Type,
+	x: X,
+};
+const iconFor = (name: string) => icons[name as keyof typeof icons];
+
+const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).length;
+---
+
+<div class="ade-controls" data-ade-controls>
+	<div class="toolbar">
+		<div class="menu-anchor">
+			<button
+				type="button"
+				class="tb-btn"
+				aria-haspopup="menu"
+				aria-expanded="false"
+				data-menu-trigger
+			>
+				<ListFilter size={16} aria-hidden="true" />
+				Filters
+				<span class="badge" data-filter-count hidden>0</span>
+			</button>
+			<div class="menu" role="menu" aria-label="Add filter" hidden data-field-menu>
+				{
+					fields.map((f) => {
+						const Icon = iconFor(f.icon);
+						return (
+							<button type="button" role="menuitem" class="menu-item" data-field={f.key}>
+								<Icon size={16} aria-hidden="true" />
+								{f.label}
+							</button>
+						);
+					})
+				}
+			</div>
+		</div>
+
+		<button
+			type="button"
+			class="tb-btn"
+			role="switch"
+			aria-checked="true"
+			title={`Hide apps without a release in the last ${MAINTAINED_MONTHS} months`}
+			data-active-only
+		>
+			<span class="switch" aria-hidden="true"></span>
+			Actively maintained
+		</button>
+
+		<p class="result-count" aria-live="polite" data-result-count>
+			{total} entries
+		</p>
+
+		<div class="menu-anchor menu-anchor-end">
+			<button
+				type="button"
+				class="tb-btn"
+				aria-haspopup="menu"
+				aria-expanded="false"
+				data-menu-trigger
+			>
+				<Columns3 size={16} aria-hidden="true" />
+				Columns
+				<span class="badge" data-column-count>{visibleColumns}</span>
+			</button>
+			<div class="menu" role="menu" aria-labelledby="toggle-columns-label" hidden>
+				<p class="menu-label" id="toggle-columns-label">Toggle Columns</p>
+				{
+					COLUMNS.map((c) => {
+						const locked = "locked" in c && c.locked;
+						return (
+							<button
+								type="button"
+								role="menuitemcheckbox"
+								class="menu-item"
+								aria-checked={isColumnHiddenByDefault(c.key) ? "false" : "true"}
+								aria-disabled={locked ? "true" : undefined}
+								data-column={c.key}
+							>
+								<span class="check">
+									<Check size={16} aria-hidden="true" />
+								</span>
+								{c.label}
+							</button>
+						);
+					})
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="filter-bar" data-filter-bar hidden>
+		<div class="filter-chips" data-filter-chips></div>
+		<div class="menu-anchor">
+			<button
+				type="button"
+				class="tb-btn tb-icon"
+				aria-label="Add filter"
+				aria-haspopup="menu"
+				aria-expanded="false"
+				data-menu-trigger
+			>
+				<Plus size={16} aria-hidden="true" />
+			</button>
+			<div class="menu" role="menu" aria-label="Add filter" hidden data-field-menu>
+				{
+					fields.map((f) => {
+						const Icon = iconFor(f.icon);
+						return (
+							<button type="button" role="menuitem" class="menu-item" data-field={f.key}>
+								<Icon size={16} aria-hidden="true" />
+								{f.label}
+							</button>
+						);
+					})
+				}
+			</div>
+		</div>
+		<button type="button" class="tb-btn" data-clear-filters>Clear</button>
+	</div>
+
+	<script type="application/json" data-filter-fields set:html={JSON.stringify(fields)} />
+	<template data-icons>
+		{
+			Object.entries(icons).map(([name, Icon]) => (
+				<span data-icon={name}>
+					<Icon size={16} aria-hidden="true" />
+				</span>
+			))
+		}
+	</template>
+</div>
+
+<script>
+	import {
+		COLUMNS,
+		type ColumnKey,
+		type FilterField,
+		type FilterFieldType,
+		type FilterRecord,
+		isColumnHiddenByDefault,
+	} from "../utils/ades";
+
+	// ---------------------------------------------------------------- menus
+
+	type Arity = 0 | 1 | 2 | "many";
+	interface Operator {
+		id: string;
+		label: string;
+		arity: Arity;
+	}
+
+	let openMenu: { trigger: HTMLButtonElement; panel: HTMLElement } | null = null;
+
+	function closeMenu({ focus = false } = {}) {
+		if (!openMenu) return;
+		openMenu.panel.hidden = true;
+		openMenu.trigger.setAttribute("aria-expanded", "false");
+		if (focus) openMenu.trigger.focus();
+		openMenu = null;
+	}
+
+	function menuItems(panel: HTMLElement) {
+		return [...panel.querySelectorAll<HTMLElement>("[role^='menuitem'], input")].filter(
+			(el) => !el.closest("[hidden]"),
+		);
+	}
+
+	function showMenu(trigger: HTMLButtonElement, panel: HTMLElement) {
+		closeMenu();
+		panel.hidden = false;
+		trigger.setAttribute("aria-expanded", "true");
+		openMenu = { trigger, panel };
+		menuItems(panel)[0]?.focus();
+	}
+
+	/** Wire a trigger button to the panel that follows it inside `.menu-anchor`. */
+	function bindMenu(trigger: HTMLButtonElement) {
+		const panel = trigger.nextElementSibling as HTMLElement;
+		trigger.addEventListener("click", () => {
+			if (openMenu?.panel === panel) closeMenu();
+			else showMenu(trigger, panel);
+		});
+		panel.addEventListener("keydown", (event) => {
+			if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+			const items = menuItems(panel);
+			const index = items.indexOf(document.activeElement as HTMLElement);
+			const next = event.key === "ArrowDown" ? index + 1 : index - 1;
+			items[(next + items.length) % items.length]?.focus();
+			event.preventDefault();
+		});
+		return panel;
+	}
+
+	// Capture phase: close stale menus before any click handler opens a new one.
+	document.addEventListener(
+		"click",
+		(event) => {
+			if (openMenu && !openMenu.panel.parentElement!.contains(event.target as Node)) closeMenu();
+		},
+		true,
+	);
+	document.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") closeMenu({ focus: true });
+	});
+
+	// --------------------------------------------------------------- setup
+
+	const root = document.querySelector<HTMLElement>("[data-ade-controls]")!;
+	const fields: FilterField[] = JSON.parse(
+		root.querySelector("[data-filter-fields]")!.textContent!,
+	);
+	const fieldByKey = new Map(fields.map((f) => [f.key, f]));
+	const iconTemplate = root.querySelector<HTMLTemplateElement>("[data-icons]")!;
+
+	function icon(name: string) {
+		return iconTemplate.content.querySelector(`[data-icon="${name}"] svg`)!.cloneNode(true);
+	}
+
+	function el<K extends keyof HTMLElementTagNameMap>(
+		tag: K,
+		props: Partial<HTMLElementTagNameMap[K]> & Record<string, unknown> = {},
+		...children: (Node | string)[]
+	) {
+		const node = document.createElement(tag);
+		for (const [key, value] of Object.entries(props)) {
+			if (key.startsWith("data-") || key.startsWith("aria-") || key === "role") {
+				node.setAttribute(key, String(value));
+			} else {
+				(node as unknown as Record<string, unknown>)[key] = value;
+			}
+		}
+		node.append(...children);
+		return node;
+	}
+
+	for (const trigger of root.querySelectorAll<HTMLButtonElement>("[data-menu-trigger]")) {
+		bindMenu(trigger);
+	}
+
+	const rows = [...document.querySelectorAll<HTMLTableRowElement>("[data-ade-table] tr[data-filter]")];
+	const records = new Map(rows.map((row) => [row, JSON.parse(row.dataset.filter!) as FilterRecord]));
+
+	// ------------------------------------------------------------- columns
+
+	// Only columns the user has toggled are stored ({ key: visible }), so
+	// columns added later still get their default visibility.
+	const COLUMNS_KEY = "ade-columns";
+	const overrides: Partial<Record<ColumnKey, boolean>> = (() => {
+		try {
+			const stored = JSON.parse(localStorage.getItem(COLUMNS_KEY) ?? "null");
+			if (stored && typeof stored === "object" && !Array.isArray(stored)) return stored;
+		} catch {}
+		return {};
+	})();
+	const hiddenColumns = new Set<ColumnKey>(
+		COLUMNS.filter((c) => !(overrides[c.key] ?? !isColumnHiddenByDefault(c.key))).map((c) => c.key),
+	);
+
+	function applyColumns() {
+		for (const cell of document.querySelectorAll<HTMLElement>("[data-ade-table] [data-col]")) {
+			cell.hidden = hiddenColumns.has(cell.dataset.col as ColumnKey);
+		}
+		for (const item of root.querySelectorAll<HTMLElement>("[data-column]")) {
+			item.setAttribute("aria-checked", String(!hiddenColumns.has(item.dataset.column as ColumnKey)));
+		}
+		root.querySelector("[data-column-count]")!.textContent = String(
+			COLUMNS.length - hiddenColumns.size,
+		);
+	}
+
+	root.addEventListener("click", (event) => {
+		const item = (event.target as Element).closest<HTMLElement>("[data-column]");
+		if (!item || item.getAttribute("aria-disabled") === "true") return;
+		const key = item.dataset.column as ColumnKey;
+		if (hiddenColumns.has(key)) hiddenColumns.delete(key);
+		else hiddenColumns.add(key);
+		const visible = !hiddenColumns.has(key);
+		if (visible === !isColumnHiddenByDefault(key)) delete overrides[key];
+		else overrides[key] = visible;
+		localStorage.setItem(COLUMNS_KEY, JSON.stringify(overrides));
+		applyColumns();
+	});
+
+	applyColumns();
+
+	// ------------------------------------------------------------- filters
+
+	const EMPTY_OPS: Operator[] = [
+		{ id: "empty", label: "is empty", arity: 0 },
+		{ id: "not-empty", label: "is not empty", arity: 0 },
+	];
+
+	const OPERATORS: Record<FilterFieldType, Operator[]> = {
+		text: [
+			{ id: "contains", label: "contains", arity: 1 },
+			{ id: "not-contains", label: "does not contain", arity: 1 },
+		],
+		multi: [
+			{ id: "any", label: "has any of", arity: "many" },
+			{ id: "all", label: "has all of", arity: "many" },
+			{ id: "none", label: "has none of", arity: "many" },
+			...EMPTY_OPS,
+		],
+		option: [
+			{ id: "any", label: "is any of", arity: "many" },
+			{ id: "none", label: "is none of", arity: "many" },
+			...EMPTY_OPS,
+		],
+		date: [
+			{ id: "eq", label: "is", arity: 1 },
+			{ id: "neq", label: "is not", arity: 1 },
+			{ id: "lt", label: "is before", arity: 1 },
+			{ id: "gt", label: "is after", arity: 1 },
+			{ id: "lte", label: "is on or before", arity: 1 },
+			{ id: "gte", label: "is on or after", arity: 1 },
+			{ id: "between", label: "is between", arity: 2 },
+			{ id: "not-between", label: "is not between", arity: 2 },
+			...EMPTY_OPS,
+		],
+		number: [
+			{ id: "eq", label: "is", arity: 1 },
+			{ id: "neq", label: "is not", arity: 1 },
+			{ id: "gt", label: "is greater than", arity: 1 },
+			{ id: "lt", label: "is less than", arity: 1 },
+			{ id: "gte", label: "is greater than or equal to", arity: 1 },
+			{ id: "lte", label: "is less than or equal to", arity: 1 },
+			{ id: "between", label: "is between", arity: 2 },
+			{ id: "not-between", label: "is not between", arity: 2 },
+			...EMPTY_OPS,
+		],
+	};
+
+	interface Filter {
+		field: ColumnKey;
+		op: string;
+		values: string[];
+	}
+
+	const operator = (f: Filter) =>
+		OPERATORS[fieldByKey.get(f.field)!.type].find((o) => o.id === f.op)!;
+
+	const isEmpty = (v: unknown) => v == null || v === "" || (Array.isArray(v) && v.length === 0);
+
+	function matches(record: FilterRecord, filter: Filter): boolean {
+		const field = fieldByKey.get(filter.field)!;
+		const op = operator(filter);
+		const value = record[filter.field as keyof FilterRecord];
+		if (op.id === "empty") return isEmpty(value);
+		if (op.id === "not-empty") return !isEmpty(value);
+
+		// Incomplete filters (no value picked yet) don't filter anything out.
+		const args = filter.values.filter((v) => v !== "");
+		if (op.arity === "many" ? args.length === 0 : args.length < op.arity) return true;
+
+		switch (field.type) {
+			case "text": {
+				const hit = String(value).toLowerCase().includes(args[0].toLowerCase());
+				return op.id === "contains" ? hit : !hit;
+			}
+			case "multi":
+			case "option": {
+				const have = Array.isArray(value) ? value : value == null ? [] : [String(value)];
+				if (op.id === "all") return args.every((a) => have.includes(a));
+				const any = args.some((a) => have.includes(a));
+				return op.id === "any" ? any : !any;
+			}
+			case "date":
+			case "number": {
+				// Dates are YYYY-MM, compared as YYYYMM numbers.
+				const parse = (v: unknown) => Number(String(v).replace("-", ""));
+				const negated = op.id === "neq" || op.id === "not-between";
+				if (value == null) return negated;
+				const v = parse(value);
+				const [a, b] = args.map(parse);
+				switch (op.id) {
+					case "eq":
+						return v === a;
+					case "neq":
+						return v !== a;
+					case "lt":
+						return v < a;
+					case "gt":
+						return v > a;
+					case "lte":
+						return v <= a;
+					case "gte":
+						return v >= a;
+					case "between":
+					case "not-between": {
+						const [lo, hi] = a <= b ? [a, b] : [b, a];
+						const inside = v >= lo && v <= hi;
+						return op.id === "between" ? inside : !inside;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	const filters: Filter[] = [];
+	const chipsEl = root.querySelector<HTMLElement>("[data-filter-chips]")!;
+	const filterBar = root.querySelector<HTMLElement>("[data-filter-bar]")!;
+
+	// On by default; turning it off is persisted as ?all=1.
+	const activeToggle = root.querySelector<HTMLButtonElement>("[data-active-only]")!;
+	let activeOnly = new URL(location.href).searchParams.get("all") !== "1";
+
+	activeToggle.addEventListener("click", () => {
+		activeOnly = !activeOnly;
+		applyFilters();
+	});
+
+	function applyFilters() {
+		let shown = 0;
+		for (const [row, record] of records) {
+			// Entries without release data (null) aren't judged, so stay visible.
+			const inactive = activeOnly && record.maintained === false;
+			const match = !inactive && filters.every((f) => matches(record, f));
+			row.dataset.match = String(match);
+			if (match) shown++;
+		}
+		// The table pagers (AdeTable) decide which matching rows are shown.
+		document.dispatchEvent(new Event("ades:filter"));
+
+		root.querySelector("[data-result-count]")!.textContent =
+			shown === rows.length ? `${rows.length} entries` : `Showing ${shown} of ${rows.length}`;
+		const count = root.querySelector<HTMLElement>("[data-filter-count]")!;
+		count.hidden = filters.length === 0;
+		count.textContent = String(filters.length);
+		filterBar.hidden = filters.length === 0;
+
+		activeToggle.setAttribute("aria-checked", activeOnly ? "true" : "false");
+
+		const url = new URL(location.href);
+		if (activeOnly) url.searchParams.delete("all");
+		else url.searchParams.set("all", "1");
+		if (filters.length) {
+			url.searchParams.set("filters", JSON.stringify(filters.map((f) => [f.field, f.op, f.values])));
+		} else {
+			url.searchParams.delete("filters");
+		}
+		history.replaceState(history.state, "", url);
+	}
+
+	// -------------------------------------------------------- value editors
+
+	function optionSummary(field: FilterField, values: string[]) {
+		if (values.length === 0) return "Select…";
+		if (values.length > 2) return `${values.length} selected`;
+		return values.map((v) => field.options!.find((o) => o.value === v)?.label ?? v).join(", ");
+	}
+
+	function renderValueEditor(filter: Filter, container: HTMLElement) {
+		const field = fieldByKey.get(filter.field)!;
+		const op = operator(filter);
+		container.replaceChildren();
+		container.hidden = op.arity === 0;
+		if (op.arity === 0) return;
+
+		if (op.arity === "many") {
+			const label = el("span", { className: "value-summary" }, optionSummary(field, filter.values));
+			const trigger = el(
+				"button",
+				{
+					type: "button",
+					className: "chip-part chip-button",
+					"aria-haspopup": "true",
+					"aria-expanded": "false",
+					"aria-label": `${field.label} values`,
+				},
+				label,
+				icon("chevron-down"),
+			);
+			const list = el("div", { className: "option-list" });
+			for (const option of field.options ?? []) {
+				const input = el("input", {
+					type: "checkbox",
+					value: option.value,
+					checked: filter.values.includes(option.value),
+				});
+				list.append(el("label", { className: "option" }, input, option.label));
+			}
+			const panel = el("div", { className: "menu menu-options", hidden: true }, list);
+			if ((field.options?.length ?? 0) > 8) {
+				const search = el("input", {
+					type: "search",
+					className: "option-search",
+					placeholder: `Search ${field.label.toLowerCase()}…`,
+					"aria-label": `Search ${field.label.toLowerCase()}`,
+				});
+				search.addEventListener("input", () => {
+					const q = search.value.toLowerCase();
+					for (const option of list.querySelectorAll<HTMLElement>(".option")) {
+						option.hidden = !option.textContent!.toLowerCase().includes(q);
+					}
+				});
+				panel.prepend(search);
+			}
+			list.addEventListener("change", () => {
+				filter.values = [...list.querySelectorAll<HTMLInputElement>("input:checked")].map(
+					(i) => i.value,
+				);
+				label.textContent = optionSummary(field, filter.values);
+				label.classList.toggle("placeholder", filter.values.length === 0);
+				applyFilters();
+			});
+			label.classList.toggle("placeholder", filter.values.length === 0);
+			container.append(el("div", { className: "menu-anchor" }, trigger, panel));
+			bindMenu(trigger);
+			return;
+		}
+
+		const inputs: HTMLInputElement[] = [];
+		for (let i = 0; i < op.arity; i++) {
+			const input =
+				field.type === "date"
+					? el("input", { type: "month", placeholder: "YYYY-MM", pattern: "\\d{4}-\\d{2}" })
+					: field.type === "number"
+						? el("input", { type: "number", min: "0", inputMode: "numeric", placeholder: "0" })
+						: el("input", { type: "text", placeholder: "Search…" });
+			input.className = "chip-input";
+			input.value = filter.values[i] ?? "";
+			input.setAttribute("aria-label", op.arity === 2 ? `${field.label} ${i ? "to" : "from"}` : field.label);
+			input.addEventListener("input", () => {
+				filter.values = inputs.map((x) => x.value.trim());
+				applyFilters();
+			});
+			inputs.push(input);
+			if (i > 0) container.append(el("span", { className: "chip-and" }, "and"));
+			container.append(input);
+		}
+	}
+
+	function openValueEditor(container: HTMLElement) {
+		const trigger = container.querySelector<HTMLButtonElement>("[aria-haspopup]");
+		if (trigger) showMenu(trigger, trigger.nextElementSibling as HTMLElement);
+		else container.querySelector("input")?.focus();
+	}
+
+	// ----------------------------------------------------------------- chips
+
+	function addChip(filter: Filter, { focus = false } = {}) {
+		const field = fieldByKey.get(filter.field)!;
+		filters.push(filter);
+
+		const select = el("select", { className: "chip-op", "aria-label": `${field.label} condition` });
+		for (const op of OPERATORS[field.type]) {
+			select.append(el("option", { value: op.id, selected: op.id === filter.op }, op.label));
+		}
+		const opWrap = el("span", { className: "chip-part chip-select" }, select, icon("chevron-down"));
+		const value = el("span", { className: "chip-part chip-value" });
+
+		const menuTrigger = el(
+			"button",
+			{
+				type: "button",
+				className: "chip-part chip-button chip-menu",
+				"aria-label": `${field.label} filter options`,
+				"aria-haspopup": "menu",
+				"aria-expanded": "false",
+			},
+			icon("ellipsis-vertical"),
+		);
+		const remove = el(
+			"button",
+			{ type: "button", role: "menuitem", className: "menu-item" },
+			icon("x"),
+			"Remove filter",
+		);
+		const menu = el("div", { className: "menu menu-end", role: "menu", hidden: true }, remove);
+
+		const chip = el(
+			"div",
+			{ className: "filter-chip", role: "group", "aria-label": `${field.label} filter` },
+			el("span", { className: "chip-part chip-field" }, icon(field.icon), field.label),
+			opWrap,
+			value,
+			el("div", { className: "menu-anchor" }, menuTrigger, menu),
+		);
+		bindMenu(menuTrigger);
+
+		select.addEventListener("change", () => {
+			const before = operator(filter).arity;
+			filter.op = select.value;
+			const after = operator(filter).arity;
+			if (before !== after) {
+				// Keep what we can: option lists stay lists, single values stay single.
+				if ((before === "many") !== (after === "many")) filter.values = [];
+				else if (typeof after === "number") filter.values = filter.values.slice(0, after);
+				renderValueEditor(filter, value);
+			}
+			applyFilters();
+		});
+
+		remove.addEventListener("click", () => {
+			closeMenu();
+			filters.splice(filters.indexOf(filter), 1);
+			chip.remove();
+			applyFilters();
+			const next =
+				chipsEl.querySelector<HTMLElement>(".chip-menu") ??
+				root.querySelector<HTMLElement>("[data-menu-trigger]");
+			next?.focus();
+		});
+
+		renderValueEditor(filter, value);
+		chipsEl.append(chip);
+		applyFilters();
+		if (focus) openValueEditor(value);
+	}
+
+	for (const menu of root.querySelectorAll<HTMLElement>("[data-field-menu]")) {
+		menu.addEventListener("click", (event) => {
+			const item = (event.target as Element).closest<HTMLElement>("[data-field]");
+			if (!item) return;
+			closeMenu();
+			const field = fieldByKey.get(item.dataset.field as ColumnKey)!;
+			addChip({ field: field.key, op: OPERATORS[field.type][0].id, values: [] }, { focus: true });
+		});
+	}
+
+	root.querySelector("[data-clear-filters]")!.addEventListener("click", () => {
+		filters.length = 0;
+		chipsEl.replaceChildren();
+		applyFilters();
+		root.querySelector<HTMLElement>("[data-menu-trigger]")!.focus();
+	});
+
+	// Restore filters from ?filters=[[field, op, values], ...]
+	try {
+		const saved = JSON.parse(new URL(location.href).searchParams.get("filters") ?? "[]");
+		for (const [key, op, values] of saved) {
+			const field = fieldByKey.get(key);
+			if (!field || !OPERATORS[field.type].some((o) => o.id === op) || !Array.isArray(values)) {
+				continue;
+			}
+			addChip({ field: field.key, op, values: values.map(String) });
+		}
+	} catch {}
+	applyFilters();
+</script>
+
+<style>
+	.ade-controls {
+		margin-bottom: var(--spacing-10);
+	}
+
+	.toolbar {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-3);
+	}
+
+	.result-count {
+		margin: 0 auto 0 0;
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.filter-bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--spacing-2);
+		margin-top: var(--spacing-3);
+	}
+
+	.filter-bar[hidden] {
+		display: none;
+	}
+
+	.filter-chips {
+		display: contents;
+	}
+
+	/* Buttons */
+
+	.tb-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+		height: 2rem;
+		padding: 0 var(--spacing-3);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		color: var(--color-text);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-sm);
+		cursor: pointer;
+		transition: background var(--transition-fast);
+	}
+
+	.tb-btn:hover,
+	.tb-btn[aria-expanded="true"] {
+		background: var(--color-surface);
+	}
+
+	/* Small track + thumb inside the "Actively maintained" switch button. */
+	.switch {
+		position: relative;
+		width: 1.75rem;
+		height: 1rem;
+		background: var(--color-border);
+		border-radius: 999px;
+		transition: background var(--transition-fast);
+	}
+
+	.switch::after {
+		content: "";
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: calc(1rem - 4px);
+		height: calc(1rem - 4px);
+		background: var(--color-bg);
+		border-radius: 50%;
+		transition: transform var(--transition-fast);
+	}
+
+	[aria-checked="true"] > .switch {
+		background: var(--color-brand);
+	}
+
+	[aria-checked="true"] > .switch::after {
+		transform: translateX(0.75rem);
+	}
+
+	.tb-icon {
+		width: 2rem;
+		padding: 0;
+		justify-content: center;
+	}
+
+	.badge {
+		min-width: 1.25rem;
+		padding: 0 var(--spacing-1);
+		font-size: var(--font-size-xs);
+		font-variant-numeric: tabular-nums;
+		line-height: 1.25rem;
+		text-align: center;
+		color: var(--color-text-secondary);
+		background: var(--color-surface);
+		border-radius: var(--radius);
+	}
+
+	.badge[data-filter-count] {
+		color: var(--color-on-brand);
+		background: var(--color-brand);
+	}
+
+	.badge[hidden] {
+		display: none;
+	}
+
+	.ade-controls :is(button, input, select):focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 1px;
+	}
+
+	.ade-controls :global(svg) {
+		flex-shrink: 0;
+	}
+
+	/* Menus */
+
+	.ade-controls :global(.menu-anchor) {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.ade-controls :global(.menu) {
+		position: absolute;
+		top: calc(100% + var(--spacing-1));
+		left: 0;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		min-width: 12rem;
+		padding: var(--spacing-1);
+		font-size: var(--font-size-sm);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-lg);
+	}
+
+	.ade-controls :global(.menu[hidden]) {
+		display: none;
+	}
+
+	.menu-anchor-end > .menu,
+	.ade-controls :global(.menu-end) {
+		left: auto;
+		right: 0;
+	}
+
+	.menu-label {
+		margin: 0;
+		padding: var(--spacing-2);
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		color: var(--color-muted);
+	}
+
+	.ade-controls :global(.menu-item),
+	.ade-controls :global(.option) {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-2);
+		width: 100%;
+		padding: var(--spacing-1) var(--spacing-2);
+		font: inherit;
+		color: var(--color-text);
+		text-align: left;
+		white-space: nowrap;
+		background: none;
+		border: none;
+		border-radius: var(--radius);
+		cursor: pointer;
+	}
+
+	.ade-controls :global(.menu-item svg) {
+		color: var(--color-muted);
+	}
+
+	.ade-controls :global(.menu-item:is(:hover, :focus-visible)),
+	.ade-controls :global(.option:hover) {
+		background: var(--color-surface);
+		outline: none;
+	}
+
+	.menu-item[aria-disabled="true"] {
+		color: var(--color-muted);
+		cursor: default;
+	}
+
+	.check {
+		display: inline-flex;
+		width: 16px;
+	}
+
+	.menu-item[aria-checked="false"] .check {
+		visibility: hidden;
+	}
+
+	.menu-item[aria-checked] .check :global(svg) {
+		color: var(--color-text);
+	}
+
+	.ade-controls :global(.menu-options) {
+		max-height: 18rem;
+		min-width: 14rem;
+	}
+
+	.ade-controls :global(.option-list) {
+		overflow-y: auto;
+	}
+
+	.ade-controls :global(.option[hidden]) {
+		display: none;
+	}
+
+	.ade-controls :global(.option input) {
+		accent-color: var(--color-brand);
+		margin: 0;
+	}
+
+	.ade-controls :global(.option-search) {
+		margin-bottom: var(--spacing-1);
+		padding: var(--spacing-1) var(--spacing-2);
+		font: inherit;
+		color: var(--color-text);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	/* Filter chips */
+
+	.ade-controls :global(.filter-chip) {
+		display: inline-flex;
+		align-items: stretch;
+		height: 2rem;
+		font-size: var(--font-size-sm);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.ade-controls :global(.chip-part) {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-1);
+		padding: 0 var(--spacing-2);
+	}
+
+	.ade-controls :global(.chip-part + .chip-part),
+	.ade-controls :global(.chip-part + .menu-anchor) {
+		border-left: 1px solid var(--color-border);
+	}
+
+	.ade-controls :global(.chip-part[hidden]) {
+		display: none;
+	}
+
+	.ade-controls :global(.chip-field) {
+		font-weight: 500;
+		color: var(--color-text);
+	}
+
+	.ade-controls :global(.chip-field svg),
+	.ade-controls :global(.chip-part > svg) {
+		color: var(--color-muted);
+	}
+
+	.ade-controls :global(.chip-select) {
+		position: relative;
+		padding: 0;
+	}
+
+	.ade-controls :global(.chip-op) {
+		appearance: none;
+		height: 100%;
+		padding: 0 calc(var(--spacing-2) + 18px) 0 var(--spacing-2);
+		font: inherit;
+		color: var(--color-text-secondary);
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+
+	.ade-controls :global(.chip-select svg) {
+		position: absolute;
+		right: var(--spacing-2);
+		pointer-events: none;
+	}
+
+	.ade-controls :global(.chip-value) {
+		padding: 0;
+	}
+
+	.ade-controls :global(.chip-value .menu-anchor) {
+		height: 100%;
+	}
+
+	.ade-controls :global(.chip-button) {
+		height: 100%;
+		font: inherit;
+		color: var(--color-text);
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+
+	.ade-controls :global(.chip-button:hover) {
+		background: var(--color-surface);
+	}
+
+	.ade-controls :global(.chip-value .chip-button) {
+		border-radius: 0;
+	}
+
+	.ade-controls :global(.chip-menu) {
+		padding: 0 var(--spacing-1);
+		border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+	}
+
+	.ade-controls :global(.value-summary) {
+		max-width: 14rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.ade-controls :global(.placeholder) {
+		color: var(--color-muted);
+	}
+
+	.ade-controls :global(.chip-input) {
+		width: 7.5rem;
+		height: 100%;
+		padding: 0 var(--spacing-2);
+		font: inherit;
+		color: var(--color-text);
+		background: none;
+		border: none;
+	}
+
+	.ade-controls :global(.chip-input[type="number"]) {
+		width: 5.5rem;
+	}
+
+	.ade-controls :global(.chip-input[type="month"]) {
+		width: 9.5rem;
+	}
+
+	.ade-controls :global(.chip-and) {
+		align-self: center;
+		color: var(--color-muted);
+	}
+</style>

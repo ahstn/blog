@@ -1,0 +1,38 @@
+name: Update ADE stars and releases
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - id: update
+        run: pnpm ades:update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Still open the PR when some repos fail (renamed, deleted, private):
+      # the others' updates are already written, and the failed step keeps
+      # the run red so the broken entry gets noticed.
+      - if: ${{ !cancelled() && steps.update.outcome != 'skipped' }}
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/update-ades
+          commit-message: "chore: update agentic dev env stars and releases"
+          title: "chore: update agentic dev env stars and releases"
+          body: Automated weekly refresh via `scripts/update-ades.mjs`.
+          add-paths: src/data/agentic-dev-envs.yml
+          delete-branch: true

@@ -6,6 +6,12 @@ import webhookNotifier from "@emdash-cms/plugin-webhook-notifier";
 import { defineConfig, fontProviders } from "astro/config";
 import emdash from "emdash/astro";
 
+// `astro check` / `astro build` start their own Vite instance, which
+// re-optimises deps into the shared cache and deletes files a running dev
+// server still references ("file does not exist ... optimize deps directory").
+// Giving dev its own cache dir lets them run side by side.
+const isDev = process.argv.includes("dev");
+
 export default defineConfig({
 	output: "server",
 	adapter: cloudflare(),
@@ -41,4 +47,7 @@ export default defineConfig({
 		},
 	],
 	devToolbar: { enabled: false },
+	vite: {
+		cacheDir: isDev ? "node_modules/.vite-dev" : "node_modules/.vite",
+	},
 });

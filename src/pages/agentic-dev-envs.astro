@@ -1,0 +1,224 @@
+---
+import { getCollection } from "astro:content";
+import AdeControls from "../components/AdeControls.astro";
+import AdePreview from "../components/AdePreview.astro";
+import AdeTable from "../components/AdeTable.astro";
+import type { Ade } from "../content.config";
+import Base from "../layouts/Base.astro";
+import {
+	FEATURES,
+	featureLabel,
+	type FilterField,
+	PLATFORM_LABELS,
+	PLATFORMS,
+	SOURCE_KINDS,
+	sourceKind,
+	TECH,
+} from "../utils/ades";
+
+// Repo-backed data (src/data/agentic-dev-envs.yml), not EmDash content, so
+// there's no cacheHint to set. Stars and releases are refreshed by
+// scripts/update-ades.mjs.
+// Explicitly typed: astro:content's generated types resolve to `any` here.
+type Entry = { id: string; data: Ade };
+const all: Entry[] = await getCollection("agenticDevEnvs");
+
+const byStars = (a: Entry, b: Entry) =>
+	(b.data.stars ?? -1) - (a.data.stars ?? -1) || a.data.name.localeCompare(b.data.name);
+
+const ui = all.filter((e) => e.data.category === "ui").sort(byStars);
+const terminal = all.filter((e) => e.data.category === "terminal").sort(byStars);
+
+const lastUpdated = all
+	.map((e) => e.data.stars_updated_at)
+	.filter(Boolean)
+	.sort()
+	.at(-1);
+
+// Filter options only list values that actually occur in the data.
+const sorted = (values: Iterable<string>) =>
+	[...new Set(values)].sort((a, b) => a.localeCompare(b)).map((v) => ({ value: v, label: v }));
+
+const usedPlatforms = new Set<string>(all.flatMap((e) => e.data.platforms));
+const usedTech = new Set<string>(all.flatMap((e) => e.data.tech));
+const usedFeatures = new Set<string>(all.flatMap((e) => e.data.features));
+const usedSourceKinds = new Set<string>(all.map((e) => sourceKind(e.data)));
+
+const filterFields: FilterField[] = [
+	{ key: "name", label: "Name", type: "text", icon: "type" },
+	{
+		key: "platforms",
+		label: "Works on",
+		type: "multi",
+		icon: "monitor",
+		options: PLATFORMS.filter((p) => usedPlatforms.has(p)).map((p) => ({
+			value: p,
+			label: PLATFORM_LABELS[p],
+		})),
+	},
+	{
+		key: "tech",
+		label: "Tech",
+		type: "multi",
+		icon: "cpu",
+		options: Object.keys(TECH)
+			.filter((t) => usedTech.has(t))
+			.map((t) => ({ value: t, label: t })),
+	},
+	{
+		key: "agents",
+		label: "Agents",
+		type: "multi",
+		icon: "bot",
+		options: sorted(all.flatMap((e) => e.data.agents)),
+	},
+	{
+		key: "features",
+		label: "Features",
+		type: "multi",
+		icon: "sparkles",
+		options: FEATURES.filter((f) => usedFeatures.has(f)).map((f) => ({
+			value: f,
+			label: featureLabel(f),
+		})),
+	},
+	{ key: "first-seen", label: "First seen", type: "date", icon: "calendar" },
+	{ key: "release", label: "Latest release", type: "date", icon: "package" },
+	{ key: "stars", label: "Stars", type: "number", icon: "star" },
+	{
+		key: "source",
+		label: "Source",
+		type: "option",
+		icon: "code",
+		options: SOURCE_KINDS.filter((k) => usedSourceKinds.has(k)).map((k) => ({ value: k, label: k })),
+	},
+];
+---
+
+<Base
+	title="Agentic Development Environments"
+	description="A tracked list of desktop and terminal apps for running coding agents like Claude Code, Codex, OpenCode and Pi: what they're built with, which agents they drive, and how they're trending."
+>
+	<div class="ades-page">
+		<header class="page-header">
+			<h1 class="page-title">Agentic Development Environments</h1>
+			<p class="page-description">
+				Apps for orchestrating coding agents: {all.length} tracked, split into
+				GUI-first and terminal-first tools.
+				{lastUpdated && <> Stars last refreshed {lastUpdated}.</>}
+			</p>
+		</header>
+
+		<AdeControls fields={filterFields} total={all.length} />
+
+		<section class="ades-section" aria-labelledby="ui-heading">
+			<h2 id="ui-heading">GUI-focused</h2>
+			<p class="section-description">
+				Desktop, web and mobile apps. Apps that also embed terminal views are
+				listed here.
+			</p>
+			<AdeTable id="ades-ui" caption="GUI-focused agentic development environments" entries={ui} />
+		</section>
+
+		<section class="ades-section" aria-labelledby="terminal-heading">
+			<h2 id="terminal-heading">Terminal-focused</h2>
+			<p class="section-description">TUIs and terminal multiplexers built around agents.</p>
+			<AdeTable
+				id="ades-terminal"
+				caption="Terminal-focused agentic development environments"
+				entries={terminal}
+			/>
+		</section>
+	</div>
+	<AdePreview />
+</Base>
+
+<script>
+	type SortKey = "name" | "stars" | "first-seen" | "release";
+
+	function sortTable(table: HTMLTableElement, key: SortKey, dir: "ascending" | "descending") {
+		const tbody = table.tBodies[0];
+		const attr = `data-${key}`;
+		const rows = [...tbody.querySelectorAll<HTMLTableRowElement>("tr[data-filter]")].sort((a, b) => {
+			const av = a.getAttribute(attr) ?? "";
+			const bv = b.getAttribute(attr) ?? "";
+			const cmp = key === "stars" ? Number(av) - Number(bv) : av.localeCompare(bv);
+			return dir === "ascending" ? cmp : -cmp;
+		});
+		tbody.append(...rows, tbody.querySelector("[data-empty-row]")!);
+		table.dispatchEvent(new Event("ades:sort")); // back to page 1 (AdeTable)
+		for (const th of table.tHead!.querySelectorAll("th[aria-sort]")) {
+			const isActive = th.querySelector(`[data-sort="${key}"]`);
+			th.setAttribute("aria-sort", isActive ? dir : "none");
+		}
+	}
+
+	for (const table of document.querySelectorAll<HTMLTableElement>("[data-ade-table]")) {
+		table.tHead!.addEventListener("click", (event) => {
+			const button = (event.target as Element).closest<HTMLButtonElement>("[data-sort]");
+			if (!button) return;
+			const key = button.dataset.sort as SortKey;
+			const current = button.closest("th")!.getAttribute("aria-sort");
+			// Name defaults to A→Z; numeric/date columns default to high→low.
+			const first = key === "name" ? "ascending" : "descending";
+			const next =
+				current === first ? (first === "ascending" ? "descending" : "ascending") : first;
+			sortTable(table, key, next);
+		});
+	}
+</script>
+
+<style>
+	.ades-page {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: var(--spacing-16) var(--spacing-6);
+	}
+
+	.page-header {
+		max-width: var(--content-width);
+		margin-bottom: var(--spacing-8);
+	}
+
+	.page-title {
+		font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
+		font-weight: var(--font-weight-display);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	.page-description {
+		margin-top: var(--spacing-3);
+		color: var(--color-text-secondary);
+	}
+
+	/* Pagers scroll their section back into view; clear the sticky header. */
+	.ades-section {
+		scroll-margin-top: calc(4rem + var(--spacing-6));
+	}
+
+	.ades-section + .ades-section {
+		margin-top: var(--spacing-16);
+	}
+
+	.ades-section h2 {
+		font-size: var(--font-size-2xl);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: var(--tracking-snug);
+	}
+
+	.section-description {
+		margin: var(--spacing-2) 0 var(--spacing-6);
+		color: var(--color-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+</style>
