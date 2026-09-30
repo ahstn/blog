@@ -1,0 +1,23 @@
+public/favicon.svg
+  s_093cc53eafdd8c::t_cf622bd6ed4f7a 1-4
+src/layouts/Base.astro
+  s_093cc53eafdd8c::t_3f541ea8021aa9 44,85
+src/utils/site-identity.ts
+  s_093cc53eafdd8c::t_335d4c0479a309 17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1dd5f7404b17383533f463e3d358a1c4802ec480",
+  "prompts": {},
+  "sessions": {
+    "s_093cc53eafdd8c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a446f87ea086ede29",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
