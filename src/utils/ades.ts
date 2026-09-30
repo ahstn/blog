@@ -46,6 +46,10 @@ export type Tech = keyof typeof TECH;
 /** "Actively maintained" means a release within this many months. */
 export const MAINTAINED_MONTHS = 3;
 
+/** Rows-per-page options for each table's pager; 0 means all rows. */
+export const PAGE_SIZES = [10, 20, 50, 0] as const;
+export const DEFAULT_PAGE_SIZE = 20;
+
 /**
  * Whether the latest release (YYYY-MM-DD) falls inside the maintenance
  * window, or null if there's no release data to judge by.

@@ -1,15 +1,19 @@
 ---
+import ChevronLeft from "@lucide/astro/icons/chevron-left";
+import ChevronRight from "@lucide/astro/icons/chevron-right";
 import type { Ade } from "../content.config";
 import { previewUrl } from "../utils/ade-previews";
 import { agentIcon, sortAgents } from "../utils/agent-icons";
 import { FEATURE_ICONS, sortFeatures } from "../utils/feature-icons";
 import {
 	type ColumnKey,
+	DEFAULT_PAGE_SIZE,
 	featureLabel,
 	type FilterRecord,
 	isColumnHiddenByDefault,
 	isMaintained,
 	MAINTAINED_MONTHS,
+	PAGE_SIZES,
 	PLATFORM_LABELS,
 	sourceDetail,
 	sourceKind,
@@ -63,6 +67,15 @@ const filterRecord = (ade: Ade): FilterRecord => ({
 // Spread onto every header/body cell so the Columns menu can toggle them.
 // Default-hidden columns are hidden server-side to avoid a flash on load.
 const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefault(key) });
+
+// First page as the client will render it (maintained only, default page
+// size), so rows don't flash in and out on load.
+const matches = entries.map(({ data }) => isMaintained(data.latest_release?.date) !== false);
+const matchCount = matches.filter(Boolean).length;
+const firstPage = new Set(
+	entries.filter((_, i) => matches[i]).slice(0, DEFAULT_PAGE_SIZE).map((e) => e.id),
+);
+const pageCount = Math.max(1, Math.ceil(matchCount / DEFAULT_PAGE_SIZE));
 ---
 
 <div class="ade-table-wrap">
@@ -92,14 +105,15 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		</thead>
 		<tbody>
 			{
-				entries.map(({ id: entryId, data: ade }) => (
+				entries.map(({ id: entryId, data: ade }, i) => (
 					<tr
 						data-name={ade.name.toLowerCase()}
 						data-stars={ade.stars ?? -1}
 						data-first-seen={ade.first_seen ?? ""}
 						data-release={ade.latest_release?.date ?? ""}
 						data-filter={JSON.stringify(filterRecord(ade))}
-						hidden={isMaintained(ade.latest_release?.date) === false}
+						data-match={String(matches[i])}
+						hidden={!firstPage.has(entryId)}
 					>
 						<th scope="row" class="ade-name" data-preview={previewUrl(entryId)} {...col("name")}>
 							<a href={ade.website}>{ade.name}</a>
@@ -220,12 +234,98 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 					</tr>
 				))
 			}
-			<tr class="ade-empty" data-empty-row hidden>
+			<tr class="ade-empty" data-empty-row hidden={matchCount > 0}>
 				<td colspan="10">No entries match the current filters.</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
+
+<nav class="ade-pager" aria-label={`${caption}: pages`} data-pager={id}>
+	<label class="pager-size">
+		Rows per page
+		<select data-page-size>
+			{
+				PAGE_SIZES.map((n) => (
+					<option value={n} selected={n === DEFAULT_PAGE_SIZE}>
+						{n === 0 ? "All" : n}
+					</option>
+				))
+			}
+		</select>
+	</label>
+	<p class="pager-range" data-page-range aria-live="polite">
+		{matchCount ? `1–${Math.min(DEFAULT_PAGE_SIZE, matchCount)} of ${matchCount}` : "0 of 0"}
+	</p>
+	<div class="pager-nav">
+		<button type="button" class="pager-btn" data-page-prev aria-label="Previous page" disabled>
+			<ChevronLeft size={16} aria-hidden="true" />
+		</button>
+		<span class="pager-page" data-page-label>Page 1 of {pageCount}</span>
+		<button
+			type="button"
+			class="pager-btn"
+			data-page-next
+			aria-label="Next page"
+			disabled={pageCount === 1}
+		>
+			<ChevronRight size={16} aria-hidden="true" />
+		</button>
+	</div>
+</nav>
+
+<script>
+	// Paging sits on top of filtering: AdeControls marks rows with
+	// data-match and fires "ades:filter"; sorting fires "ades:sort" on the
+	// table. Here, only matching rows on the current page are shown.
+	for (const table of document.querySelectorAll<HTMLTableElement>("[data-ade-table]")) {
+		const pager = document.querySelector<HTMLElement>(`[data-pager="${table.id}"]`)!;
+		const sizeSelect = pager.querySelector<HTMLSelectElement>("[data-page-size]")!;
+		const prev = pager.querySelector<HTMLButtonElement>("[data-page-prev]")!;
+		const next = pager.querySelector<HTMLButtonElement>("[data-page-next]")!;
+		const tbody = table.tBodies[0];
+		let page = 0;
+
+		function render() {
+			const rows = [...tbody.querySelectorAll<HTMLTableRowElement>("tr[data-filter]")];
+			const matched = rows.filter((row) => row.dataset.match !== "false");
+			const size = Number(sizeSelect.value) || Math.max(matched.length, 1);
+			const pages = Math.max(1, Math.ceil(matched.length / size));
+			page = Math.min(page, pages - 1);
+			const start = page * size;
+			const end = Math.min(start + size, matched.length);
+			const visible = new Set(matched.slice(start, end));
+
+			for (const row of rows) row.hidden = !visible.has(row);
+			tbody.querySelector<HTMLElement>("[data-empty-row]")!.hidden = matched.length > 0;
+			pager.querySelector("[data-page-range]")!.textContent = matched.length
+				? `${start + 1}–${end} of ${matched.length}`
+				: "0 of 0";
+			pager.querySelector("[data-page-label]")!.textContent = `Page ${page + 1} of ${pages}`;
+			prev.disabled = page === 0;
+			next.disabled = page >= pages - 1;
+		}
+
+		function goTo(target: number) {
+			page = target;
+			render();
+			// Paging from the controls below a long table: bring its top back.
+			if (table.getBoundingClientRect().top < 0) {
+				table.closest("section")?.scrollIntoView({ block: "start" });
+			}
+		}
+
+		prev.addEventListener("click", () => goTo(page - 1));
+		next.addEventListener("click", () => goTo(page + 1));
+		sizeSelect.addEventListener("change", () => goTo(0));
+		table.addEventListener("ades:sort", () => goTo(0));
+		document.addEventListener("ades:filter", () => {
+			page = 0;
+			render();
+		});
+		render();
+	}
+</script>
 
 <style>
 	/* Widths live on header cells (not <col>) so hiding a column can't shift
@@ -541,5 +641,81 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		overflow: hidden;
 		clip-path: inset(50%);
 		white-space: nowrap;
+	}
+
+	.ade-pager {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--spacing-3) var(--spacing-6);
+		margin-top: var(--spacing-3);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.pager-size {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	.pager-range {
+		margin: 0;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pager-nav {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	.pager-page {
+		min-width: 5.5rem;
+		text-align: center;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pager-size select,
+	.pager-btn {
+		height: 2rem;
+		font: inherit;
+		color: var(--color-text);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-sm);
+		cursor: pointer;
+	}
+
+	.pager-size select {
+		padding: 0 var(--spacing-2);
+	}
+
+	.pager-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		padding: 0;
+	}
+
+	.pager-size select:hover,
+	.pager-btn:hover:not(:disabled) {
+		background: var(--color-surface);
+	}
+
+	.pager-btn:disabled {
+		color: var(--color-muted);
+		box-shadow: none;
+		cursor: default;
+		opacity: 0.5;
+	}
+
+	.pager-size select:focus-visible,
+	.pager-btn:focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 2px;
 	}
 </style>

@@ -455,13 +455,12 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 		for (const [row, record] of records) {
 			// Entries without release data (null) aren't judged, so stay visible.
 			const inactive = activeOnly && record.maintained === false;
-			row.hidden = inactive || !filters.every((f) => matches(record, f));
-			if (!row.hidden) shown++;
+			const match = !inactive && filters.every((f) => matches(record, f));
+			row.dataset.match = String(match);
+			if (match) shown++;
 		}
-		for (const tbody of document.querySelectorAll("[data-ade-table] tbody")) {
-			const emptyRow = tbody.querySelector<HTMLElement>("[data-empty-row]")!;
-			emptyRow.hidden = !!tbody.querySelector("tr[data-filter]:not([hidden])");
-		}
+		// The table pagers (AdeTable) decide which matching rows are shown.
+		document.dispatchEvent(new Event("ades:filter"));
 
 		root.querySelector("[data-result-count]")!.textContent =
 			shown === rows.length ? `${rows.length} entries` : `Showing ${shown} of ${rows.length}`;

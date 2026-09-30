@@ -146,6 +146,7 @@ const filterFields: FilterField[] = [
 			return dir === "ascending" ? cmp : -cmp;
 		});
 		tbody.append(...rows, tbody.querySelector("[data-empty-row]")!);
+		table.dispatchEvent(new Event("ades:sort")); // back to page 1 (AdeTable)
 		for (const th of table.tHead!.querySelectorAll("th[aria-sort]")) {
 			const isActive = th.querySelector(`[data-sort="${key}"]`);
 			th.setAttribute("aria-sort", isActive ? dir : "none");
@@ -189,6 +190,11 @@ const filterFields: FilterField[] = [
 	.page-description {
 		margin-top: var(--spacing-3);
 		color: var(--color-text-secondary);
+	}
+
+	/* Pagers scroll their section back into view; clear the sticky header. */
+	.ades-section {
+		scroll-margin-top: calc(4rem + var(--spacing-6));
 	}
 
 	.ades-section + .ades-section {
