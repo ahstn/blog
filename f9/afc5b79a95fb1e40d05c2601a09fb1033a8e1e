@@ -1,0 +1,43 @@
+.claude/launch.json
+  s_1e8b4df78a517a::t_6697f1d6a4fd9e 1-11
+.github/workflows/update-ade-stars.yml
+  s_1e8b4df78a517a::t_f2c69570c2cf5e 1-33
+.gitignore
+  s_1e8b4df78a517a::t_24a16e2ef00e5a 13
+scripts/update-ade-stars.mjs
+  s_1e8b4df78a517a::t_c02e85bf72d737 1-68
+seed/seed.json
+  s_1e8b4df78a517a::t_5f7eb02e99dcc3 148-152
+src/content.config.ts
+  s_1e8b4df78a517a::t_cb3b648ac4777f 1-57
+src/data/agentic-dev-envs.yml
+  s_1e8b4df78a517a::t_80f91970456c24 1-440
+package.json
+  s_1e8b4df78a517a::t_f7b0822d60ab61 14-15,23,32-33
+pnpm-lock.yaml
+  s_1e8b4df78a517a::t_3d4d33d67e7ef1 1-7984
+src/components/AdeControls.astro
+  s_1e8b4df78a517a::t_cb13dc48ca4a1a 1-982
+src/components/AdeTable.astro
+  s_1e8b4df78a517a::t_5377d1d0d77eae 1-313
+src/pages/agentic-dev-envs.astro
+  s_1e8b4df78a517a::t_2d147429c62875 1-213
+src/utils/ades.ts
+  s_1e8b4df78a517a::t_c6c2b840b7fc74 1-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f9afc5b79a95fb1e40d05c2601a09fb1033a8e1e",
+  "prompts": {},
+  "sessions": {
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
