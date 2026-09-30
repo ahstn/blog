@@ -107,7 +107,6 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 							<span class="ade-links">
 								{ade.repo && <a href={`https://github.com/${ade.repo}`}>GitHub</a>}
 								{ade.links.docs && <a href={ade.links.docs}>Docs</a>}
-								{ade.links.discord && <a href={ade.links.discord}>Discord</a>}
 								{ade.links.x && <a href={ade.links.x}>X</a>}
 								{!ade.repo && !ade.links.docs && <span>{hostname(ade.website)}</span>}
 							</span>
@@ -186,9 +185,9 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 								<a
 									class="release"
 									href={`https://github.com/${ade.repo}/releases/latest`}
-									title={`Released ${ade.latest_release.date}`}
+									title={`v${ade.latest_release.version}, released ${ade.latest_release.date}`}
 								>
-									v{ade.latest_release.version}
+									<span class="release-version">v{ade.latest_release.version}</span>
 									<span class="release-date">{formatMonth(ade.latest_release.date.slice(0, 7))}</span>
 								</a>
 							) : (
@@ -491,6 +490,14 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		font-size: var(--font-size-xs);
 		color: var(--color-text);
 		text-decoration: none;
+	}
+
+	/* Some projects tag date-stamped builds (v0.2026.06.03…); clip those
+	   rather than widen the column. The full version is in the title. */
+	.release-version {
+		max-width: 5rem; /* .w-release */
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.release:hover {

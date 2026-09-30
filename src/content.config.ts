@@ -27,7 +27,6 @@ export const adeSchema = z.object({
 		.optional(),
 	links: z
 		.object({
-			discord: z.url().optional(),
 			x: z.url().optional(),
 			docs: z.url().optional(),
 		})
