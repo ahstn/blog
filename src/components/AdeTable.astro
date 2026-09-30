@@ -1,5 +1,6 @@
 ---
 import type { Ade } from "../content.config";
+import { previewUrl } from "../utils/ade-previews";
 import { agentIcon, sortAgents } from "../utils/agent-icons";
 import { FEATURE_ICONS, sortFeatures } from "../utils/feature-icons";
 import {
@@ -91,7 +92,7 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		</thead>
 		<tbody>
 			{
-				entries.map(({ data: ade }) => (
+				entries.map(({ id: entryId, data: ade }) => (
 					<tr
 						data-name={ade.name.toLowerCase()}
 						data-stars={ade.stars ?? -1}
@@ -100,7 +101,7 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 						data-filter={JSON.stringify(filterRecord(ade))}
 						hidden={isMaintained(ade.latest_release?.date) === false}
 					>
-						<th scope="row" class="ade-name" {...col("name")}>
+						<th scope="row" class="ade-name" data-preview={previewUrl(entryId)} {...col("name")}>
 							<a href={ade.website}>{ade.name}</a>
 							{ade.note && <span class="ade-note">{ade.note}</span>}
 							<span class="ade-links">

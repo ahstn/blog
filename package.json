@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
     "typecheck": "astro check",
+    "ades:preview": "node scripts/ade-preview.mjs",
     "ades:update": "node scripts/update-ades.mjs"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.7",
     "@cloudflare/workers-types": "^4.20260305.1",
+    "sharp": "^0.35.5",
     "wrangler": "^4.99.0",
     "yaml": "^2.9.1"
   },

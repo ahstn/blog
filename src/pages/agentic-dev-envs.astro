@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import AdeControls from "../components/AdeControls.astro";
+import AdePreview from "../components/AdePreview.astro";
 import AdeTable from "../components/AdeTable.astro";
 import type { Ade } from "../content.config";
 import Base from "../layouts/Base.astro";
@@ -129,6 +130,7 @@ const filterFields: FilterField[] = [
 			/>
 		</section>
 	</div>
+	<AdePreview />
 </Base>
 
 <script>

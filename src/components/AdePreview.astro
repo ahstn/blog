@@ -1,0 +1,109 @@
+---
+/**
+ * Floating screenshot shown beside the cursor while hovering an ADE's name
+ * cell (`[data-preview]`). Desktop only: needs a fine pointer that can hover
+ * and a wide viewport, so touch devices and small screens never load images.
+ */
+---
+
+<img class="ade-preview" data-ade-preview alt="" aria-hidden="true" decoding="async" hidden />
+
+<style>
+	.ade-preview {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 50;
+		width: clamp(20rem, 30vw, 36rem);
+		height: auto;
+		max-height: 70vh;
+		object-fit: cover;
+		object-position: top left;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		background: var(--color-surface);
+		box-shadow: 0 12px 32px rgb(0 0 0 / 0.25);
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity var(--transition-fast);
+	}
+
+	.ade-preview.is-visible {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ade-preview {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	const img = document.querySelector<HTMLImageElement>("[data-ade-preview]")!;
+	const desktop = matchMedia("(hover: hover) and (pointer: fine) and (min-width: 64rem)");
+	const OFFSET = 16; // px between cursor and image
+	const MARGIN = 8; // px kept clear of the viewport edges
+
+	let current: HTMLElement | null = null;
+	let x = 0;
+	let y = 0;
+
+	function place() {
+		const { width, height } = img.getBoundingClientRect();
+		// Right of the cursor, flipping left only if it would run off-screen;
+		// vertically centred on the cursor, clamped to the viewport.
+		let left = x + OFFSET;
+		if (left + width > innerWidth - MARGIN) left = Math.max(MARGIN, x - OFFSET - width);
+		const top = Math.min(Math.max(MARGIN, y - height / 2), innerHeight - height - MARGIN);
+		img.style.transform = `translate(${left}px, ${top}px)`;
+	}
+
+	function hide() {
+		current = null;
+		img.classList.remove("is-visible");
+		img.hidden = true;
+	}
+
+	async function show(cell: HTMLElement) {
+		current = cell;
+		const src = cell.dataset.preview!;
+		if (img.getAttribute("src") !== src) {
+			img.classList.remove("is-visible");
+			img.src = src;
+		}
+		img.hidden = false;
+		try {
+			await img.decode();
+		} catch {
+			return hide();
+		}
+		if (current !== cell) return; // moved on while loading
+		place();
+		img.classList.add("is-visible");
+	}
+
+	document.addEventListener("pointerover", (e) => {
+		if (e.pointerType !== "mouse" || !desktop.matches) return;
+		const cell = (e.target as Element).closest<HTMLElement>("[data-preview]");
+		if (cell && cell !== current) {
+			x = e.clientX;
+			y = e.clientY;
+			show(cell);
+		} else if (!cell && current) {
+			hide();
+		}
+	});
+
+	document.addEventListener("pointermove", (e) => {
+		if (!current) return;
+		x = e.clientX;
+		y = e.clientY;
+		if (!img.hidden) place();
+	});
+
+	// Scrolling moves the row out from under a still cursor.
+	addEventListener("scroll", hide, { passive: true });
+	document.documentElement.addEventListener("pointerleave", hide);
+	desktop.addEventListener("change", hide);
+</script>
