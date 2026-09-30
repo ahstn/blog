@@ -2,9 +2,12 @@
 #
 # Schema: src/content.config.ts (validated at build time).
 # category: "ui" or "terminal". GUI apps that also embed terminals are "ui".
+# tech: language(s) then UI layer only, from TECH in src/utils/ades.ts.
 # features: see FEATURES in src/utils/ades.ts.
-# agents: at most ~8 named; the rest counted in agents_more.
-# stars / stars_updated_at: written by `pnpm ades:update`, don't edit by hand.
+# agents: at most ~8 named; the rest counted in agents_more (total = the
+#   count on references.agents, the page listing supported agents).
+# stars / stars_updated_at / latest_release: written by `pnpm ades:update`,
+#   don't edit by hand.
 
 - id: t3-code
   name: T3 Code
@@ -17,13 +20,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
+  tech: [TypeScript, Electron]
   agents: [Claude Code, Codex, OpenCode, Cursor CLI, Grok Build, Antigravity]
   agents_more: 0
+  references:
+    agents: https://github.com/pingdotgg/t3code#installation
   features: [worktrees, remote-control, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-03
-  stars: 23985
+  stars: 23992
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.0.44
+    date: 2026-09-29
 
 - id: emdash
   name: Emdash
@@ -38,13 +46,18 @@
   price: free
   open_source: true
   license: Apache-2.0
-  tech: [TypeScript, Electron, React]
-  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Amp, Copilot CLI, Droid]
-  agents_more: 29
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Amp, Copilot CLI, Droid, OMP]
+  agents_more: 26
+  references:
+    agents: https://emdash.com/docs/providers
   features: [worktrees, automations, browser, diff-review, terminal, cloud-sandboxes]
   first_seen: 2025-09
   stars: 5889
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 1.2.7
+    date: 2026-09-27
 
 - id: pi-gui
   name: pi-gui
@@ -55,13 +68,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
+  tech: [TypeScript, Electron]
   agents: [Pi]
   agents_more: 0
+  references:
+    agents: https://github.com/minghinmatthewlam/pi-gui#readme
   features: [worktrees, automations, plugins, diff-review, terminal]
   first_seen: 2026-04
   stars: 1059
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 1.0.1
+    date: 2026-09-26
 
 - id: helmor
   name: Helmor
@@ -75,13 +93,18 @@
   price: free
   open_source: true
   license: Apache-2.0
-  tech: [TypeScript, Rust, Tauri, React]
+  tech: [TypeScript, Rust, Tauri]
   agents: [Claude Code, Codex, Cursor CLI, OpenCode, Kimi CLI]
   agents_more: 0
+  references:
+    agents: https://github.com/dohooo/helmor#features
   features: [worktrees, remote-control, diff-review, terminal]
   first_seen: 2026-04
   stars: 1308
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.46.0
+    date: 2026-07-24
 
 - id: orca
   name: Orca
@@ -96,13 +119,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
-  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp]
-  agents_more: 19
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp, OMP]
+  agents_more: 28
+  references:
+    agents: https://www.onorca.dev/docs/agents/supported
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-03
-  stars: 82232
+  stars: 82264
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 1.4.217
+    date: 2026-09-29
 
 - id: superconductor
   name: Superconductor
@@ -117,8 +145,10 @@
   price: free
   open_source: false
   tech: [Rust, Metal]
-  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Droid]
-  agents_more: 7
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Droid, OMP]
+  agents_more: 6
+  references:
+    agents: https://super.engineering/docs/providers-and-models/
   features: [worktrees, browser, diff-review, terminal]
   first_seen: 2026-04
 
@@ -134,13 +164,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
-  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Droid, Grok Build, Antigravity]
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Droid, Grok Build, Antigravity, OMP]
   agents_more: 1
+  references:
+    agents: https://www.trysynara.com/docs/providers
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal]
   first_seen: 2026-04
-  stars: 1919
+  stars: 1920
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.9.2
+    date: 2026-09-25
 
 - id: paseo
   name: Paseo
@@ -154,13 +189,18 @@
   price: freemium
   open_source: true
   license: Apache-2.0
-  tech: [TypeScript, Electron, React Native, Expo]
-  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Copilot CLI, Gemini CLI, Amp]
-  agents_more: 33
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Copilot CLI, Gemini CLI, Amp, OMP]
+  agents_more: 32
+  references:
+    agents: https://paseo.sh/agents
   features: [worktrees, remote-control, mobile-app, automations, plugins, diff-review, terminal]
   first_seen: 2026-02
-  stars: 19098
+  stars: 19105
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.10.2
+    date: 2026-09-29
 
 - id: zeron
   name: Zeron
@@ -177,10 +217,15 @@
   tech: [Rust, GPUI]
   agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi]
   agents_more: 4
+  references:
+    agents: https://github.com/zeronsh/zeron/blob/main/crates/proto/src/agent.rs
   features: [remote-control, browser, diff-review, terminal]
   first_seen: 2026-07
-  stars: 2504
+  stars: 2508
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.2.99
+    date: 2026-09-30
 
 - id: bb
   name: bb
@@ -194,13 +239,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
-  agents: [Claude Code, Codex, Cursor CLI, Pi, OpenCode]
-  agents_more: 8
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, Cursor CLI, Pi, OpenCode, OMP]
+  agents_more: 7
+  references:
+    agents: https://getbb.app/
   features: [worktrees, plugins, automations, remote-control, browser, diff-review, cloud-sandboxes]
   first_seen: 2026-05
-  stars: 4023
+  stars: 4029
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.44.0
+    date: 2026-09-25
 
 - id: gooey-pi
   name: GooeyPi
@@ -211,13 +261,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
-  agents: [Pi]
-  agents_more: 2
+  tech: [TypeScript, Electron]
+  agents: [Pi, OMP]
+  agents_more: 1
+  references:
+    agents: https://github.com/am-will/gooey-pi#three-harnesses-one-workspace
   features: [worktrees, automations, browser, diff-review, terminal]
   first_seen: 2026-08
   stars: 941
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 1.1.17
+    date: 2026-09-09
 
 - id: diri
   name: Diri
@@ -233,10 +288,15 @@
   tech: [Rust, GPUI]
   agents: [Claude Code, Codex, Cursor CLI, Gemini CLI, OpenCode, Pi, Copilot CLI, Amp]
   agents_more: 14
+  references:
+    agents: https://github.com/cristicretu/diri/tree/main/diri/crates/diri-engine/manifests
   features: [worktrees, remote-control, diff-review, terminal, mobile-app]
   first_seen: 2026-08
   stars: 338
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.8.10
+    date: 2026-09-29
 
 - id: waku
   name: Waku
@@ -248,12 +308,17 @@
   open_source: true
   license: GPL-3.0-only
   tech: [Rust, GPUI]
-  agents: [Claude Code, Codex, OpenCode, Pi, Amp, Cursor CLI, Kimi CLI]
-  agents_more: 2
+  agents: [Claude Code, Codex, OpenCode, Pi, Amp, Cursor CLI, Kimi CLI, OMP]
+  agents_more: 3
+  references:
+    agents: https://github.com/egoist/waku/blob/main/docs/providers.md
   features: [diff-review, terminal, browser]
   first_seen: 2026-08
   stars: 1549
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.1.19
+    date: 2026-09-10
 
 - id: agent-orchestrator
   name: Agent Orchestrator
@@ -268,13 +333,18 @@
   price: free
   open_source: true
   license: Apache-2.0
-  tech: [Go, TypeScript, Electron, React]
-  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Gemini CLI, Amp, Copilot CLI]
-  agents_more: 24
+  tech: [TypeScript, Go, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Gemini CLI, Amp, Copilot CLI, OMP]
+  agents_more: 20
+  references:
+    agents: https://docs.orchestrator.inc/plugins/agents
   features: [worktrees, kanban, remote-control, mobile-app, browser, diff-review, terminal, plugins]
   first_seen: 2026-02
-  stars: 12570
+  stars: 12571
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.13.2
+    date: 2026-09-30
 
 - id: openchamber
   name: OpenChamber
@@ -288,13 +358,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Electron, React]
+  tech: [TypeScript, Electron]
   agents: [OpenCode]
   agents_more: 0
+  references:
+    agents: https://docs.openchamber.dev/opencode-server
   features: [worktrees, remote-control, automations, browser, diff-review, terminal, mobile-app]
   first_seen: 2025-12
-  stars: 10969
+  stars: 10974
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 2.0.4
+    date: 2026-09-28
 
 - id: opensession
   name: Open Session
@@ -305,13 +380,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Bun, React, Electron, Swift]
+  tech: [TypeScript, Swift, Electron]
   agents: [Pi, Claude Code, Codex]
   agents_more: 0
+  references:
+    agents: https://github.com/tellahq/opensession/blob/main/docs/setup/README.md#minimum-requirements
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, mobile-app, cloud-sandboxes]
   first_seen: 2026-07
   stars: 388
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.4.70
+    date: 2026-09-24
 
 - id: monocode
   name: MonoCode
@@ -322,13 +402,18 @@
   price: free
   open_source: true
   license: MIT
-  tech: [TypeScript, Rust, Tauri, React]
-  agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi]
-  agents_more: 5
+  tech: [TypeScript, Rust, Tauri]
+  agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi, OMP]
+  agents_more: 4
+  references:
+    agents: https://github.com/hardbeat920/monocode#install
   features: [worktrees, remote-control]
   first_seen: 2026-08
   stars: 1763
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.6.0
+    date: 2026-09-30
 
 - id: fractal
   name: Fractal
@@ -354,13 +439,18 @@
   price: free
   open_source: true
   license: AGPL-3.0
-  tech: [TypeScript, Electron, Effect]
+  tech: [TypeScript, Electron]
   agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI]
   agents_more: 2
+  references:
+    agents: https://docs.zuse.sh/providers
   features: [worktrees, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-05
   stars: 218
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.23.0
+    date: 2026-09-30
 
 - id: dray
   name: Dray
@@ -371,13 +461,18 @@
   price: free
   open_source: true
   license: Apache-2.0
-  tech: [TypeScript, Rust, Tauri, React]
+  tech: [TypeScript, Rust, Tauri]
   agents: [Claude Code, Codex, Pi]
   agents_more: 2
+  references:
+    agents: https://github.com/monorepo-labs/dray/blob/main/apps/desktop/src-tauri/src/harness/harness.rs
   features: [worktrees, browser, diff-review, terminal]
   first_seen: 2026-08
   stars: 103
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.25.2
+    date: 2026-09-30
 
 - id: herdr
   name: herdr
@@ -393,12 +488,17 @@
   open_source: true
   license: Apache-2.0
   tech: [Rust, Ratatui]
-  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Amp, Copilot CLI]
-  agents_more: 7
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Amp, Copilot CLI, OMP]
+  agents_more: 14
+  references:
+    agents: https://herdr.dev/docs/agents/
   features: [plugins, terminal]
   first_seen: 2026-03
-  stars: 41632
+  stars: 41646
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.9.3
+    date: 2026-09-29
 
 - id: luvus
   name: Luvus
@@ -413,12 +513,17 @@
   open_source: true
   license: Apache-2.0
   tech: [Rust, Ratatui]
-  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp]
-  agents_more: 15
+  agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp, OMP]
+  agents_more: 14
+  references:
+    agents: https://luvus.dev/docs/reference/agents/
   features: [worktrees, remote-control, automations, plugins, diff-review, terminal]
   first_seen: 2026-06
-  stars: 941
+  stars: 943
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 0.14.3
+    date: 2026-09-30
 
 - id: tty7
   name: tty7
@@ -432,9 +537,14 @@
   open_source: true
   license: Apache-2.0
   tech: [Rust, GPUI]
-  agents: [Claude Code, Codex, OpenCode, Gemini CLI, Cursor CLI, Aider, Amp, Copilot CLI]
-  agents_more: 18
+  agents: [Claude Code, Codex, OpenCode, Gemini CLI, Cursor CLI, Aider, Amp, Copilot CLI, Pi, OMP]
+  agents_more: 16
+  references:
+    agents: https://tty7.io/agents/overview
   features: [diff-review, terminal]
   first_seen: 2026-07
-  stars: 1181
+  stars: 1182
   stars_updated_at: 2026-09-30
+  latest_release:
+    version: 26.9.4
+    date: 2026-09-29

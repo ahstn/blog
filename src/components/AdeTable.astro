@@ -7,8 +7,11 @@ import {
 	featureLabel,
 	type FilterRecord,
 	isColumnHiddenByDefault,
+	isMaintained,
+	MAINTAINED_MONTHS,
 	PLATFORM_LABELS,
 	sourceLabel,
+	TECH,
 } from "../utils/ades";
 
 interface Props {
@@ -23,7 +26,7 @@ const formatStars = (n: number) =>
 	n < 1000 ? String(n) : `${(n / 1000).toFixed(n < 10_000 ? 1 : 0).replace(/\.0$/, "")}k`;
 
 const formatMonth = (ym: string) =>
-	new Date(`${ym}-01T00:00:00Z`).toLocaleDateString("en-GB", {
+	new Date(`${ym}-01T00:00:00Z`).toLocaleDateString("en-US", {
 		month: "short",
 		year: "numeric",
 		timeZone: "UTC",
@@ -49,6 +52,8 @@ const filterRecord = (ade: Ade): FilterRecord => ({
 	agents: ade.agents,
 	features: ade.features,
 	"first-seen": ade.first_seen ?? null,
+	release: ade.latest_release?.date.slice(0, 7) ?? null,
+	maintained: isMaintained(ade.latest_release?.date),
 	price: ade.price ?? null,
 	stars: ade.stars ?? null,
 	source: sourceLabel(ade),
@@ -74,6 +79,10 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 				<th scope="col" aria-sort="none" {...col("first-seen")}>
 					<button type="button" data-sort="first-seen">First seen</button>
 				</th>
+				<th scope="col" aria-sort="none" {...col("release")}>
+					<button type="button" data-sort="release">Latest release</button>
+				</th>
+				<th scope="col" {...col("maintained")}>Maintained</th>
 				<th scope="col" {...col("price")}>Price</th>
 				<th scope="col" class="num" aria-sort="descending" {...col("stars")}>
 					<button type="button" data-sort="stars">Stars</button>
@@ -88,7 +97,9 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 						data-name={ade.name.toLowerCase()}
 						data-stars={ade.stars ?? -1}
 						data-first-seen={ade.first_seen ?? ""}
+						data-release={ade.latest_release?.date ?? ""}
 						data-filter={JSON.stringify(filterRecord(ade))}
+						hidden={isMaintained(ade.latest_release?.date) === false}
 					>
 						<th scope="row" class="ade-name" {...col("name")}>
 							<a href={ade.website}>{ade.name}</a>
@@ -106,7 +117,11 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 						</td>
 						<td {...col("tech")}>
 							<ul class="chips">
-								{ade.tech.map((t) => <li class="chip chip-mono">{t}</li>)}
+								{ade.tech.map((t) => (
+									<li class="chip chip-tech" style={`--tech: ${TECH[t]}`}>
+										{t}
+									</li>
+								))}
 							</ul>
 						</td>
 						<td class="ade-agents" {...col("agents")}>
@@ -160,6 +175,27 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 						<td class="nowrap" {...col("first-seen")}>
 							{ade.first_seen ? formatMonth(ade.first_seen) : "—"}
 						</td>
+						<td class="nowrap" {...col("release")}>
+							{ade.latest_release ? (
+								<a
+									class="release"
+									href={`https://github.com/${ade.repo}/releases/latest`}
+									title={`Released ${ade.latest_release.date}`}
+								>
+									v{ade.latest_release.version}
+									<span class="release-date">{formatMonth(ade.latest_release.date.slice(0, 7))}</span>
+								</a>
+							) : (
+								"—"
+							)}
+						</td>
+						<td
+							class="nowrap"
+							title={`Released in the last ${MAINTAINED_MONTHS} months`}
+							{...col("maintained")}
+						>
+							{{ true: "Yes", false: "No", null: "—" }[String(isMaintained(ade.latest_release?.date))]}
+						</td>
 						<td class="capitalize" {...col("price")}>{ade.price ?? "—"}</td>
 						<td class="num" {...col("stars")}>
 							{ade.repo && ade.stars !== undefined ? (
@@ -178,7 +214,7 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 				))
 			}
 			<tr class="ade-empty" data-empty-row hidden>
-				<td colspan="9">No entries match the current filters.</td>
+				<td colspan="11">No entries match the current filters.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -395,8 +431,31 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		border-radius: var(--radius);
 	}
 
-	.chip-mono {
+	/* --tech is a per-chip light-dark() colour from TECH. */
+	.chip-tech {
+		font-size: 0.6875rem;
+		font-weight: 500;
+		color: var(--tech);
+		background: color-mix(in srgb, var(--tech) 8%, transparent);
+		border-color: color-mix(in srgb, var(--tech) 35%, transparent);
+	}
+
+	.release {
+		display: flex;
+		flex-direction: column;
 		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.release:hover {
+		color: var(--color-brand);
+	}
+
+	.release-date {
+		font-family: var(--font-body);
+		color: var(--color-muted);
 	}
 
 	.num {

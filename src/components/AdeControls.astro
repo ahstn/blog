@@ -9,13 +9,14 @@ import Cpu from "@lucide/astro/icons/cpu";
 import EllipsisVertical from "@lucide/astro/icons/ellipsis-vertical";
 import ListFilter from "@lucide/astro/icons/list-filter";
 import Monitor from "@lucide/astro/icons/monitor";
+import Package from "@lucide/astro/icons/package";
 import Plus from "@lucide/astro/icons/plus";
 import Sparkles from "@lucide/astro/icons/sparkles";
 import Star from "@lucide/astro/icons/star";
 import Tag from "@lucide/astro/icons/tag";
 import Type from "@lucide/astro/icons/type";
 import X from "@lucide/astro/icons/x";
-import { COLUMNS, type FilterField, isColumnHiddenByDefault } from "../utils/ades";
+import { COLUMNS, type FilterField, isColumnHiddenByDefault, MAINTAINED_MONTHS } from "../utils/ades";
 
 interface Props {
 	fields: FilterField[];
@@ -34,6 +35,7 @@ const icons = {
 	cpu: Cpu,
 	"ellipsis-vertical": EllipsisVertical,
 	monitor: Monitor,
+	package: Package,
 	sparkles: Sparkles,
 	star: Star,
 	tag: Tag,
@@ -73,6 +75,18 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 				}
 			</div>
 		</div>
+
+		<button
+			type="button"
+			class="tb-btn"
+			role="switch"
+			aria-checked="true"
+			title={`Hide apps without a release in the last ${MAINTAINED_MONTHS} months`}
+			data-active-only
+		>
+			<span class="switch" aria-hidden="true"></span>
+			Actively maintained
+		</button>
 
 		<p class="result-count" aria-live="polite" data-result-count>
 			{total} entries
@@ -270,15 +284,18 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 
 	// ------------------------------------------------------------- columns
 
-	const COLUMNS_KEY = "ade-hidden-columns";
+	// Only columns the user has toggled are stored ({ key: visible }), so
+	// columns added later still get their default visibility.
+	const COLUMNS_KEY = "ade-columns";
+	const overrides: Partial<Record<ColumnKey, boolean>> = (() => {
+		try {
+			const stored = JSON.parse(localStorage.getItem(COLUMNS_KEY) ?? "null");
+			if (stored && typeof stored === "object" && !Array.isArray(stored)) return stored;
+		} catch {}
+		return {};
+	})();
 	const hiddenColumns = new Set<ColumnKey>(
-		(() => {
-			try {
-				const stored = JSON.parse(localStorage.getItem(COLUMNS_KEY) ?? "null");
-				if (Array.isArray(stored)) return stored;
-			} catch {}
-			return COLUMNS.filter((c) => isColumnHiddenByDefault(c.key)).map((c) => c.key);
-		})(),
+		COLUMNS.filter((c) => !(overrides[c.key] ?? !isColumnHiddenByDefault(c.key))).map((c) => c.key),
 	);
 
 	function applyColumns() {
@@ -299,7 +316,10 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 		const key = item.dataset.column as ColumnKey;
 		if (hiddenColumns.has(key)) hiddenColumns.delete(key);
 		else hiddenColumns.add(key);
-		localStorage.setItem(COLUMNS_KEY, JSON.stringify([...hiddenColumns]));
+		const visible = !hiddenColumns.has(key);
+		if (visible === !isColumnHiddenByDefault(key)) delete overrides[key];
+		else overrides[key] = visible;
+		localStorage.setItem(COLUMNS_KEY, JSON.stringify(overrides));
 		applyColumns();
 	});
 
@@ -423,10 +443,21 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 	const chipsEl = root.querySelector<HTMLElement>("[data-filter-chips]")!;
 	const filterBar = root.querySelector<HTMLElement>("[data-filter-bar]")!;
 
+	// On by default; turning it off is persisted as ?all=1.
+	const activeToggle = root.querySelector<HTMLButtonElement>("[data-active-only]")!;
+	let activeOnly = new URL(location.href).searchParams.get("all") !== "1";
+
+	activeToggle.addEventListener("click", () => {
+		activeOnly = !activeOnly;
+		applyFilters();
+	});
+
 	function applyFilters() {
 		let shown = 0;
 		for (const [row, record] of records) {
-			row.hidden = !filters.every((f) => matches(record, f));
+			// Entries without release data (null) aren't judged, so stay visible.
+			const inactive = activeOnly && record.maintained === false;
+			row.hidden = inactive || !filters.every((f) => matches(record, f));
 			if (!row.hidden) shown++;
 		}
 		for (const tbody of document.querySelectorAll("[data-ade-table] tbody")) {
@@ -441,7 +472,11 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 		count.textContent = String(filters.length);
 		filterBar.hidden = filters.length === 0;
 
+		activeToggle.setAttribute("aria-checked", activeOnly ? "true" : "false");
+
 		const url = new URL(location.href);
+		if (activeOnly) url.searchParams.delete("all");
+		else url.searchParams.set("all", "1");
 		if (filters.length) {
 			url.searchParams.set("filters", JSON.stringify(filters.map((f) => [f.field, f.op, f.values])));
 		} else {
@@ -645,6 +680,7 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 			addChip({ field: field.key, op, values: values.map(String) });
 		}
 	} catch {}
+	applyFilters();
 </script>
 
 <style>
@@ -703,6 +739,36 @@ const visibleColumns = COLUMNS.filter((c) => !isColumnHiddenByDefault(c.key)).le
 	.tb-btn:hover,
 	.tb-btn[aria-expanded="true"] {
 		background: var(--color-surface);
+	}
+
+	/* Small track + thumb inside the "Actively maintained" switch button. */
+	.switch {
+		position: relative;
+		width: 1.75rem;
+		height: 1rem;
+		background: var(--color-border);
+		border-radius: 999px;
+		transition: background var(--transition-fast);
+	}
+
+	.switch::after {
+		content: "";
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: calc(1rem - 4px);
+		height: calc(1rem - 4px);
+		background: var(--color-bg);
+		border-radius: 50%;
+		transition: transform var(--transition-fast);
+	}
+
+	[aria-checked="true"] > .switch {
+		background: var(--color-brand);
+	}
+
+	[aria-checked="true"] > .switch::after {
+		transform: translateX(0.75rem);
 	}
 
 	.tb-icon {

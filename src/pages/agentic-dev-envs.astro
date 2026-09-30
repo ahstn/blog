@@ -11,11 +11,12 @@ import {
 	PLATFORM_LABELS,
 	PLATFORMS,
 	sourceLabel,
+	TECH,
 } from "../utils/ades";
 
 // Repo-backed data (src/data/agentic-dev-envs.yml), not EmDash content, so
-// there's no cacheHint to set. Star counts are refreshed by
-// scripts/update-ade-stars.mjs.
+// there's no cacheHint to set. Stars and releases are refreshed by
+// scripts/update-ades.mjs.
 // Explicitly typed: astro:content's generated types resolve to `any` here.
 type Entry = { id: string; data: Ade };
 const all: Entry[] = await getCollection("agenticDevEnvs");
@@ -37,6 +38,7 @@ const sorted = (values: Iterable<string>) =>
 	[...new Set(values)].sort((a, b) => a.localeCompare(b)).map((v) => ({ value: v, label: v }));
 
 const usedPlatforms = new Set<string>(all.flatMap((e) => e.data.platforms));
+const usedTech = new Set<string>(all.flatMap((e) => e.data.tech));
 const usedFeatures = new Set<string>(all.flatMap((e) => e.data.features));
 const usedPrices = new Set<string>(all.flatMap((e) => (e.data.price ? [e.data.price] : [])));
 
@@ -52,7 +54,15 @@ const filterFields: FilterField[] = [
 			label: PLATFORM_LABELS[p],
 		})),
 	},
-	{ key: "tech", label: "Tech", type: "multi", icon: "cpu", options: sorted(all.flatMap((e) => e.data.tech)) },
+	{
+		key: "tech",
+		label: "Tech",
+		type: "multi",
+		icon: "cpu",
+		options: Object.keys(TECH)
+			.filter((t) => usedTech.has(t))
+			.map((t) => ({ value: t, label: t })),
+	},
 	{
 		key: "agents",
 		label: "Agents",
@@ -71,6 +81,7 @@ const filterFields: FilterField[] = [
 		})),
 	},
 	{ key: "first-seen", label: "First seen", type: "date", icon: "calendar" },
+	{ key: "release", label: "Latest release", type: "date", icon: "package" },
 	{
 		key: "price",
 		label: "Price",
@@ -129,7 +140,7 @@ const filterFields: FilterField[] = [
 </Base>
 
 <script>
-	type SortKey = "name" | "stars" | "first-seen";
+	type SortKey = "name" | "stars" | "first-seen" | "release";
 
 	function sortTable(table: HTMLTableElement, key: SortKey, dir: "ascending" | "descending") {
 		const tbody = table.tBodies[0];

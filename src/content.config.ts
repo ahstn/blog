@@ -8,7 +8,7 @@
 import { defineCollection } from "astro:content";
 import { file } from "astro/loaders";
 import { z } from "astro/zod";
-import { FEATURES, PLATFORMS } from "./utils/ades";
+import { FEATURES, PLATFORMS, TECH, type Tech } from "./utils/ades";
 
 // YAML turns unquoted `2026-07` into a string, but `2026-07-01` into a Date,
 // so accept both and normalise.
@@ -36,15 +36,28 @@ export const adeSchema = z.object({
 	price: z.enum(["free", "freemium", "paid", "waitlist"]).optional(),
 	open_source: z.boolean(),
 	license: z.string().optional(),
-	tech: z.array(z.string()).default([]),
+	tech: z.array(z.enum(Object.keys(TECH) as [Tech, ...Tech[]])).default([]),
 	agents: z.array(z.string()).default([]),
 	agents_more: z.number().int().nonnegative().default(0),
+	// Source pages backing the data above, so it can be re-checked.
+	references: z
+		.object({
+			agents: z.url().optional(),
+		})
+		.default({}),
 	features: z.array(z.enum(FEATURES)).default([]),
 	first_seen: yearMonth.optional(),
 	note: z.string().optional(),
-	// Written by scripts/update-ade-stars.mjs -- don't edit by hand.
+	// Written by scripts/update-ades.mjs -- don't edit by hand.
 	stars: z.number().int().nonnegative().optional(),
 	stars_updated_at: isoDate.optional(),
+	latest_release: z
+		.object({
+			// Coerced: YAML would read a bare `1.10` as a number.
+			version: z.coerce.string(),
+			date: isoDate,
+		})
+		.optional(),
 });
 
 export type Ade = z.output<typeof adeSchema>;

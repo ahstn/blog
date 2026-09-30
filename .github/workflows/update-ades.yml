@@ -1,4 +1,4 @@
-name: Update ADE star counts
+name: Update ADE stars and releases
 
 on:
   schedule:
@@ -25,9 +25,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: peter-evans/create-pull-request@v7
         with:
-          branch: chore/update-ade-stars
-          commit-message: "chore: update agentic dev env star counts"
-          title: "chore: update agentic dev env star counts"
-          body: Automated weekly refresh via `scripts/update-ade-stars.mjs`.
+          branch: chore/update-ades
+          commit-message: "chore: update agentic dev env stars and releases"
+          title: "chore: update agentic dev env stars and releases"
+          body: Automated weekly refresh via `scripts/update-ades.mjs`.
           add-paths: src/data/agentic-dev-envs.yml
           delete-branch: true
