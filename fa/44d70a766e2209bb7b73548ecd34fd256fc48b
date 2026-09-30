@@ -1,0 +1,21 @@
+src/components/AdeTable.astro
+  s_1e8b4df78a517a::t_64381d48fb1f65 188,190,495-502
+src/data/agentic-dev-envs.yml
+  s_1e8b4df78a517a::t_d4b0b3514eb58f 28,124,192,215,239,332,356,400,464-808,828,880-1066
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fa44d70a766e2209bb7b73548ecd34fd256fc48b",
+  "prompts": {},
+  "sessions": {
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
