@@ -1,0 +1,33 @@
+emdash-env.d.ts
+  s_1e8b4df78a517a::t_6bdb2526f605ca 6,17,27,33
+mise.toml
+  s_0995aa9c2357cd::t_f61f7069d22cb2 1-26
+package.json
+  s_1e8b4df78a517a::t_30ba614eb640db 17-25,28-30,32
+pnpm-lock.yaml
+  s_1e8b4df78a517a::t_9dabcac963875e 1-7967
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa6e48f0a451d37f1a9a7025f2e36a87c5083854",
+  "prompts": {},
+  "sessions": {
+    "s_0995aa9c2357cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3665a4cd-7d4a-47d7-b0f5-b53d265f5e56",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    },
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
