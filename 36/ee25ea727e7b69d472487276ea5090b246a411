@@ -1,0 +1,31 @@
+package.json
+  s_1e8b4df78a517a::t_a05cc6aec6459a 15,34
+pnpm-lock.yaml
+  s_1e8b4df78a517a::t_4fea9f6cbca95a 51-53
+scripts/ade-preview.mjs
+  s_1e8b4df78a517a::t_119101d6302480 1-40
+src/components/AdePreview.astro
+  s_1e8b4df78a517a::t_777672d9e1f167 1-109
+src/components/AdeTable.astro
+  s_1e8b4df78a517a::t_5a62e86f59a3c6 3,95,104
+src/pages/agentic-dev-envs.astro
+  s_1e8b4df78a517a::t_1cd14a605928cb 4,133
+src/utils/ade-previews.ts
+  s_1e8b4df78a517a::t_f5ab2a6c2301fb 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "36ee25ea727e7b69d472487276ea5090b246a411",
+  "prompts": {},
+  "sessions": {
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
