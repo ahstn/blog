@@ -20,10 +20,15 @@ jobs:
           node-version: lts/*
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm ades:update
+      - id: update
+        run: pnpm ades:update
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: peter-evans/create-pull-request@v7
+      # Still open the PR when some repos fail (renamed, deleted, private):
+      # the others' updates are already written, and the failed step keeps
+      # the run red so the broken entry gets noticed.
+      - if: ${{ !cancelled() && steps.update.outcome != 'skipped' }}
+        uses: peter-evans/create-pull-request@v7
         with:
           branch: chore/update-ades
           commit-message: "chore: update agentic dev env stars and releases"

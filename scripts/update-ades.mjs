@@ -8,14 +8,17 @@
  *   (GitHub excludes drafts and pre-releases), e.g. `desktop-v0.44.0` is
  *   stored as version `0.44.0`. Repos without releases are left untouched.
  *
- * Comments, ordering and every other field are preserved.
+ * Comments, ordering and every other field are preserved. Also lists entries
+ * without a hover preview (src/assets/ades/<id>.webp); those are added by hand
+ * with `pnpm ades:preview`, never fetched here.
  *
  * Auth: GITHUB_TOKEN / GH_TOKEN env var, falling back to `gh auth token`.
+ * Required: two requests per repo soon exceeds the 60/h unauthenticated limit.
  * Usage: pnpm ades:update [--dry-run]
  */
 
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseDocument } from "yaml";
 
@@ -26,13 +29,17 @@ function token() {
 	const env = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
 	if (env) return env;
 	try {
-		return execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim();
+		return execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim() || undefined;
 	} catch {
-		return undefined; // unauthenticated: 60 req/h, fine for a small list
+		return undefined;
 	}
 }
 
 const auth = token();
+if (!auth) {
+	console.error("error: no GitHub token. Set GITHUB_TOKEN / GH_TOKEN or run `gh auth login`.");
+	process.exit(1);
+}
 
 /** GET a GitHub API path; resolves to undefined on 404. */
 async function github(path) {
@@ -40,7 +47,7 @@ async function github(path) {
 		headers: {
 			accept: "application/vnd.github+json",
 			"x-github-api-version": "2022-11-28",
-			...(auth && { authorization: `Bearer ${auth}` }),
+			authorization: `Bearer ${auth}`,
 		},
 	});
 	if (res.status === 404) return undefined;
@@ -93,6 +100,13 @@ for (const item of doc.contents.items) {
 		failed++;
 		console.error(`warn: ${err.message}`);
 	}
+}
+
+const missingPreviews = doc.contents.items
+	.map((item) => item.get("id"))
+	.filter((id) => !existsSync(fileURLToPath(new URL(`../src/assets/ades/${id}.webp`, import.meta.url))));
+if (missingPreviews.length) {
+	console.log(`no preview (add with \`pnpm ades:preview <id> <image-url>\`): ${missingPreviews.join(", ")}`);
 }
 
 if (changed && !dryRun) writeFileSync(FILE, doc.toString({ lineWidth: 0, flowCollectionPadding: false }));
