@@ -1,0 +1,21 @@
+astro.config.mjs
+  s_0995aa9c2357cd::t_6814a62e694623 4,28-33
+wrangler.jsonc
+  s_0995aa9c2357cd::t_f74fef0bbbde97 21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d7bb281afe8917b7f96ce5b55bfb702feb30425f",
+  "prompts": {},
+  "sessions": {
+    "s_0995aa9c2357cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3665a4cd-7d4a-47d7-b0f5-b53d265f5e56",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
