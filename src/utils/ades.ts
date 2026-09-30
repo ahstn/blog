@@ -59,8 +59,22 @@ export function isMaintained(releaseDate: string | undefined, now = new Date()):
 
 export const featureLabel = (f: string) => f.replaceAll("-", " ");
 
-export const sourceLabel = (ade: { open_source: boolean; license?: string }) =>
-	ade.open_source ? (ade.license ?? "Open") : "Proprietary";
+type SourceFields = { open_source: boolean; license?: string; price?: string };
+
+/** Availability, in display order: the first line of the Source column. */
+export const SOURCE_KINDS = ["Open source", "Proprietary", "Waitlist"] as const;
+export type SourceKind = (typeof SOURCE_KINDS)[number];
+
+export const sourceKind = (ade: SourceFields): SourceKind =>
+	ade.price === "waitlist" ? "Waitlist" : ade.open_source ? "Open source" : "Proprietary";
+
+/** Muted second line: the licence, or the price for closed-source apps. */
+export const sourceDetail = (ade: SourceFields): string | undefined =>
+	ade.open_source
+		? ade.license
+		: ade.price && ade.price !== "waitlist"
+			? ade.price[0].toUpperCase() + ade.price.slice(1)
+			: undefined;
 
 /** Table columns, in display order. `name` can't be hidden. */
 export const COLUMNS = [
@@ -72,7 +86,6 @@ export const COLUMNS = [
 	{ key: "first-seen", label: "First seen" },
 	{ key: "release", label: "Latest release" },
 	{ key: "maintained", label: "Maintained", hidden: true },
-	{ key: "price", label: "Price" },
 	{ key: "stars", label: "Stars" },
 	{ key: "source", label: "Source" },
 ] as const satisfies readonly { key: string; label: string; locked?: boolean; hidden?: boolean }[];
@@ -108,7 +121,6 @@ export type FilterRecord = {
 	release: string | null;
 	/** null when there's no release data (e.g. closed source). */
 	maintained: boolean | null;
-	price: string | null;
 	stars: number | null;
-	source: string;
+	source: SourceKind;
 };

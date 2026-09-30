@@ -10,7 +10,8 @@ import {
 	isMaintained,
 	MAINTAINED_MONTHS,
 	PLATFORM_LABELS,
-	sourceLabel,
+	sourceDetail,
+	sourceKind,
 	TECH,
 } from "../utils/ades";
 
@@ -32,7 +33,7 @@ const formatMonth = (ym: string) =>
 		timeZone: "UTC",
 	});
 
-const MAX_AGENT_ICONS = 8;
+const MAX_AGENT_ICONS = 6;
 
 const agentList = (ade: Ade) => {
 	const agents = sortAgents(ade.agents);
@@ -54,9 +55,8 @@ const filterRecord = (ade: Ade): FilterRecord => ({
 	"first-seen": ade.first_seen ?? null,
 	release: ade.latest_release?.date.slice(0, 7) ?? null,
 	maintained: isMaintained(ade.latest_release?.date),
-	price: ade.price ?? null,
 	stars: ade.stars ?? null,
-	source: sourceLabel(ade),
+	source: sourceKind(ade),
 });
 
 // Spread onto every header/body cell so the Columns menu can toggle them.
@@ -74,8 +74,8 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 				</th>
 				<th scope="col" class="w-platforms" {...col("platforms")}>Works on</th>
 				<th scope="col" class="w-tech" {...col("tech")}>Tech</th>
-				<th scope="col" {...col("agents")}>Agents</th>
-				<th scope="col" {...col("features")}>Features</th>
+				<th scope="col" class="w-icons" {...col("agents")}>Agents</th>
+				<th scope="col" class="w-icons" {...col("features")}>Features</th>
 				<th scope="col" aria-sort="none" {...col("first-seen")}>
 					<button type="button" data-sort="first-seen">First seen</button>
 				</th>
@@ -83,7 +83,6 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 					<button type="button" data-sort="release">Latest release</button>
 				</th>
 				<th scope="col" {...col("maintained")}>Maintained</th>
-				<th scope="col" {...col("price")}>Price</th>
 				<th scope="col" class="num" aria-sort="descending" {...col("stars")}>
 					<button type="button" data-sort="stars">Stars</button>
 				</th>
@@ -146,7 +145,13 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 											})}
 											{more > 0 && (
 												<li class="agent-more" data-tooltip={moreTitle}>
-													+{more} more
+													{ade.references.agents ? (
+														<a href={ade.references.agents} target="_blank" rel="noopener">
+															+{more} more
+														</a>
+													) : (
+														`+${more} more`
+													)}
 												</li>
 											)}
 										</ul>
@@ -196,7 +201,6 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 						>
 							{{ true: "Yes", false: "No", null: "—" }[String(isMaintained(ade.latest_release?.date))]}
 						</td>
-						<td class="capitalize" {...col("price")}>{ade.price ?? "—"}</td>
 						<td class="num" {...col("stars")}>
 							{ade.repo && ade.stars !== undefined ? (
 								<a
@@ -209,12 +213,15 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 								"—"
 							)}
 						</td>
-						<td class="nowrap" {...col("source")}>{sourceLabel(ade)}</td>
+						<td class="nowrap" {...col("source")}>
+							{sourceKind(ade)}
+							{sourceDetail(ade) && <span class="source-detail">{sourceDetail(ade)}</span>}
+						</td>
 					</tr>
 				))
 			}
 			<tr class="ade-empty" data-empty-row hidden>
-				<td colspan="11">No entries match the current filters.</td>
+				<td colspan="10">No entries match the current filters.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -235,6 +242,12 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		width: 8rem;
 	}
 
+	/* Agents and features share the five-track icon grid width. */
+	.w-icons {
+		width: calc(5 * 1.5rem + 4 * var(--spacing-1));
+		box-sizing: content-box;
+	}
+
 	.ade-table-wrap {
 		overflow-x: auto;
 		border: 1px solid var(--color-border);
@@ -251,7 +264,7 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 
 	.ade-table th,
 	.ade-table td {
-		padding: var(--spacing-3) var(--spacing-4);
+		padding: var(--spacing-3);
 		text-align: left;
 		vertical-align: top;
 		border-bottom: 1px solid var(--color-border-subtle);
@@ -345,15 +358,18 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		list-style: none;
 	}
 
-	/* Eight fixed tracks: one row of icons, "+N more" on its own line. */
-	.agent-icons {
-		color: var(--color-text);
-		grid-template-columns: repeat(8, 1.5rem);
-	}
-
-	/* Five tracks: at most two rows for the ten features. */
+	/* Five tracks for both lists, so the two columns line up: at most two
+	   rows of features, and six agents with "+N more" after the sixth. */
+	.agent-icons,
 	.feature-icons {
 		grid-template-columns: repeat(5, 1.5rem);
+	}
+
+	.agent-icons {
+		color: var(--color-text);
+	}
+
+	.feature-icons {
 		color: var(--color-text-secondary);
 	}
 
@@ -378,12 +394,21 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 
 	.agent-more {
 		position: relative;
-		grid-column: 1 / -1;
+		grid-column-end: span 2; /* after the last icon, or wraps if no room */
+		align-self: center;
 		justify-self: start;
 		font-size: var(--font-size-xs);
 		white-space: nowrap;
 		color: var(--color-muted);
 		cursor: default;
+	}
+
+	.agent-more a {
+		color: inherit;
+	}
+
+	.agent-more a:hover {
+		color: var(--color-brand);
 	}
 
 	/* Tooltips: shown on hover, positioned above the icon. */
@@ -467,12 +492,14 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		color: var(--color-text);
 	}
 
-	.nowrap {
-		white-space: nowrap;
+	.source-detail {
+		display: block;
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
 	}
 
-	.capitalize {
-		text-transform: capitalize;
+	.nowrap {
+		white-space: nowrap;
 	}
 
 	.muted {

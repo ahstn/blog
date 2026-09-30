@@ -10,7 +10,8 @@ import {
 	type FilterField,
 	PLATFORM_LABELS,
 	PLATFORMS,
-	sourceLabel,
+	SOURCE_KINDS,
+	sourceKind,
 	TECH,
 } from "../utils/ades";
 
@@ -40,7 +41,7 @@ const sorted = (values: Iterable<string>) =>
 const usedPlatforms = new Set<string>(all.flatMap((e) => e.data.platforms));
 const usedTech = new Set<string>(all.flatMap((e) => e.data.tech));
 const usedFeatures = new Set<string>(all.flatMap((e) => e.data.features));
-const usedPrices = new Set<string>(all.flatMap((e) => (e.data.price ? [e.data.price] : [])));
+const usedSourceKinds = new Set<string>(all.map((e) => sourceKind(e.data)));
 
 const filterFields: FilterField[] = [
 	{ key: "name", label: "Name", type: "text", icon: "type" },
@@ -82,22 +83,13 @@ const filterFields: FilterField[] = [
 	},
 	{ key: "first-seen", label: "First seen", type: "date", icon: "calendar" },
 	{ key: "release", label: "Latest release", type: "date", icon: "package" },
-	{
-		key: "price",
-		label: "Price",
-		type: "option",
-		icon: "tag",
-		options: (["free", "freemium", "paid", "waitlist"] as const)
-			.filter((p) => usedPrices.has(p))
-			.map((p) => ({ value: p, label: p[0].toUpperCase() + p.slice(1) })),
-	},
 	{ key: "stars", label: "Stars", type: "number", icon: "star" },
 	{
 		key: "source",
 		label: "Source",
 		type: "option",
 		icon: "code",
-		options: sorted(all.map((e) => sourceLabel(e.data))),
+		options: SOURCE_KINDS.filter((k) => usedSourceKinds.has(k)).map((k) => ({ value: k, label: k })),
 	},
 ];
 ---
