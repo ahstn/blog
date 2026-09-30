@@ -1,0 +1,19 @@
+src/layouts/Base.astro
+  s_bdc9788ed49821::t_b1951d5b29da51 110,477-488
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "378b7e75846d44703e7ec2b86cf6e5596e9ed487",
+  "prompts": {},
+  "sessions": {
+    "s_bdc9788ed49821": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44c1df6b-2ee8-4a82-a3c7-9276f1098dfc",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
