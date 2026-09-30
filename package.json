@@ -20,6 +20,7 @@
     "@emdash-cms/cloudflare": "^0.28.1",
     "@emdash-cms/plugin-forms": "^0.2.4",
     "@emdash-cms/plugin-webhook-notifier": "^0.2.0",
+    "@lobehub/icons-static-svg": "^1.95.1",
     "@lucide/astro": "^1.48.0",
     "astro": "^7.0.0",
     "emdash": "^0.28.1",

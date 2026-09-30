@@ -1,5 +1,7 @@
 ---
 import type { Ade } from "../content.config";
+import { agentIcon, sortAgents } from "../utils/agent-icons";
+import { FEATURE_ICONS, sortFeatures } from "../utils/feature-icons";
 import {
 	type ColumnKey,
 	featureLabel,
@@ -26,6 +28,17 @@ const formatMonth = (ym: string) =>
 		year: "numeric",
 		timeZone: "UTC",
 	});
+
+const MAX_AGENT_ICONS = 8;
+
+const agentList = (ade: Ade) => {
+	const agents = sortAgents(ade.agents);
+	const shown = agents.slice(0, MAX_AGENT_ICONS);
+	const overflow = agents.slice(MAX_AGENT_ICONS);
+	const more = overflow.length + ade.agents_more;
+	const moreTitle = [...overflow, ...(ade.agents_more ? [`${ade.agents_more} others`] : [])].join(", ");
+	return { shown, more, moreTitle };
+};
 
 const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, "");
 
@@ -56,8 +69,8 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 				</th>
 				<th scope="col" class="w-platforms" {...col("platforms")}>Works on</th>
 				<th scope="col" class="w-tech" {...col("tech")}>Tech</th>
-				<th scope="col" class="w-list" {...col("agents")}>Agents</th>
-				<th scope="col" class="w-list" {...col("features")}>Features</th>
+				<th scope="col" {...col("agents")}>Agents</th>
+				<th scope="col" {...col("features")}>Features</th>
 				<th scope="col" aria-sort="none" {...col("first-seen")}>
 					<button type="button" data-sort="first-seen">First seen</button>
 				</th>
@@ -97,11 +110,52 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 							</ul>
 						</td>
 						<td class="ade-agents" {...col("agents")}>
-							{ade.agents.length ? ade.agents.join(", ") : "—"}
-							{ade.agents_more > 0 && <span class="muted"> +{ade.agents_more} more</span>}
+							{ade.agents.length ? (
+								(() => {
+									const { shown, more, moreTitle } = agentList(ade);
+									return (
+										<ul class="icon-list agent-icons">
+											{shown.map((name) => {
+												const svg = agentIcon(name);
+												return (
+													<li class="icon-badge" role="img" aria-label={name} data-tooltip={name}>
+														{svg ? (
+															<Fragment set:html={svg} />
+														) : (
+															<span class="agent-fallback" aria-hidden="true">
+																{name[0]}
+															</span>
+														)}
+													</li>
+												);
+											})}
+											{more > 0 && (
+												<li class="agent-more" data-tooltip={moreTitle}>
+													+{more} more
+												</li>
+											)}
+										</ul>
+									);
+								})()
+							) : (
+								"—"
+							)}
 						</td>
-						<td class="ade-features" {...col("features")}>
-							{ade.features.length ? ade.features.map(featureLabel).join(", ") : "—"}
+						<td {...col("features")}>
+							{ade.features.length ? (
+								<ul class="icon-list feature-icons">
+									{sortFeatures(ade.features).map((f) => {
+										const Icon = FEATURE_ICONS[f];
+										return (
+											<li class="icon-badge" role="img" aria-label={featureLabel(f)} data-tooltip={featureLabel(f)}>
+												<Icon size={14} aria-hidden="true" />
+											</li>
+										);
+									})}
+								</ul>
+							) : (
+								"—"
+							)}
 						</td>
 						<td class="nowrap" {...col("first-seen")}>
 							{ade.first_seen ? formatMonth(ade.first_seen) : "—"}
@@ -143,10 +197,6 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 
 	.w-tech {
 		width: 8rem;
-	}
-
-	.w-list {
-		width: 12.5rem;
 	}
 
 	.ade-table-wrap {
@@ -251,8 +301,80 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		color: var(--color-brand);
 	}
 
-	.ade-agents {
+	.icon-list {
+		display: grid;
+		gap: var(--spacing-1);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Eight fixed tracks: one row of icons, "+N more" on its own line. */
+	.agent-icons {
+		color: var(--color-text);
+		grid-template-columns: repeat(8, 1.5rem);
+	}
+
+	/* Five tracks: at most two rows for the ten features. */
+	.feature-icons {
+		grid-template-columns: repeat(5, 1.5rem);
 		color: var(--color-text-secondary);
+	}
+
+	.icon-badge {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		font-size: 1rem; /* Lobe SVGs are sized 1em */
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.agent-fallback {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		line-height: 1;
+		color: var(--color-text-secondary);
+	}
+
+	.agent-more {
+		position: relative;
+		grid-column: 1 / -1;
+		justify-self: start;
+		font-size: var(--font-size-xs);
+		white-space: nowrap;
+		color: var(--color-muted);
+		cursor: default;
+	}
+
+	/* Tooltips: shown on hover, positioned above the icon. */
+	[data-tooltip]::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: calc(100% + 6px);
+		left: 50%;
+		z-index: 10;
+		width: max-content;
+		max-width: 16rem;
+		padding: var(--spacing-1) var(--spacing-2);
+		font-size: var(--font-size-xs);
+		font-weight: 500;
+		line-height: var(--leading-snug);
+		white-space: normal;
+		color: var(--color-bg);
+		background: var(--color-text);
+		border-radius: var(--radius);
+		transform: translateX(-50%);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity var(--transition-fast);
+	}
+
+	[data-tooltip]:hover::after {
+		opacity: 1;
 	}
 
 	.chips {
@@ -271,10 +393,6 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		color: var(--color-text-secondary);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
-	}
-
-	.ade-features {
-		color: var(--color-text-secondary);
 	}
 
 	.chip-mono {

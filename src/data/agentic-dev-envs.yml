@@ -20,7 +20,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Claude Code, Codex, OpenCode, Cursor CLI, Grok Build, Antigravity]
   agents_more: 0
-  features: [multi-agent, worktrees, remote-control, browser, diff-review, terminal, mobile-app]
+  features: [worktrees, remote-control, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-03
   stars: 23985
   stars_updated_at: 2026-09-30
@@ -41,7 +41,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Amp, Copilot CLI, Droid]
   agents_more: 29
-  features: [multi-agent, worktrees, automations, browser, diff-review, terminal, cloud-sandboxes]
+  features: [worktrees, automations, browser, diff-review, terminal, cloud-sandboxes]
   first_seen: 2025-09
   stars: 5889
   stars_updated_at: 2026-09-30
@@ -58,7 +58,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Pi]
   agents_more: 0
-  features: [multi-agent, worktrees, automations, plugins, diff-review, terminal]
+  features: [worktrees, automations, plugins, diff-review, terminal]
   first_seen: 2026-04
   stars: 1059
   stars_updated_at: 2026-09-30
@@ -78,7 +78,7 @@
   tech: [TypeScript, Rust, Tauri, React]
   agents: [Claude Code, Codex, Cursor CLI, OpenCode, Kimi CLI]
   agents_more: 0
-  features: [multi-agent, worktrees, remote-control, diff-review, terminal]
+  features: [worktrees, remote-control, diff-review, terminal]
   first_seen: 2026-04
   stars: 1308
   stars_updated_at: 2026-09-30
@@ -99,7 +99,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp]
   agents_more: 19
-  features: [multi-agent, worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-03
   stars: 82232
   stars_updated_at: 2026-09-30
@@ -119,7 +119,7 @@
   tech: [Rust, Metal]
   agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Droid]
   agents_more: 7
-  features: [multi-agent, worktrees, browser, diff-review, terminal]
+  features: [worktrees, browser, diff-review, terminal]
   first_seen: 2026-04
 
 - id: synara
@@ -137,7 +137,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Droid, Grok Build, Antigravity]
   agents_more: 1
-  features: [multi-agent, worktrees, kanban, remote-control, automations, browser, diff-review, terminal]
+  features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal]
   first_seen: 2026-04
   stars: 1919
   stars_updated_at: 2026-09-30
@@ -157,7 +157,7 @@
   tech: [TypeScript, Electron, React Native, Expo]
   agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Copilot CLI, Gemini CLI, Amp]
   agents_more: 33
-  features: [multi-agent, worktrees, remote-control, mobile-app, automations, plugins, diff-review, terminal]
+  features: [worktrees, remote-control, mobile-app, automations, plugins, diff-review, terminal]
   first_seen: 2026-02
   stars: 19098
   stars_updated_at: 2026-09-30
@@ -177,7 +177,7 @@
   tech: [Rust, GPUI]
   agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi]
   agents_more: 4
-  features: [multi-agent, remote-control, browser, diff-review, terminal]
+  features: [remote-control, browser, diff-review, terminal]
   first_seen: 2026-07
   stars: 2504
   stars_updated_at: 2026-09-30
@@ -197,7 +197,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Claude Code, Codex, Cursor CLI, Pi, OpenCode]
   agents_more: 8
-  features: [multi-agent, worktrees, plugins, automations, remote-control, browser, diff-review, cloud-sandboxes]
+  features: [worktrees, plugins, automations, remote-control, browser, diff-review, cloud-sandboxes]
   first_seen: 2026-05
   stars: 4023
   stars_updated_at: 2026-09-30
@@ -214,7 +214,7 @@
   tech: [TypeScript, Electron, React]
   agents: [Pi]
   agents_more: 2
-  features: [multi-agent, worktrees, automations, browser, diff-review, terminal]
+  features: [worktrees, automations, browser, diff-review, terminal]
   first_seen: 2026-08
   stars: 941
   stars_updated_at: 2026-09-30
@@ -233,7 +233,7 @@
   tech: [Rust, GPUI]
   agents: [Claude Code, Codex, Cursor CLI, Gemini CLI, OpenCode, Pi, Copilot CLI, Amp]
   agents_more: 14
-  features: [multi-agent, worktrees, remote-control, diff-review, terminal, mobile-app]
+  features: [worktrees, remote-control, diff-review, terminal, mobile-app]
   first_seen: 2026-08
   stars: 338
   stars_updated_at: 2026-09-30
@@ -250,7 +250,7 @@
   tech: [Rust, GPUI]
   agents: [Claude Code, Codex, OpenCode, Pi, Amp, Cursor CLI, Kimi CLI]
   agents_more: 2
-  features: [multi-agent, diff-review, terminal, browser]
+  features: [diff-review, terminal, browser]
   first_seen: 2026-08
   stars: 1549
   stars_updated_at: 2026-09-30
@@ -271,7 +271,7 @@
   tech: [Go, TypeScript, Electron, React]
   agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Gemini CLI, Amp, Copilot CLI]
   agents_more: 24
-  features: [multi-agent, worktrees, kanban, remote-control, mobile-app, browser, diff-review, terminal, plugins]
+  features: [worktrees, kanban, remote-control, mobile-app, browser, diff-review, terminal, plugins]
   first_seen: 2026-02
   stars: 12570
   stars_updated_at: 2026-09-30
@@ -291,7 +291,7 @@
   tech: [TypeScript, Electron, React]
   agents: [OpenCode]
   agents_more: 0
-  features: [multi-agent, worktrees, remote-control, automations, browser, diff-review, terminal, mobile-app]
+  features: [worktrees, remote-control, automations, browser, diff-review, terminal, mobile-app]
   first_seen: 2025-12
   stars: 10969
   stars_updated_at: 2026-09-30
@@ -308,7 +308,7 @@
   tech: [TypeScript, Bun, React, Electron, Swift]
   agents: [Pi, Claude Code, Codex]
   agents_more: 0
-  features: [multi-agent, worktrees, kanban, remote-control, automations, browser, diff-review, mobile-app, cloud-sandboxes]
+  features: [worktrees, kanban, remote-control, automations, browser, diff-review, mobile-app, cloud-sandboxes]
   first_seen: 2026-07
   stars: 388
   stars_updated_at: 2026-09-30
@@ -325,7 +325,7 @@
   tech: [TypeScript, Rust, Tauri, React]
   agents: [Claude Code, Codex, Cursor CLI, OpenCode, Pi]
   agents_more: 5
-  features: [multi-agent, worktrees, remote-control]
+  features: [worktrees, remote-control]
   first_seen: 2026-08
   stars: 1763
   stars_updated_at: 2026-09-30
@@ -338,7 +338,7 @@
     x: https://x.com/TryFractalCo
   price: waitlist
   open_source: false
-  features: [multi-agent, kanban, automations, plugins]
+  features: [kanban, automations, plugins]
   first_seen: 2026-05
 
 - id: zuse
@@ -357,7 +357,7 @@
   tech: [TypeScript, Electron, Effect]
   agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI]
   agents_more: 2
-  features: [multi-agent, worktrees, diff-review, terminal, mobile-app, cloud-sandboxes]
+  features: [worktrees, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-05
   stars: 218
   stars_updated_at: 2026-09-30
@@ -374,7 +374,7 @@
   tech: [TypeScript, Rust, Tauri, React]
   agents: [Claude Code, Codex, Pi]
   agents_more: 2
-  features: [multi-agent, worktrees, browser, diff-review, terminal]
+  features: [worktrees, browser, diff-review, terminal]
   first_seen: 2026-08
   stars: 103
   stars_updated_at: 2026-09-30
@@ -395,7 +395,7 @@
   tech: [Rust, Ratatui]
   agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Amp, Copilot CLI]
   agents_more: 7
-  features: [multi-agent, plugins, terminal]
+  features: [plugins, terminal]
   first_seen: 2026-03
   stars: 41632
   stars_updated_at: 2026-09-30
@@ -415,7 +415,7 @@
   tech: [Rust, Ratatui]
   agents: [Claude Code, Codex, OpenCode, Pi, Gemini CLI, Cursor CLI, Copilot CLI, Amp]
   agents_more: 15
-  features: [multi-agent, worktrees, remote-control, automations, plugins, diff-review, terminal]
+  features: [worktrees, remote-control, automations, plugins, diff-review, terminal]
   first_seen: 2026-06
   stars: 941
   stars_updated_at: 2026-09-30
@@ -434,7 +434,7 @@
   tech: [Rust, GPUI]
   agents: [Claude Code, Codex, OpenCode, Gemini CLI, Cursor CLI, Aider, Amp, Copilot CLI]
   agents_more: 18
-  features: [multi-agent, diff-review, terminal]
+  features: [diff-review, terminal]
   first_seen: 2026-07
   stars: 1181
   stars_updated_at: 2026-09-30

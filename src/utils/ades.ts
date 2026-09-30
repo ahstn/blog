@@ -10,7 +10,6 @@ export const PLATFORM_LABELS: Record<(typeof PLATFORMS)[number], string> = {
 };
 
 export const FEATURES = [
-	"multi-agent",
 	"worktrees",
 	"kanban",
 	"remote-control",
