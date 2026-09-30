@@ -1,0 +1,29 @@
+package.json
+  s_1e8b4df78a517a::t_e1c7eeb61eb632 23
+pnpm-lock.yaml
+  s_1e8b4df78a517a::t_222363d4f8328d 26-28,1357-1359,5218-5219
+src/utils/agent-icons.ts
+  s_1e8b4df78a517a::t_5e55c263d10e28 1-52
+src/components/AdeTable.astro
+  s_1e8b4df78a517a::t_35725ee69decdb 3-4,32-42,72-73,113-142,144-158,304-339,343-379
+src/data/agentic-dev-envs.yml
+  s_1e8b4df78a517a::t_a52952a3e8060a 23,44,61,81,102,122,140,160,180,200,217,236,253,274,294,311,328,341,360,377,398,418,437
+src/utils/feature-icons.ts
+  s_1e8b4df78a517a::t_d8f48002114dd2 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25cdd2ce7fbd683ffcedf82c7a35117b837bddb6",
+  "prompts": {},
+  "sessions": {
+    "s_1e8b4df78a517a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c5dcca70-c7be-4105-b28c-ac31481f46b4",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
