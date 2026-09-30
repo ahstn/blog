@@ -1,6 +1,7 @@
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import { d1, r2, sandbox } from "@emdash-cms/cloudflare";
+import { cloudflareEmail } from "@emdash-cms/cloudflare/plugins";
 import { formsPlugin } from "@emdash-cms/plugin-forms";
 import webhookNotifier from "@emdash-cms/plugin-webhook-notifier";
 import { defineConfig, fontProviders } from "astro/config";
@@ -24,7 +25,12 @@ export default defineConfig({
 		emdash({
 			database: d1({ binding: "DB", session: "auto" }),
 			storage: r2({ binding: "MEDIA" }),
-			plugins: [formsPlugin()],
+			plugins: [
+				formsPlugin(),
+				// Magic links, invites, and account recovery. The sender domain
+				// must be onboarded under Cloudflare Email Service > Email Sending.
+				cloudflareEmail({ from: { email: "noreply@mail.ahstn.io", name: "ahstn.io" } }),
+			],
 			sandboxed: [webhookNotifier],
 			sandboxRunner: sandbox(),
 			marketplace: "https://marketplace.emdashcms.com",

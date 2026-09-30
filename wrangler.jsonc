@@ -18,6 +18,8 @@
       "preview_bucket_name": "my-emdash-media",
     },
   ],
+  // Cloudflare Email Sending, used by the cloudflareEmail() plugin
+  "send_email": [{ "name": "EMAIL" }],
   // Drives scheduled publishing, plugin cron, and maintenance (see src/worker.ts)
   "triggers": {
     "crons": ["* * * * *"],
