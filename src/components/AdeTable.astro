@@ -76,17 +76,17 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 				<th scope="col" class="w-tech" {...col("tech")}>Tech</th>
 				<th scope="col" class="w-icons" {...col("agents")}>Agents</th>
 				<th scope="col" class="w-icons" {...col("features")}>Features</th>
-				<th scope="col" aria-sort="none" {...col("first-seen")}>
+				<th scope="col" class="w-first-seen" aria-sort="none" {...col("first-seen")}>
 					<button type="button" data-sort="first-seen">First seen</button>
 				</th>
-				<th scope="col" aria-sort="none" {...col("release")}>
-					<button type="button" data-sort="release">Latest release</button>
+				<th scope="col" class="w-release" aria-sort="none" {...col("release")}>
+					<button type="button" data-sort="release">Release</button>
 				</th>
 				<th scope="col" {...col("maintained")}>Maintained</th>
-				<th scope="col" class="num" aria-sort="descending" {...col("stars")}>
+				<th scope="col" class="num w-stars" aria-sort="descending" {...col("stars")}>
 					<button type="button" data-sort="stars">Stars</button>
 				</th>
-				<th scope="col" {...col("source")}>Source</th>
+				<th scope="col" class="w-source" {...col("source")}>Source</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -229,7 +229,9 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 
 <style>
 	/* Widths live on header cells (not <col>) so hiding a column can't shift
-	   widths onto its neighbours. */
+	   widths onto its neighbours. Every column has one sized to its typical
+	   content, so on wide screens the spare table width is shared out in
+	   proportion rather than pooling in one column. */
 	.w-name {
 		width: 10rem;
 	}
@@ -239,7 +241,23 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 	}
 
 	.w-tech {
-		width: 8rem;
+		width: 7.5rem;
+	}
+
+	.w-first-seen {
+		width: 6rem;
+	}
+
+	.w-release {
+		width: 5rem;
+	}
+
+	.w-stars {
+		width: 4.5rem;
+	}
+
+	.w-source {
+		width: 7rem;
 	}
 
 	/* Agents and features share the five-track icon grid width. */
@@ -483,8 +501,10 @@ const col = (key: ColumnKey) => ({ "data-col": key, hidden: isColumnHiddenByDefa
 		color: var(--color-muted);
 	}
 
+	/* Centred: the header is about twice as wide as the values, and centring
+	   splits that slack across both sides instead of one gap. */
 	.num {
-		text-align: right !important;
+		text-align: center !important;
 		font-variant-numeric: tabular-nums;
 	}
 
