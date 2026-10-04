@@ -9,12 +9,13 @@ import {
 import { createPublicPageContext } from "emdash/page";
 import LiveSearch from "emdash/ui/search";
 import { Font } from "astro:assets";
-import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import { documentTitle, resolveBlogSiteIdentity } from "../utils/site-identity";
 import "../styles/tokens.css";
 import "../styles/theme.css";
 
 interface Props {
-	title: string;
+	/** Omit to use the fallback tab title. */
+	title?: string | null;
 	pageTitle?: string | null;
 	description?: string | null;
 	image?: string | null;
@@ -42,8 +43,7 @@ const {
 	content,
 } = Astro.props;
 const { siteTitle, siteTagline, siteLogo, siteFavicon } = resolveBlogSiteIdentity(await getSiteSettings());
-// If title already includes site title (from getSeoMeta), use as-is
-const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
+const fullTitle = documentTitle(title);
 
 // Fetch primary menu defined in seed
 const menu = await getMenu("primary");
@@ -63,7 +63,7 @@ const pageCtx = createPublicPageContext({
 	kind: content ? "content" : "custom",
 	pageType: type,
 	title: fullTitle,
-	pageTitle: pageTitle ?? title,
+	pageTitle: pageTitle ?? title ?? fullTitle,
 	description,
 	canonical,
 	image,
