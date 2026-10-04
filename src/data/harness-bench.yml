@@ -1,0 +1,203 @@
+# Harness Bench: Terminal-Bench 4 results, rendered at /harness-bench.
+#
+# Hand-curated from the harness-bench README (main):
+# https://github.com/ahstn/harness-bench/blob/main/README.md
+# Model: deepseek/deepseek-v4.1-flash via OpenRouter, high reasoning.
+# Only the five main harnesses are kept; the README's PiG and Empryo rows
+# (three tasks each) are left out. OMP has a row per version it ran.
+#
+# Per task:
+#   method   best-of-3 (the pair's best attempt) | mean-of-3 (mean of
+#            the attempts that ran)
+#   cohort   the README block the rows come from, plus its report
+# Per result:
+#   score         fractional score as a percentage
+#   score_sd      sample standard deviation (mean-of-3 only)
+#   attempts      attempts that ran (fewer than three when a full score
+#                 stopped the pair early); passes counts official passes
+#   best_attempt  the attempt the row reports (best-of-3 only)
+#   lower_bound   token and price totals are lower bounds (README's ≥)
+#   escaped       a full score skipped the pair's remaining attempts (‡)
+#   price         estimated USD at the cohort's captured reference rates
+
+- id: cargo-flight-dispatch
+  description: Cargo flight planning. Repair route feasibility, navigation and wind, and fuel and weight calculations.
+  method: best-of-3
+  cohort: Two-task best-of-three
+  date: 2026-09-24
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-two-task-best-of-3-20260924/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 80.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "12:18", total_time: "15:07", cached_tokens: 1488512, total_tokens: 2143381, price: 0.1455 }
+    - { harness: Copilot, version: 1.0.83, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:14", total_time: "23:09", cached_tokens: 1235456, total_tokens: 2455964, price: 0.3020 }
+    - { harness: OMP, version: 18.1.15, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "12:38", total_time: "14:00", cached_tokens: 1981068, total_tokens: 2128643, price: 0.0671 }
+    - { harness: OMP, version: 18.2.8, score: 75.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "37:30", total_time: "38:49", cached_tokens: 1687496, total_tokens: 1971185, price: 0.0983 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:44", total_time: "12:57", cached_tokens: 1711890, total_tokens: 2346625, price: 0.1380, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:44", total_time: "11:49", cached_tokens: 1109640, total_tokens: 1784282, price: 0.1434 }
+
+- id: embedding-drift-monitor
+  description: Embedding drift monitoring. Repair numerical utilities, reference calibration and alert behaviour.
+  method: best-of-3
+  cohort: Two-task best-of-three
+  date: 2026-09-24
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-two-task-best-of-3-20260924/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "16:11", total_time: "20:24", cached_tokens: 1842898, total_tokens: 2706948, price: 0.1675, escaped: true }
+    - { harness: Copilot, version: 1.0.83, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "27:38", total_time: "32:26", cached_tokens: 566400, total_tokens: 852414, price: 0.0788, escaped: true }
+    - { harness: OMP, version: 18.1.15, score: 100.00, best_attempt: 2, attempts: 2, passes: 2, agent_time: "4:47", total_time: "6:52", cached_tokens: 870528, total_tokens: 938965, price: 0.0257, escaped: true }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "19:52", total_time: "22:14", cached_tokens: 3066470, total_tokens: 3253001, price: 0.0711, escaped: true }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "9:19", total_time: "13:26", cached_tokens: 1799808, total_tokens: 2172284, price: 0.0918, lower_bound: true, escaped: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 100.00, best_attempt: 1, attempts: 2, passes: 2, agent_time: "14:33", total_time: "16:21", cached_tokens: 2113536, total_tokens: 2565803, price: 0.1078, escaped: true }
+
+- id: sglang-qwen-burst
+  description: Fix SGLang tool-call parameter ordering for Qwen and Llama under burst load.
+  method: mean-of-3
+  cohort: SGLang best-of-three
+  date: 2026-09-18
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-sglang-best-of-3-20260918/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 61.11, score_sd: 53.58, attempts: 3, passes: 1, agent_time: "83:46", total_time: "86:53", cached_tokens: 40018901, total_tokens: 49534721, price: 1.7402 }
+    - { harness: Copilot, version: 1.0.83, score: 33.33, score_sd: 28.87, attempts: 3, passes: 0, agent_time: "89:22", total_time: "90:23", cached_tokens: 20527531, total_tokens: 23014808, price: 0.6848 }
+    - { harness: OMP, version: 18.1.15, score: 50.00, score_sd: 70.71, attempts: 2, passes: 1, agent_time: "31:07", total_time: "32:23", cached_tokens: 40428480, total_tokens: 40934090, price: 0.2649, escaped: true }
+    - { harness: OMP, version: 18.2.8, score: 66.67, score_sd: 57.74, attempts: 3, passes: 2, agent_time: "54:20", total_time: "58:35", cached_tokens: 46099177, total_tokens: 47532394, price: 0.4359 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 50.00, score_sd: 70.71, attempts: 2, passes: 1, agent_time: "33:13", total_time: "36:10", cached_tokens: 35433024, total_tokens: 35851726, price: 0.2188, escaped: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 0.00, score_sd: 0.00, attempts: 3, passes: 0, agent_time: "14:27", total_time: "15:30", cached_tokens: 12240043, total_tokens: 12550457, price: 0.1122 }
+
+- id: session-window-debug
+  description: Streaming session windows. Repair retention, merge retractions and totals, and watermark progress.
+  method: best-of-3
+  cohort: Session-window best-of-three
+  date: 2026-09-19
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-session-window-best-of-3-20260919/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "11:34", total_time: "14:05", cached_tokens: 2022144, total_tokens: 2137180, price: 0.0590 }
+    - { harness: Copilot, version: 1.0.83, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "42:41", total_time: "44:08", cached_tokens: 1363968, total_tokens: 1812235, price: 0.1970 }
+    - { harness: OMP, version: 18.1.15, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "7:34", total_time: "8:37", cached_tokens: 999936, total_tokens: 1086735, price: 0.0379 }
+    - { harness: OMP, version: 18.2.8, score: 85.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:13", total_time: "12:30", cached_tokens: 1619850, total_tokens: 1886439, price: 0.0754 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:30", total_time: "18:57", cached_tokens: 2939648, total_tokens: 3101047, price: 0.0782, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "12:36", total_time: "13:43", cached_tokens: 1416704, total_tokens: 1530881, price: 0.0586 }
+
+- id: mvcc-lsm-compaction
+  description: MVCC visibility in an LSM store. Fix compaction, add a reproducer and regression test, and survive adversarial interleavings within the storage budget.
+  method: best-of-3
+  cohort: Four-task best-of-three
+  date: 2026-09-19
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-four-task-best-of-3-20260919/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 71.43, best_attempt: 1, attempts: 3, passes: 0, agent_time: "2:01", total_time: "8:19", cached_tokens: 300544, total_tokens: 346118, price: 0.0128 }
+    - { harness: Copilot, version: 1.0.83, score: 71.43, best_attempt: 1, attempts: 3, passes: 0, agent_time: "4:41", total_time: "9:59", cached_tokens: 673280, total_tokens: 726931, price: 0.0187 }
+    - { harness: OMP, version: 18.1.15, score: 80.36, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:28", total_time: "16:19", cached_tokens: 573440, total_tokens: 737263, price: 0.0455 }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 1, attempts: 3, passes: 2, agent_time: "12:12", total_time: "19:25", cached_tokens: 2962176, total_tokens: 3077902, price: 0.0488 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 2, attempts: 3, passes: 2, agent_time: "4:44", total_time: "11:10", cached_tokens: 477696, total_tokens: 532668, price: 0.0205, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 100.00, best_attempt: 2, attempts: 3, passes: 2, agent_time: "11:33", total_time: "16:52", cached_tokens: 1416192, total_tokens: 1506076, price: 0.0419 }
+
+- id: wal-recovery-ordering
+  description: Write-ahead log recovery. Repair replay semantics, durable commit ordering and detached public views.
+  method: best-of-3
+  cohort: Four-task best-of-three
+  date: 2026-09-19
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-four-task-best-of-3-20260919/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "25:25", total_time: "30:48", cached_tokens: 5150336, total_tokens: 6745439, price: 0.3106 }
+    - { harness: Copilot, version: 1.0.83, score: 97.50, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:52", total_time: "11:03", cached_tokens: 1046784, total_tokens: 1155648, price: 0.0365 }
+    - { harness: OMP, version: 18.1.15, score: 93.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:50", total_time: "11:28", cached_tokens: 1183744, total_tokens: 1285383, price: 0.0367 }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "9:23", total_time: "13:29", cached_tokens: 1722880, total_tokens: 1846967, price: 0.0489 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "11:38", total_time: "17:15", cached_tokens: 1893120, total_tokens: 2073020, price: 0.0576, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 100.00, best_attempt: 2, attempts: 3, passes: 2, agent_time: "15:05", total_time: "18:52", cached_tokens: 4482560, total_tokens: 4710486, price: 0.0931 }
+
+- id: bun-sourcemap-leak
+  description: Stop a Bun build leaking source maps and private content, without adding third-party dependencies.
+  method: best-of-3
+  cohort: Four-task best-of-three
+  date: 2026-09-19
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-four-task-best-of-3-20260919/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 65.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "46:53", total_time: "49:49", cached_tokens: 3360768, total_tokens: 3542500, price: 0.0727 }
+    - { harness: Copilot, version: 1.0.83, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:04", total_time: "12:01", cached_tokens: 392704, total_tokens: 495890, price: 0.0407 }
+    - { harness: OMP, version: 18.1.15, score: 57.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "5:21", total_time: "6:27", cached_tokens: 1185920, total_tokens: 1364786, price: 0.0517 }
+    - { harness: OMP, version: 18.2.8, score: 73.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "12:54", total_time: "15:19", cached_tokens: 3699072, total_tokens: 3882175, price: 0.0697 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "7:07", total_time: "9:47", cached_tokens: 1084672, total_tokens: 1160462, price: 0.0302, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 84.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "11:21", total_time: "12:17", cached_tokens: 1211520, total_tokens: 1394534, price: 0.0548 }
+
+- id: vllm-deepseek-streaming
+  description: Fix vLLM's DeepSeek streaming and JSON output without buffering the end token.
+  method: best-of-3
+  cohort: Four-task best-of-three
+  date: 2026-09-19
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-four-task-best-of-3-20260919/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "12:19", total_time: "15:58", cached_tokens: 3303424, total_tokens: 3434196, price: 0.0500 }
+    - { harness: Copilot, version: 1.0.83, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "29:30", total_time: "30:22", cached_tokens: 5574912, total_tokens: 6247024, price: 0.1482 }
+    - { harness: OMP, version: 18.1.15, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "43:54", total_time: "45:31", cached_tokens: 11793536, total_tokens: 12573064, price: 0.1845 }
+    - { harness: OMP, version: 18.2.8, score: 0.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "24:59", total_time: "26:53", cached_tokens: 14028288, total_tokens: 14370385, price: 0.1422 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "16:34", total_time: "19:04", cached_tokens: 22072960, total_tokens: 22406414, price: 0.1707, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:34", total_time: "9:35", cached_tokens: 5181568, total_tokens: 5311555, price: 0.0608 }
+
+- id: mp-checkpoint-consolidation
+  description: Consolidate 16 tensor-, pipeline- and expert-parallel MoE checkpoint shards into one safetensors file whose logits match the reference.
+  method: best-of-3
+  cohort: Five-task best-of-three
+  date: 2026-09-20
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-five-task-best-of-3-20260920/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "78:29", total_time: "82:18", cached_tokens: 9773824, total_tokens: 10600350, price: 0.2519, escaped: true }
+    - { harness: Copilot, version: 1.0.83, score: 40.00, best_attempt: 1, attempts: 1, passes: 0, agent_time: "180:01", total_time: "181:37", cached_tokens: 11405824, total_tokens: 14551758, price: 0.9501 }
+    - { harness: OMP, version: 18.1.15, score: 100.00, best_attempt: 2, attempts: 2, passes: 2, agent_time: "24:21", total_time: "26:16", cached_tokens: 10794496, total_tokens: 11223771, price: 0.1810 }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 1, attempts: 3, passes: 2, agent_time: "101:43", total_time: "105:55", cached_tokens: 17271808, total_tokens: 17879573, price: 0.2406 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "117:19", total_time: "121:55", cached_tokens: 22603776, total_tokens: 23165981, price: 0.2650, lower_bound: true, escaped: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "180:00", total_time: "181:03", cached_tokens: 2927872, total_tokens: 3309769, price: 0.1096 }
+
+- id: risk-scorer-replay
+  description: Repair a stale offline risk-scorer evaluator so it rebuilds parity reports deterministically, including for unseen same-schema packets.
+  method: best-of-3
+  cohort: Five-task best-of-three
+  date: 2026-09-20
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-five-task-best-of-3-20260920/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "27:55", total_time: "31:53", cached_tokens: 11014400, total_tokens: 11349525, price: 0.1723, escaped: true }
+    - { harness: Copilot, version: 1.0.83, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "47:02", total_time: "48:45", cached_tokens: 8364032, total_tokens: 9274216, price: 0.3256 }
+    - { harness: OMP, version: 18.1.15, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "49:12", total_time: "51:22", cached_tokens: 33009920, total_tokens: 33542343, price: 0.3031, escaped: true }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 2, attempts: 3, passes: 1, agent_time: "43:03", total_time: "45:08", cached_tokens: 35711370, total_tokens: 37323731, price: 0.5073 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "43:10", total_time: "46:51", cached_tokens: 46545792, total_tokens: 48396706, price: 0.5377, lower_bound: true, escaped: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "52:02", total_time: "52:58", cached_tokens: 18204800, total_tokens: 19561901, price: 0.4190 }
+
+- id: nextjs-performance
+  description: Cut page-load and interaction latency across a Next.js warehouse app without changing routes, workflows or appearance.
+  method: best-of-3
+  cohort: Five-task best-of-three
+  date: 2026-09-20
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-five-task-best-of-3-20260920/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 20.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "67:25", total_time: "71:16", cached_tokens: 11916800, total_tokens: 14955452, price: 0.5605 }
+    - { harness: Copilot, version: 1.0.83, score: 40.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:14", total_time: "14:19", cached_tokens: 2585984, total_tokens: 2884101, price: 0.0822 }
+    - { harness: OMP, version: 18.1.15, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "78:46", total_time: "80:55", cached_tokens: 3513472, total_tokens: 3748316, price: 0.0654 }
+    - { harness: OMP, version: 18.2.8, score: 60.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:48", total_time: "12:32", cached_tokens: 5248614, total_tokens: 5497293, price: 0.0792 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 40.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:46", total_time: "16:45", cached_tokens: 6440320, total_tokens: 6974003, price: 0.1368, lower_bound: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "21:59", total_time: "23:29", cached_tokens: 4282112, total_tokens: 4471215, price: 0.0701 }
+
+- id: react-lead-form
+  description: "Fix a React intake form's shared submission pipeline: validation, normalisation, ledger reconciliation and atomic CRM export."
+  method: best-of-3
+  cohort: Five-task best-of-three
+  date: 2026-09-20
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-five-task-best-of-3-20260920/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "26:39", total_time: "29:38", cached_tokens: 12172288, total_tokens: 12501903, price: 0.1666, escaped: true }
+    - { harness: Copilot, version: 1.0.83, score: 96.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "31:05", total_time: "32:39", cached_tokens: 1629696, total_tokens: 1896211, price: 0.1123 }
+    - { harness: OMP, version: 18.1.15, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "23:37", total_time: "25:14", cached_tokens: 2818816, total_tokens: 2978828, price: 0.0701, escaped: true }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "8:36", total_time: "10:01", cached_tokens: 4297384, total_tokens: 4416541, price: 0.0653, escaped: true }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "13:32", total_time: "16:27", cached_tokens: 3359616, total_tokens: 3637372, price: 0.0907, lower_bound: true, escaped: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "13:55", total_time: "15:09", cached_tokens: 2449920, total_tokens: 2594226, price: 0.0681, escaped: true }
+
+- id: vpp-loss-divergence
+  description: Fix installed Megatron-style framework code so a CPU training run's loss trace matches the reference.
+  method: best-of-3
+  cohort: Five-task best-of-three
+  date: 2026-09-20
+  report: https://github.com/ahstn/harness-bench/blob/main/results/deepseek-tb4-five-task-best-of-3-20260920/report.md
+  results:
+    - { harness: Claude Code, version: 2.1.270, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "119:24", total_time: "122:46", cached_tokens: 28366976, total_tokens: 30331171, price: 0.5603, escaped: true }
+    - { harness: Copilot, version: 1.0.83, score: 0.00, best_attempt: 1, attempts: 1, passes: 0, agent_time: "180:01", total_time: "182:06", cached_tokens: 20692096, total_tokens: 24817547, price: 1.1669 }
+    - { harness: OMP, version: 18.1.15, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "104:32", total_time: "107:01", cached_tokens: 36192000, total_tokens: 37638925, price: 0.4306 }
+    - { harness: OMP, version: 18.2.8, score: 100.00, best_attempt: 1, attempts: 3, passes: 1, agent_time: "58:25", total_time: "60:55", cached_tokens: 34668410, total_tokens: 35861572, price: 0.3909 }
+    - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "55:37", total_time: "59:06", cached_tokens: 47711104, total_tokens: 48180472, price: 0.3075, lower_bound: true, escaped: true }
+    - { harness: Pi baseline, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "101:25", total_time: "103:18", cached_tokens: 29735936, total_tokens: 31318163, price: 0.4320 }

@@ -150,6 +150,11 @@
 					"type": "custom",
 					"label": "ADEs",
 					"url": "/agentic-dev-envs"
+				},
+				{
+					"type": "custom",
+					"label": "Harness Bench",
+					"url": "/harness-bench"
 				}
 			]
 		}

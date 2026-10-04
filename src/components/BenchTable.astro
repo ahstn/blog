@@ -1,0 +1,195 @@
+---
+import {
+	type BenchRow,
+	formatPass,
+	formatPrice,
+	formatScore,
+	formatTokens,
+	seriesColor,
+} from "../utils/harness-bench";
+import HarnessIcon from "./HarnessIcon.astro";
+
+interface Props {
+	rows: BenchRow[];
+	caption: string;
+}
+
+const { rows, caption } = Astro.props;
+
+// Rows with a view follow the chart's "all versions" toggle (BenchChart sets
+// data-all on every [data-version-scope]). The top score is bolded within
+// each view's visible rows.
+const toggled = rows.some((r) => r.view);
+const topOf = (hidden: BenchRow["view"]) =>
+	Math.max(...rows.filter((r) => r.view !== hidden).map((r) => r.score));
+const topDefault = topOf("all");
+const topAll = topOf("default");
+---
+
+<div class="bench-table-wrap" data-version-scope={toggled ? "" : undefined}>
+	<table class="bench-table">
+		<caption class="visually-hidden">{caption}</caption>
+		<thead>
+			<tr>
+				<th scope="col">Harness</th>
+				<th scope="col">Version</th>
+				<th scope="col" class="num">Fractional score</th>
+				<th scope="col" class="center">Official pass</th>
+				<th scope="col" class="num">Agent time</th>
+				<th scope="col" class="num">Total time</th>
+				<th scope="col" class="num">Cached tokens</th>
+				<th scope="col" class="num">Total tokens</th>
+				<th scope="col" class="num">Estimated price (USD)</th>
+			</tr>
+		</thead>
+		<tbody>
+			{
+				rows.map((r) => (
+					<tr data-view={r.view}>
+						<th scope="row" class="harness">
+							<span class="harness-name">
+								<span class="swatch" style={`--c: ${seriesColor(r.harness)}`} aria-hidden="true" />
+								<HarnessIcon harness={r.harness} />
+								{r.harness}
+								{r.escaped && (
+									<span class="marker" title="A full score skipped this pair's remaining attempts">
+										‡
+									</span>
+								)}
+							</span>
+						</th>
+						<td class="version">{r.version}</td>
+						<td class="num">
+							<span
+								class:list={[
+									"score",
+									{
+										"top-default": r.view !== "all" && r.score === topDefault && topDefault > 0,
+										"top-all": r.view !== "default" && r.score === topAll && topAll > 0,
+									},
+								]}
+							>
+								{formatScore(r.score)}
+							</span>
+							{r.scoreNote && <span class="score-note">{r.scoreNote}</span>}
+						</td>
+						<td class="center">{formatPass(r)}</td>
+						<td class="num">{r.agentTime}</td>
+						<td class="num">{r.totalTime}</td>
+						<td class="num">{formatTokens(r.cachedTokens, r.lowerBound)}</td>
+						<td class="num">{formatTokens(r.totalTokens, r.lowerBound)}</td>
+						<td class="num">{formatPrice(r.price, r.lowerBound)}</td>
+					</tr>
+				))
+			}
+		</tbody>
+	</table>
+</div>
+
+<style>
+	.bench-table-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.bench-table {
+		width: 100%;
+		min-width: 56rem;
+		border-collapse: collapse;
+		font-size: var(--font-size-sm);
+		line-height: var(--leading-snug);
+	}
+
+	.bench-table th,
+	.bench-table td {
+		padding: var(--spacing-3);
+		text-align: left;
+		vertical-align: top;
+		border-bottom: 1px solid var(--color-border-subtle);
+	}
+
+	.bench-table tbody tr:last-child > * {
+		border-bottom: none;
+	}
+
+	.bench-table thead th {
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		text-transform: uppercase;
+		letter-spacing: var(--tracking-wide);
+		color: var(--color-muted);
+		/* Long headers wrap so the table fits the wide container. */
+		vertical-align: bottom;
+		background: var(--color-bg-subtle);
+	}
+
+	.bench-table .num {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.bench-table td.num {
+		white-space: nowrap;
+	}
+
+	.bench-table .center {
+		text-align: center;
+	}
+
+	.harness {
+		font-weight: var(--font-weight-heading);
+		white-space: nowrap;
+	}
+
+	.harness-name {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	[data-version-scope]:not([data-all]) tr[data-view="all"],
+	[data-version-scope][data-all] tr[data-view="default"] {
+		display: none;
+	}
+
+	.swatch {
+		display: inline-block;
+		width: 0.625rem;
+		height: 0.625rem;
+		border-radius: 2px;
+		background: var(--c);
+	}
+
+	.marker {
+		font-weight: 400;
+		color: var(--color-muted);
+		cursor: help;
+	}
+
+	.version {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--color-text-secondary);
+	}
+
+	.bench-table-wrap:not([data-all]) .score.top-default,
+	.bench-table-wrap[data-all] .score.top-all {
+		font-weight: var(--font-weight-heading);
+	}
+
+	.score-note {
+		display: block;
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+</style>
