@@ -1,0 +1,35 @@
+seed/seed.json
+  s_72f0061d90297c::t_70640b693598d2 153-157
+src/components/BenchChart.astro
+  s_72f0061d90297c::t_a11881068dcabf 1-467
+src/components/BenchTable.astro
+  s_72f0061d90297c::t_5f2b7e7b49878a 1-195
+src/components/HarnessIcon.astro
+  s_72f0061d90297c::t_1c6c0ba325693b 1-36
+src/components/OmpIcon.astro
+  s_72f0061d90297c::t_671b8a96ca6a2e 1-19
+src/content.config.ts
+  s_72f0061d90297c::t_90f0f973ee7512 12,70-108
+src/data/harness-bench.yml
+  s_72f0061d90297c::t_fdbbbc2b4513c9 1-203
+src/pages/harness-bench.astro
+  s_72f0061d90297c::t_e8be106d08f76e 1-215
+src/utils/harness-bench.ts
+  s_72f0061d90297c::t_ba0578fa5ad5ed 1-164
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d950651d91f616c37ad6f07a50ee111120840c3",
+  "prompts": {},
+  "sessions": {
+    "s_72f0061d90297c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8b802350-6feb-4868-b46e-3964af83f932",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
