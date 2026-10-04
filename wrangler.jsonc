@@ -4,6 +4,14 @@
   "main": "./src/worker.ts",
   "compatibility_date": "2026-02-24",
   "compatibility_flags": ["nodejs_compat"],
+  // Served only on ahstn.io; passkeys are bound to siteUrl, so workers.dev is off.
+  "workers_dev": false,
+  "preview_urls": false,
+  // www is redirected to the apex in src/worker.ts
+  "routes": [
+    { "pattern": "ahstn.io", "custom_domain": true },
+    { "pattern": "www.ahstn.io", "custom_domain": true },
+  ],
   "d1_databases": [
     {
       "binding": "DB",
@@ -18,6 +26,8 @@
       "preview_bucket_name": "my-emdash-media",
     },
   ],
+  // Cloudflare Email Sending, used by the cloudflareEmail() plugin
+  "send_email": [{ "name": "EMAIL" }],
   // Drives scheduled publishing, plugin cron, and maintenance (see src/worker.ts)
   "triggers": {
     "crons": ["* * * * *"],

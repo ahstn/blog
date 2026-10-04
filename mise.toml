@@ -1,0 +1,26 @@
+[tools]
+node = "24"
+pnpm = "11.28.0"
+
+[tasks.install]
+description = "Install dependencies"
+run = "pnpm install --frozen-lockfile"
+
+[tasks.dev]
+description = "Start the local dev server"
+depends = ["install"]
+run = "pnpm dev"
+
+[tasks.build]
+description = "Build the Worker bundle"
+depends = ["install"]
+run = "pnpm build"
+
+[tasks.deploy]
+description = "Build and deploy to Cloudflare Workers"
+depends = ["build"]
+run = "pnpm exec wrangler deploy"
+
+[tasks.tail]
+description = "Stream production Worker logs"
+run = "pnpm exec wrangler tail"
