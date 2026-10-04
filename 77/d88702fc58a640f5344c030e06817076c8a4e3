@@ -1,0 +1,25 @@
+src/layouts/Base.astro
+  s_72f0061d90297c::t_8145ce46e2b82b 12,17-18,46,66
+src/pages/index.astro
+  s_72f0061d90297c::t_d342468690a06d 24,76
+src/pages/posts/[slug].astro
+  s_72f0061d90297c::t_38f52d2340a7dd 19,60
+src/utils/site-identity.ts
+  s_72f0061d90297c::t_b22558b543e6a7 27-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "77d88702fc58a640f5344c030e06817076c8a4e3",
+  "prompts": {},
+  "sessions": {
+    "s_72f0061d90297c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8b802350-6feb-4868-b46e-3964af83f932",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
