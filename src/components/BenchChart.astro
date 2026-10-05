@@ -1,0 +1,467 @@
+---
+import type { BenchTask } from "../content.config";
+import {
+	compareVersions,
+	formatPass,
+	formatScore,
+	HARNESSES,
+	seriesColor,
+} from "../utils/harness-bench";
+
+interface Props {
+	tasks: { id: string; data: BenchTask }[];
+}
+
+const { tasks } = Astro.props;
+
+const harnessRank = (h: string) => HARNESSES.indexOf(h as (typeof HARNESSES)[number]);
+
+// Every bar, grouped by task. Within a task: harness order, then oldest to
+// newest version. A bar is "latest" when it's the newest version of its
+// harness run on that task; only those show until all versions are enabled.
+const groups = tasks.map(({ id, data }) => {
+	const results = [...data.results].sort(
+		(a, b) => harnessRank(a.harness) - harnessRank(b.harness) || compareVersions(a.version, b.version),
+	);
+	return {
+		id,
+		bars: results.map((r, i) => ({
+			...r,
+			latest: results.slice(i + 1).every((later) => later.harness !== r.harness),
+			detail: [
+				data.method === "mean-of-3"
+					? `Mean of ${r.attempts} ± ${r.score_sd?.toFixed(2)}`
+					: `Best of ${r.attempts}, attempt ${r.best_attempt}`,
+				`official pass ${formatPass(r)}`,
+			].join(" · "),
+		})),
+	};
+});
+
+// Legend: each harness with its versions, newest first. Older versions only
+// appear once all versions are enabled.
+const legend = HARNESSES.map((harness) => {
+	const versions = [
+		...new Set(tasks.flatMap((t) => t.data.results.filter((r) => r.harness === harness).map((r) => r.version))),
+	].sort((a, b) => compareVersions(b, a));
+	return { harness, versions };
+}).filter((l) => l.versions.length > 0);
+
+const hasOlderVersions = legend.some((l) => l.versions.length > 1);
+const ticks = [100, 75, 50, 25, 0];
+
+// Break long task ids after hyphens so they wrap onto two lines.
+const breakable = (id: string) => id.split("-");
+---
+
+<figure class="bench-chart" data-bench-chart>
+	<div class="chart-head">
+		<ul class="chart-legend" aria-label="Harnesses">
+			{
+				legend.map(({ harness, versions }) =>
+					versions.map((version, i) => (
+						<li class="legend-item" data-latest={String(i === 0)} style={`--c: ${seriesColor(harness)}`}>
+							<span class="legend-swatch" aria-hidden="true" />
+							{harness}
+							<span class="legend-version">{version}</span>
+						</li>
+					)),
+				)
+			}
+		</ul>
+		<div class="chart-toggle">
+			<button type="button" class="tb-btn" aria-pressed="false" data-all-versions>
+				Show all harness versions
+			</button>
+			{!hasOlderVersions && <span class="toggle-hint">One version per harness so far</span>}
+		</div>
+	</div>
+
+	<div class="chart-scroll">
+		<div class="chart-body" style={`--task-count: ${groups.length}`}>
+			<div class="chart-plot">
+				<div class="chart-grid" aria-hidden="true">
+					{
+						ticks.map((t) => (
+							<div class="grid-line" style={`bottom: ${t}%`}>
+								<span class="tick-label">{t}%</span>
+							</div>
+						))
+					}
+				</div>
+				<div class="chart-groups">
+					{
+						groups.map((g) => (
+							<div class="chart-group" role="group" aria-label={g.id}>
+								{g.bars.map((b) => (
+									<button
+										type="button"
+										class="bar"
+										data-latest={String(b.latest)}
+										data-score={formatScore(b.score)}
+										data-harness={b.harness}
+										data-version={b.version}
+										data-task={g.id}
+										data-detail={b.detail}
+										style={`--h: ${b.score}%; --c: ${seriesColor(b.harness)}`}
+										aria-label={`${g.id}, ${b.harness} ${b.version}: ${formatScore(b.score)}. ${b.detail}`}
+									>
+										<span class="bar-fill" />
+									</button>
+								))}
+							</div>
+						))
+					}
+				</div>
+			</div>
+			<div class="chart-x" aria-hidden="true">
+				{
+					groups.map((g) => (
+						<a class="x-label" href={`#task-${g.id}`} tabindex="-1">
+							{breakable(g.id).map((part, i, parts) => (
+								<>
+									{part}
+									{i < parts.length - 1 && (
+										<>
+											-<wbr />
+										</>
+									)}
+								</>
+							))}
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="chart-tooltip" role="tooltip" hidden data-tooltip>
+		<strong class="tt-value" data-tt-value></strong>
+		<span class="tt-series"><span class="tt-key" data-tt-key></span><span data-tt-series></span></span>
+		<span class="tt-task" data-tt-task></span>
+		<span class="tt-detail" data-tt-detail></span>
+	</div>
+
+	<figcaption class="chart-caption">
+		Fractional score per task and harness. Hover or focus a bar for details; every value is
+		also in the tables below.
+	</figcaption>
+</figure>
+
+<script>
+	for (const chart of document.querySelectorAll<HTMLElement>("[data-bench-chart]")) {
+		const toggle = chart.querySelector<HTMLButtonElement>("[data-all-versions]")!;
+		toggle.addEventListener("click", () => {
+			const on = toggle.getAttribute("aria-pressed") !== "true";
+			toggle.setAttribute("aria-pressed", String(on));
+			chart.toggleAttribute("data-all", on);
+			// Tables with version-dependent rows (the aggregate) follow along.
+			for (const scope of document.querySelectorAll("[data-version-scope]")) {
+				scope.toggleAttribute("data-all", on);
+			}
+		});
+
+		const tooltip = chart.querySelector<HTMLElement>("[data-tooltip]")!;
+		const field = (name: string) => tooltip.querySelector<HTMLElement>(`[data-tt-${name}]`)!;
+
+		const show = (bar: HTMLElement) => {
+			const d = bar.dataset;
+			// textContent, not innerHTML: values come from the data file.
+			field("value").textContent = d.score ?? "";
+			field("series").textContent = `${d.harness} ${d.version}`;
+			field("task").textContent = d.task ?? "";
+			field("detail").textContent = d.detail ?? "";
+			field("key").style.background = bar.style.getPropertyValue("--c");
+			tooltip.hidden = false;
+
+			// Above the bar's top, centred on it, kept inside the figure.
+			const box = chart.getBoundingClientRect();
+			const fill = bar.querySelector(".bar-fill")!.getBoundingClientRect();
+			const tip = tooltip.getBoundingClientRect();
+			const left = fill.left + fill.width / 2 - box.left - tip.width / 2;
+			const top = fill.top - box.top - tip.height - 8;
+			tooltip.style.left = `${Math.max(0, Math.min(left, box.width - tip.width))}px`;
+			tooltip.style.top = `${Math.max(0, top)}px`;
+		};
+		const hide = () => (tooltip.hidden = true);
+
+		chart.addEventListener("pointerover", (e) => {
+			const bar = (e.target as Element).closest<HTMLElement>(".bar");
+			if (bar) show(bar);
+		});
+		chart.addEventListener("pointerout", (e) => {
+			if (!(e.relatedTarget as Element | null)?.closest(".bar")) hide();
+		});
+		chart.addEventListener("focusin", (e) => {
+			const bar = (e.target as Element).closest<HTMLElement>(".bar");
+			if (bar) show(bar);
+		});
+		chart.addEventListener("focusout", hide);
+		chart.querySelector(".chart-scroll")!.addEventListener("scroll", hide, { passive: true });
+	}
+</script>
+
+<style>
+	/* --series-1..5 come from the page (one hue per harness, shared with the
+	   tables' swatches). */
+	.bench-chart {
+		--plot-height: 16rem;
+
+		position: relative;
+		margin: 0;
+	}
+
+	.chart-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--spacing-3) var(--spacing-6);
+		margin-bottom: var(--spacing-6);
+	}
+
+	.chart-legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-2) var(--spacing-5);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-size: var(--font-size-sm);
+		color: var(--color-text);
+	}
+
+	.legend-item {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	.legend-swatch {
+		width: 0.75rem;
+		height: 0.75rem;
+		border-radius: 2px;
+		background: var(--c);
+	}
+
+	.legend-version {
+		color: var(--color-muted);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.chart-toggle {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-3);
+	}
+
+	.toggle-hint {
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+
+	.tb-btn {
+		padding: var(--spacing-1) var(--spacing-3);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		color: var(--color-text);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		cursor: pointer;
+	}
+
+	.tb-btn:hover {
+		border-color: var(--color-text-secondary);
+	}
+
+	.tb-btn[aria-pressed="true"] {
+		color: var(--color-on-brand);
+		background: var(--color-brand);
+		border-color: var(--color-brand);
+	}
+
+	.tb-btn:focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 2px;
+	}
+
+	/* Older versions are hidden until "all versions" is on; the flex rows
+	   reflow so the remaining bars stay centred. */
+	.bench-chart:not([data-all]) [data-latest="false"] {
+		display: none;
+	}
+
+	.chart-scroll {
+		overflow-x: auto;
+	}
+
+	/* Padding keeps the y tick labels (left, and the 100% label's top half)
+	   inside the scroll box, so it never needs a vertical scrollbar. Each task
+	   gets at least 5.25rem: room for its bars and a label wrapped at its hyphens, and
+	   13 tasks still fit the wide container. The bar and label rows share
+	   minmax(0, 1fr) columns so they stay aligned. */
+	.chart-body {
+		min-width: calc(var(--task-count) * 5.25rem + 2.75rem);
+		padding: var(--spacing-2) 0 var(--spacing-1) 2.75rem;
+	}
+
+	.chart-plot {
+		position: relative;
+		height: var(--plot-height);
+	}
+
+	.chart-grid {
+		position: absolute;
+		inset: 0;
+	}
+
+	.grid-line {
+		position: absolute;
+		left: 0;
+		right: 0;
+		border-top: 1px solid var(--color-border-subtle);
+	}
+
+	/* The baseline is the one solid axis. */
+	.grid-line:last-child {
+		border-top-color: var(--color-border);
+	}
+
+	.tick-label {
+		position: absolute;
+		right: calc(100% + var(--spacing-2));
+		transform: translateY(-50%);
+		font-size: var(--font-size-xs);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+		white-space: nowrap;
+	}
+
+	.chart-groups {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-auto-columns: minmax(0, 1fr);
+		grid-auto-flow: column;
+	}
+
+	.chart-group {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+	}
+
+	/* The whole column is the hit target, not just the painted fill. */
+	.bar {
+		all: unset;
+		display: flex;
+		align-items: flex-end;
+		flex: 0 1 1.375rem; /* 20px fill + 2px surface gap */
+		min-width: 0;
+		padding: 0 1px;
+		box-sizing: border-box;
+		cursor: default;
+	}
+
+	.bar-fill {
+		width: 100%;
+		max-width: 1.25rem;
+		margin: 0 auto;
+		/* A 0% result still shows a sliver, so it reads as measured. */
+		height: max(var(--h), 2px);
+		background: var(--c);
+		border-radius: 4px 4px 0 0;
+		transition: filter 120ms;
+	}
+
+	.bar[data-latest="false"] .bar-fill,
+	.legend-item[data-latest="false"] .legend-swatch {
+		opacity: 0.45;
+	}
+
+	.bar:hover .bar-fill,
+	.bar:focus-visible .bar-fill {
+		filter: brightness(1.15) saturate(1.1);
+	}
+
+	.bar:focus-visible {
+		outline: 2px solid var(--color-brand-ring);
+		outline-offset: 1px;
+		border-radius: 2px;
+	}
+
+	.chart-x {
+		display: grid;
+		grid-auto-columns: minmax(0, 1fr);
+		grid-auto-flow: column;
+		margin-top: var(--spacing-2);
+	}
+
+	.x-label {
+		padding: 0 1px;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: -0.03em;
+		line-height: var(--leading-snug);
+		overflow-wrap: anywhere;
+		text-align: center;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+	}
+
+	.x-label:hover {
+		color: var(--color-brand);
+	}
+
+	.chart-tooltip {
+		position: absolute;
+		z-index: 10;
+		display: grid;
+		gap: 2px;
+		min-width: 11rem;
+		padding: var(--spacing-2) var(--spacing-3);
+		font-size: var(--font-size-xs);
+		line-height: var(--leading-snug);
+		color: var(--color-text-secondary);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+		pointer-events: none;
+	}
+
+	.chart-tooltip[hidden] {
+		display: none;
+	}
+
+	.tt-value {
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-heading);
+		color: var(--color-text);
+	}
+
+	.tt-series {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-2);
+		color: var(--color-text);
+	}
+
+	/* Line key, not a box. */
+	.tt-key {
+		width: 0.75rem;
+		height: 2px;
+		border-radius: 1px;
+	}
+
+	.tt-task {
+		font-family: var(--font-mono);
+	}
+
+	.chart-caption {
+		margin-top: var(--spacing-4);
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+</style>

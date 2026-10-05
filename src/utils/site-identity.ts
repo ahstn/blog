@@ -24,3 +24,14 @@ export function resolveBlogSiteIdentity(settings?: BlogSiteIdentitySettings) {
 		siteFavicon: settings?.favicon?.url ?? DEFAULT_FAVICON,
 	};
 }
+
+// Browser tab titles read "<page> | Adam Houston", independent of the site
+// name in Site Settings. Pages without their own title use the fallback.
+export const TITLE_SUFFIX = "Adam Houston";
+const FALLBACK_PAGE_TITLE = "Personal";
+
+export function documentTitle(title?: string | null) {
+	const suffix = ` | ${TITLE_SUFFIX}`;
+	if (title?.endsWith(suffix)) return title;
+	return `${title || FALLBACK_PAGE_TITLE}${suffix}`;
+}

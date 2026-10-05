@@ -9,6 +9,7 @@ import { defineCollection } from "astro:content";
 import { file } from "astro/loaders";
 import { z } from "astro/zod";
 import { FEATURES, PLATFORMS, TECH, type Tech } from "./utils/ades";
+import { HARNESSES } from "./utils/harness-bench";
 
 // YAML turns unquoted `2026-07` into a string, but `2026-07-01` into a Date,
 // so accept both and normalise.
@@ -66,4 +67,42 @@ const agenticDevEnvs = defineCollection({
 	schema: adeSchema,
 });
 
-export const collections = { agenticDevEnvs };
+// Harness Bench: Terminal-Bench 4 results per task (src/data/harness-bench.yml).
+const clock = z.string().regex(/^\d+:\d{2}$/, "expected m:ss");
+
+export const benchResultSchema = z.object({
+	harness: z.enum(HARNESSES),
+	// Coerced: YAML would read a bare `1.10` as a number.
+	version: z.coerce.string(),
+	score: z.number().min(0).max(100),
+	score_sd: z.number().nonnegative().optional(),
+	best_attempt: z.number().int().positive().optional(),
+	attempts: z.number().int().positive(),
+	passes: z.number().int().nonnegative(),
+	agent_time: clock,
+	total_time: clock,
+	cached_tokens: z.number().int().nonnegative(),
+	total_tokens: z.number().int().nonnegative(),
+	price: z.number().nonnegative(),
+	lower_bound: z.boolean().default(false),
+	escaped: z.boolean().default(false),
+});
+
+export const benchTaskSchema = z.object({
+	description: z.string(),
+	method: z.enum(["best-of-3", "mean-of-3"]),
+	cohort: z.string(),
+	date: isoDate,
+	report: z.url(),
+	results: z.array(benchResultSchema).min(1),
+});
+
+export type BenchResult = z.output<typeof benchResultSchema>;
+export type BenchTask = z.output<typeof benchTaskSchema>;
+
+const harnessBench = defineCollection({
+	loader: file("src/data/harness-bench.yml"),
+	schema: benchTaskSchema,
+});
+
+export const collections = { agenticDevEnvs, harnessBench };

@@ -1,0 +1,36 @@
+---
+import { agentIcon } from "../utils/agent-icons";
+import type { Harness } from "../utils/harness-bench";
+import OmpIcon from "./OmpIcon.astro";
+
+interface Props {
+	harness: Harness;
+}
+
+const { harness } = Astro.props;
+
+// Harness names mapped to the agent names Lobe icons are keyed by (shared
+// with the ADE page). OMP has no Lobe icon and uses its own mark.
+const LOBE_NAMES: Record<Exclude<Harness, "OMP">, string> = {
+	"Claude Code": "Claude Code",
+	Copilot: "Copilot CLI",
+	"OpenCode v2": "OpenCode",
+	"Pi baseline": "Pi",
+};
+
+const svg = harness === "OMP" ? undefined : agentIcon(LOBE_NAMES[harness]);
+---
+
+<span class="harness-icon" aria-hidden="true">
+	{harness === "OMP" ? <OmpIcon /> : svg && <Fragment set:html={svg} />}
+</span>
+
+<style>
+	/* Lobe SVGs are sized 1em; mono ones use currentColor. */
+	.harness-icon {
+		display: inline-flex;
+		flex: none;
+		font-size: 1rem;
+		color: var(--color-text);
+	}
+</style>

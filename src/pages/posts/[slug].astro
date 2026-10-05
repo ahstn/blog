@@ -5,7 +5,6 @@ import {
 	getTermsForEntries,
 	getSeoMeta,
 	decodeSlug,
-	getSiteSettings,
 } from "emdash";
 import {
 	Image,
@@ -17,7 +16,7 @@ import {
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
-import { resolveBlogSiteIdentity } from "../../utils/site-identity";
+import { TITLE_SUFFIX } from "../../utils/site-identity";
 
 const slug = decodeSlug(Astro.params.slug);
 
@@ -55,11 +54,10 @@ function getImageUrl(img: unknown): string | undefined {
 	return undefined;
 }
 const featuredImageUrl = getImageUrl(post.data.featured_image);
-const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
 
 // Generate SEO meta from content
 const seo = getSeoMeta(post, {
-	siteTitle,
+	siteTitle: TITLE_SUFFIX,
 	siteUrl: Astro.url.origin,
 	path: `/posts/${slug}`,
 	defaultOgImage: featuredImageUrl,

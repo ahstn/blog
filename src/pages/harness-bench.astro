@@ -1,0 +1,215 @@
+---
+import { getCollection } from "astro:content";
+import BenchChart from "../components/BenchChart.astro";
+import BenchTable from "../components/BenchTable.astro";
+import type { BenchTask } from "../content.config";
+import Base from "../layouts/Base.astro";
+import { aggregateRows, METHOD_LABELS, MODEL, SOURCE_URL, taskRows } from "../utils/harness-bench";
+
+// Repo-backed data (src/data/harness-bench.yml), not EmDash content, so
+// there's no cacheHint to set. Tasks are listed alphabetically.
+// Explicitly typed: astro:content's generated types resolve to `any` here.
+type Entry = { id: string; data: BenchTask };
+const tasks: Entry[] = (await getCollection("harnessBench")).sort((a: Entry, b: Entry) =>
+	a.id.localeCompare(b.id),
+);
+
+const harnessCount = new Set(tasks.flatMap((t) => t.data.results.map((r) => r.harness))).size;
+const lastRun = tasks
+	.map((t) => t.data.date)
+	.sort()
+	.at(-1);
+
+const formatDate = (iso: string) =>
+	new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
+		day: "numeric",
+		month: "short",
+		year: "numeric",
+		timeZone: "UTC",
+	});
+---
+
+<Base
+	title="Harness Bench"
+	description="Terminal-Bench 4 results for coding agent harnesses (Claude Code, Copilot, OMP, OpenCode and Pi) running the same model: fractional score, official pass, time, tokens and estimated cost per task."
+>
+	<div class="bench-page">
+		<header class="page-header">
+			<h1 class="page-title">Harness Bench</h1>
+			<p class="page-description">
+				{tasks.length} Terminal-Bench 4 tasks, each run through {harnessCount} coding agent harnesses
+				on the same model: <code>{MODEL}</code> via OpenRouter at high reasoning.
+			</p>
+			<p class="page-meta">
+				Results from <a href={SOURCE_URL}>ahstn/harness-bench</a>{lastRun && <>, last run {formatDate(lastRun)}</>}.
+			</p>
+		</header>
+
+		<section class="bench-section" aria-labelledby="chart-heading">
+			<h2 id="chart-heading">Scores by task</h2>
+			<p class="section-description">
+				Each bar uses the newest harness version run on that task; show all versions to compare
+				older ones. Fractional score credits partial repairs: weighted feature completion multiplied by regression preservation.
+			</p>
+			<BenchChart tasks={tasks} />
+		</section>
+
+		<section class="bench-section" aria-labelledby="overall-heading">
+			<h2 id="overall-heading">All tasks aggregated by harness</h2>
+			<p class="section-description">
+				Each harness across all {tasks.length} tasks, using the same versions as the chart:
+			</p>
+			<BenchTable
+				rows={aggregateRows(tasks.map((t) => t.data))}
+				caption="Results by harness across all tasks"
+			/>
+		</section>
+
+		<section class="bench-section" aria-labelledby="tasks-heading">
+			<h2 id="tasks-heading">Results by task</h2>
+			<p class="section-description">
+				Agent time excludes setup and verification; total time covers the whole trial. ≥ marks
+				OpenCode token totals and prices, which are lower bounds until its child sessions are
+				counted. Prices are estimates at fixed reference rates ($0.15/M uncached input, $0.003/M
+				cached input, $0.60/M output), not provider bills.
+			</p>
+
+			{
+				tasks.map(({ id, data }) => (
+					<article class="bench-task" id={`task-${id}`} aria-labelledby={`task-${id}-heading`}>
+						<h3 id={`task-${id}-heading`} class="task-title">
+							{id}
+						</h3>
+						<p class="task-description">{data.description}</p>
+						<p class="task-meta">
+							{METHOD_LABELS[data.method]} · {data.cohort} cohort · {formatDate(data.date)} ·{" "}
+							<a href={data.report}>Report</a>
+						</p>
+						<BenchTable rows={taskRows(data)} caption={`${id} results by harness`} />
+					</article>
+				))
+			}
+
+			<p class="footnotes">
+				Best of three rows report each harness's best attempt and count official passes over the
+				attempts that ran. Mean of three rows report the mean ± sample standard deviation. ‡ marks a
+				pair whose full score stopped it early, so it ran fewer than three attempts.
+			</p>
+		</section>
+	</div>
+</Base>
+
+<style>
+	/* Chart-only categorical palette: one hue per harness, in HARNESSES order,
+	   used by the chart bars and the matching table swatches. Validated (CVD
+	   and normal-vision separation) against both page surfaces; the dark
+	   column is the same hues stepped for the dark surface. */
+	.bench-page {
+		--series-1: light-dark(#2a78d6, #3987e5);
+		--series-2: light-dark(#eb6834, #d95926);
+		--series-3: light-dark(#1baf7a, #199e70);
+		--series-4: light-dark(#eda100, #c98500);
+		--series-5: light-dark(#e87ba4, #d55181);
+
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: var(--spacing-16) var(--spacing-6);
+	}
+
+	@supports not (color: light-dark(#000, #fff)) {
+		.bench-page {
+			--series-1: #2a78d6;
+			--series-2: #eb6834;
+			--series-3: #1baf7a;
+			--series-4: #eda100;
+			--series-5: #e87ba4;
+		}
+	}
+
+	.page-header {
+		max-width: var(--content-width);
+		margin-bottom: var(--spacing-12);
+	}
+
+	.page-title {
+		font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
+		font-weight: var(--font-weight-display);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	.page-description {
+		margin-top: var(--spacing-3);
+		color: var(--color-text-secondary);
+	}
+
+	.page-description code {
+		font-family: var(--font-mono);
+		font-size: 0.875em;
+	}
+
+	.page-meta {
+		margin-top: var(--spacing-2);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.page-meta a,
+	.task-meta a {
+		color: inherit;
+	}
+
+	.page-meta a:hover,
+	.task-meta a:hover {
+		color: var(--color-brand);
+	}
+
+	.bench-section + .bench-section {
+		margin-top: var(--spacing-16);
+	}
+
+	.bench-section h2 {
+		font-size: var(--font-size-2xl);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: var(--tracking-snug);
+	}
+
+	.section-description {
+		margin: var(--spacing-2) 0 var(--spacing-6);
+		color: var(--color-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	/* Chart labels link here; clear the sticky header. */
+	.bench-task {
+		scroll-margin-top: calc(4rem + var(--spacing-6));
+	}
+
+	.bench-task + .bench-task {
+		margin-top: var(--spacing-10);
+	}
+
+	.task-title {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-heading);
+	}
+
+	.task-description {
+		margin-top: var(--spacing-1);
+		color: var(--color-text-secondary);
+		font-size: var(--font-size-sm);
+	}
+
+	.task-meta {
+		margin: var(--spacing-1) 0 var(--spacing-4);
+		color: var(--color-muted);
+		font-size: var(--font-size-xs);
+	}
+
+	.footnotes {
+		margin-top: var(--spacing-8);
+		color: var(--color-muted);
+		font-size: var(--font-size-xs);
+	}
+</style>
