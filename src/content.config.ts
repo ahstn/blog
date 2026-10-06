@@ -88,16 +88,23 @@ export const benchResultSchema = z.object({
 	escaped: z.boolean().default(false),
 });
 
-export const benchTaskSchema = z.object({
-	description: z.string(),
-	method: z.enum(["best-of-3", "mean-of-3"]),
+// One cohort's rows for a task. A task re-run by a later cohort (newer
+// harness versions or task revision) gets another run.
+export const benchRunSchema = z.object({
 	cohort: z.string(),
 	date: isoDate,
+	method: z.enum(["best-of-3", "mean-of-3"]),
 	report: z.url(),
 	results: z.array(benchResultSchema).min(1),
 });
 
+export const benchTaskSchema = z.object({
+	description: z.string(),
+	runs: z.array(benchRunSchema).min(1),
+});
+
 export type BenchResult = z.output<typeof benchResultSchema>;
+export type BenchRun = z.output<typeof benchRunSchema>;
 export type BenchTask = z.output<typeof benchTaskSchema>;
 
 const harnessBench = defineCollection({

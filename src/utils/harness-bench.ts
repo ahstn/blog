@@ -1,6 +1,6 @@
 // Shared constants and formatting for the Harness Bench page.
 
-import type { BenchResult, BenchTask } from "../content.config";
+import type { BenchResult, BenchRun, BenchTask } from "../content.config";
 
 /**
  * Harnesses in display order. The order also fixes each harness's chart
@@ -11,7 +11,7 @@ export const HARNESSES = ["Claude Code", "Copilot", "OMP", "OpenCode v2", "Pi ba
 export type Harness = (typeof HARNESSES)[number];
 
 export const MODEL = "deepseek/deepseek-v4.1-flash";
-export const SOURCE_URL = "https://github.com/ahstn/harness-bench/tree/main";
+export const SOURCE_URL = "https://github.com/ahstn/harness-bench/tree/feat/resuming-tb4-evals";
 
 export const seriesSlot = (harness: Harness) => HARNESSES.indexOf(harness) + 1;
 export const seriesColor = (harness: Harness) => `var(--series-${seriesSlot(harness)})`;
@@ -39,6 +39,17 @@ export const formatTokens = (n: number, lowerBound: boolean) =>
 
 export const formatPrice = (usd: number, lowerBound: boolean) =>
 	`${lowerBound ? "≥" : ""}$${usd.toFixed(4)}`;
+
+/** A result with the method of the run it came from. */
+export type TaskResult = BenchResult & { method: BenchRun["method"] };
+
+/** Every result for a task, across all of its runs. */
+export const taskResults = (task: BenchTask): TaskResult[] =>
+	task.runs.flatMap((run) => run.results.map((r) => ({ ...r, method: run.method })));
+
+/** Date of a task's most recent run (ISO dates sort as strings). */
+export const lastRunDate = (task: BenchTask) =>
+	task.runs.map((r) => r.date).sort().at(-1) as string;
 
 export interface PassRecord {
 	attempts: number;
@@ -77,14 +88,14 @@ const rank = (h: Harness) => HARNESSES.indexOf(h);
 
 /** One task's results: harness order, newest version first. */
 export function taskRows(task: BenchTask): BenchRow[] {
-	return [...task.results]
+	return taskResults(task)
 		.sort((a, b) => rank(a.harness) - rank(b.harness) || compareVersions(b.version, a.version))
 		.map((r) => ({
 			harness: r.harness,
 			version: r.version,
 			score: r.score,
 			scoreNote:
-				task.method === "mean-of-3"
+				r.method === "mean-of-3"
 					? `± ${r.score_sd?.toFixed(2)} (n=${r.attempts})`
 					: `attempt ${r.best_attempt} of ${r.attempts}`,
 			passes: r.passes,
@@ -144,17 +155,17 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
  */
 export function aggregateRows(tasks: BenchTask[]): BenchRow[] {
 	return HARNESSES.flatMap((harness) => {
-		const perTask = tasks.map((t) => t.results.filter((r) => r.harness === harness));
+		const perTask = tasks.map((t) => taskResults(t).filter((r) => r.harness === harness));
 		const latest = perTask
 			.map((rs) => rs.sort((a, b) => compareVersions(b.version, a.version))[0])
-			.filter((r): r is BenchResult => r !== undefined);
+			.filter((r): r is TaskResult => r !== undefined);
 		if (latest.length === 0) return [];
 
 		const versions = [...new Set(perTask.flat().map((r) => r.version))].sort((a, b) =>
 			compareVersions(b, a),
 		);
 		const byVersion = versions.map((v) => perTask.flat().filter((r) => r.version === v));
-		const same = (rs: BenchResult[]) => rs.length === latest.length && rs.every((r) => latest.includes(r));
+		const same = (rs: TaskResult[]) => rs.length === latest.length && rs.every((r) => latest.includes(r));
 
 		if (byVersion.some(same)) {
 			return byVersion.map((rs) => aggregate(harness, rs, same(rs) ? undefined : "all"));

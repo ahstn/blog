@@ -4,7 +4,15 @@ import BenchChart from "../components/BenchChart.astro";
 import BenchTable from "../components/BenchTable.astro";
 import type { BenchTask } from "../content.config";
 import Base from "../layouts/Base.astro";
-import { aggregateRows, METHOD_LABELS, MODEL, SOURCE_URL, taskRows } from "../utils/harness-bench";
+import {
+	aggregateRows,
+	lastRunDate,
+	METHOD_LABELS,
+	MODEL,
+	SOURCE_URL,
+	taskResults,
+	taskRows,
+} from "../utils/harness-bench";
 
 // Repo-backed data (src/data/harness-bench.yml), not EmDash content, so
 // there's no cacheHint to set. Tasks are listed alphabetically.
@@ -14,9 +22,9 @@ const tasks: Entry[] = (await getCollection("harnessBench")).sort((a: Entry, b: 
 	a.id.localeCompare(b.id),
 );
 
-const harnessCount = new Set(tasks.flatMap((t) => t.data.results.map((r) => r.harness))).size;
+const harnessCount = new Set(tasks.flatMap((t) => taskResults(t.data).map((r) => r.harness))).size;
 const lastRun = tasks
-	.map((t) => t.data.date)
+	.map((t) => lastRunDate(t.data))
 	.sort()
 	.at(-1);
 
@@ -69,9 +77,11 @@ const formatDate = (iso: string) =>
 			<h2 id="tasks-heading">Results by task</h2>
 			<p class="section-description">
 				Agent time excludes setup and verification; total time covers the whole trial. ≥ marks
-				OpenCode token totals and prices, which are lower bounds until its child sessions are
-				counted. Prices are estimates at fixed reference rates ($0.15/M uncached input, $0.003/M
-				cached input, $0.60/M output), not provider bills.
+				token totals and prices that are lower bounds, mostly OpenCode's, whose child sessions
+				aren't counted. Prices are estimates at each cohort's captured reference rates, which
+				differ between cohorts (see each report), not provider bills. Tasks re-run by a later
+				cohort list each run; later offline cohorts aren't controlled comparisons with earlier
+				ones.
 			</p>
 
 			{
@@ -81,10 +91,12 @@ const formatDate = (iso: string) =>
 							{id}
 						</h3>
 						<p class="task-description">{data.description}</p>
-						<p class="task-meta">
-							{METHOD_LABELS[data.method]} · {data.cohort} cohort · {formatDate(data.date)} ·{" "}
-							<a href={data.report}>Report</a>
-						</p>
+						{data.runs.map((run) => (
+							<p class="task-meta">
+								{METHOD_LABELS[run.method]} · {run.cohort} cohort · {formatDate(run.date)} ·{" "}
+								<a href={run.report}>Report</a>
+							</p>
+						))}
 						<BenchTable rows={taskRows(data)} caption={`${id} results by harness`} />
 					</article>
 				))
@@ -93,7 +105,7 @@ const formatDate = (iso: string) =>
 			<p class="footnotes">
 				Best of three rows report each harness's best attempt and count official passes over the
 				attempts that ran. Mean of three rows report the mean ± sample standard deviation. ‡ marks a
-				pair whose full score stopped it early, so it ran fewer than three attempts.
+				pair whose full score or official pass stopped it early, so it ran fewer than three attempts.
 			</p>
 		</section>
 	</div>
@@ -202,9 +214,13 @@ const formatDate = (iso: string) =>
 	}
 
 	.task-meta {
-		margin: var(--spacing-1) 0 var(--spacing-4);
+		margin-top: var(--spacing-1);
 		color: var(--color-muted);
 		font-size: var(--font-size-xs);
+	}
+
+	.task-meta:last-of-type {
+		margin-bottom: var(--spacing-4);
 	}
 
 	.footnotes {
