@@ -1,0 +1,27 @@
+src/components/BenchChart.astro
+  s_72f0061d90297c::t_40df612f6b32f8 9,24,33,46
+src/content.config.ts
+  s_72f0061d90297c::t_8b51e334a6f315 91-93,96,101-105,107
+src/data/harness-bench.yml
+  s_72f0061d90297c::t_17424784e0286f 3-4,7,9-10,16-18,21-22,24-53,57-88,92-109,111-123,125-138,142-153,155-178,180-192,194-206,208-221,225-236,238-267,269-317,321-347
+src/pages/harness-bench.astro
+  s_72f0061d90297c::t_0d3eb8a5a8aa1c 7-15,25,27,80-84,94-99,108,217,222-225
+src/utils/harness-bench.ts
+  s_72f0061d90297c::t_4d157310b6ca81 3,14,43-53,91,98,158,161,168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f50d8440ee4f164e3f0cbb749d7e10527fb5a674",
+  "prompts": {},
+  "sessions": {
+    "s_72f0061d90297c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8b802350-6feb-4868-b46e-3964af83f932",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
