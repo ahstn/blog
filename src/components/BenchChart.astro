@@ -6,6 +6,7 @@ import {
 	formatScore,
 	HARNESSES,
 	seriesColor,
+	taskResults,
 } from "../utils/harness-bench";
 
 interface Props {
@@ -20,7 +21,7 @@ const harnessRank = (h: string) => HARNESSES.indexOf(h as (typeof HARNESSES)[num
 // newest version. A bar is "latest" when it's the newest version of its
 // harness run on that task; only those show until all versions are enabled.
 const groups = tasks.map(({ id, data }) => {
-	const results = [...data.results].sort(
+	const results = taskResults(data).sort(
 		(a, b) => harnessRank(a.harness) - harnessRank(b.harness) || compareVersions(a.version, b.version),
 	);
 	return {
@@ -29,7 +30,7 @@ const groups = tasks.map(({ id, data }) => {
 			...r,
 			latest: results.slice(i + 1).every((later) => later.harness !== r.harness),
 			detail: [
-				data.method === "mean-of-3"
+				r.method === "mean-of-3"
 					? `Mean of ${r.attempts} ± ${r.score_sd?.toFixed(2)}`
 					: `Best of ${r.attempts}, attempt ${r.best_attempt}`,
 				`official pass ${formatPass(r)}`,
@@ -42,7 +43,7 @@ const groups = tasks.map(({ id, data }) => {
 // appear once all versions are enabled.
 const legend = HARNESSES.map((harness) => {
 	const versions = [
-		...new Set(tasks.flatMap((t) => t.data.results.filter((r) => r.harness === harness).map((r) => r.version))),
+		...new Set(tasks.flatMap((t) => taskResults(t.data).filter((r) => r.harness === harness).map((r) => r.version))),
 	].sort((a, b) => compareVersions(b, a));
 	return { harness, versions };
 }).filter((l) => l.versions.length > 0);
