@@ -75,36 +75,26 @@ export const benchResultSchema = z.object({
 	// Coerced: YAML would read a bare `1.10` as a number.
 	version: z.coerce.string(),
 	score: z.number().min(0).max(100),
-	score_sd: z.number().nonnegative().optional(),
-	best_attempt: z.number().int().positive().optional(),
+	best_attempt: z.number().int().positive(),
 	attempts: z.number().int().positive(),
 	passes: z.number().int().nonnegative(),
 	agent_time: clock,
 	total_time: clock,
-	cached_tokens: z.number().int().nonnegative(),
-	total_tokens: z.number().int().nonnegative(),
-	price: z.number().nonnegative(),
+	// null when the selected attempt has no captured metric (README's N/A).
+	cached_tokens: z.number().int().nonnegative().nullable(),
+	total_tokens: z.number().int().nonnegative().nullable(),
+	price: z.number().nonnegative().nullable(),
 	lower_bound: z.boolean().default(false),
 	escaped: z.boolean().default(false),
 });
 
-// One cohort's rows for a task. A task re-run by a later cohort (newer
-// harness versions or task revision) gets another run.
-export const benchRunSchema = z.object({
-	cohort: z.string(),
-	date: isoDate,
-	method: z.enum(["best-of-3", "mean-of-3"]),
-	report: z.url(),
+// One row per exact harness version, each its best attempt (best of three).
+export const benchTaskSchema = z.object({
+	description: z.string(),
 	results: z.array(benchResultSchema).min(1),
 });
 
-export const benchTaskSchema = z.object({
-	description: z.string(),
-	runs: z.array(benchRunSchema).min(1),
-});
-
 export type BenchResult = z.output<typeof benchResultSchema>;
-export type BenchRun = z.output<typeof benchRunSchema>;
 export type BenchTask = z.output<typeof benchTaskSchema>;
 
 const harnessBench = defineCollection({

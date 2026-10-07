@@ -59,6 +59,13 @@ A blog with posts, pages, categories, tags, full-text search, and RSS. Designed 
 | Tag         | `/tag/[slug]`      | Posts filtered by tag                                                                                  |
 | RSS         | `/rss.xml`         | Generated feed                                                                                         |
 
+## Harness Bench
+
+`/harness-bench` renders Terminal-Bench 4 results from `src/data/harness-bench.yml`, a build-time content collection (not EmDash content). The data mirrors the consolidated per-task tables in the [ahstn/harness-bench](https://github.com/ahstn/harness-bench) README: one row per exact harness version, PiG and Empryo rows left out.
+
+- Harness names are `Claude Code`, `Copilot`, `OMP`, `OpenCode v2` and `Pi` (`HARNESSES` in `src/utils/harness-bench.ts`). Use `Pi`, not "Pi baseline" as the README calls it: Pi is vanilla with no extensions unless a row says otherwise.
+- When regenerating the data, bump `LAST_RUN` in `src/utils/harness-bench.ts` to the newest cohort date.
+
 ## Schema
 
 - `posts` collection: `title`, `featured_image`, `content` (Portable Text), `excerpt` (text).
