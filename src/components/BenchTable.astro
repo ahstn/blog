@@ -12,9 +12,11 @@ import HarnessIcon from "./HarnessIcon.astro";
 interface Props {
 	rows: BenchRow[];
 	caption: string;
+	/** Header for the version column. */
+	versionLabel?: string;
 }
 
-const { rows, caption } = Astro.props;
+const { rows, caption, versionLabel = "Version" } = Astro.props;
 
 // Rows with a view follow the chart's "all versions" toggle (BenchChart sets
 // data-all on every [data-version-scope]). The top score is bolded within
@@ -32,7 +34,7 @@ const topAll = topOf("default");
 		<thead>
 			<tr>
 				<th scope="col">Harness</th>
-				<th scope="col">Version</th>
+				<th scope="col">{versionLabel}</th>
 				<th scope="col" class="num">Fractional score</th>
 				<th scope="col" class="center">Official pass</th>
 				<th scope="col" class="num">Agent time</th>

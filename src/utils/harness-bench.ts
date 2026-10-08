@@ -1,17 +1,24 @@
 // Shared constants and formatting for the Harness Bench page.
 
-import type { BenchResult, BenchRun, BenchTask } from "../content.config";
+import type { BenchResult, BenchTask } from "../content.config";
 
 /**
  * Harnesses in display order. The order also fixes each harness's chart
  * colour slot (--series-1 to --series-5), so a harness keeps its colour
  * whatever is filtered.
  */
-export const HARNESSES = ["Claude Code", "Copilot", "OMP", "OpenCode v2", "Pi baseline"] as const;
+export const HARNESSES = ["Claude Code", "Copilot", "OMP", "OpenCode v2", "Pi"] as const;
 export type Harness = (typeof HARNESSES)[number];
 
 export const MODEL = "deepseek/deepseek-v4.1-flash";
 export const SOURCE_URL = "https://github.com/ahstn/harness-bench/tree/feat/resuming-tb4-evals";
+/** The README's consolidated TB4 task tables, one section per task. */
+export const README_URL = "https://github.com/ahstn/harness-bench/blob/feat/resuming-tb4-evals/README.md";
+/** Newest cohort in src/data/harness-bench.yml; bump when regenerating it. */
+export const LAST_RUN = "2026-10-06";
+
+/** GitHub's anchor for a task's README heading, "<id> (best of three)". */
+export const taskReportUrl = (id: string) => `${README_URL}#${id}-best-of-three`;
 
 export const seriesSlot = (harness: Harness) => HARNESSES.indexOf(harness) + 1;
 export const seriesColor = (harness: Harness) => `var(--series-${seriesSlot(harness)})`;
@@ -27,29 +34,14 @@ export function compareVersions(a: string, b: string): number {
 	return 0;
 }
 
-export const METHOD_LABELS = {
-	"best-of-3": "Best of three",
-	"mean-of-3": "Mean of three",
-} as const;
-
 export const formatScore = (score: number) => `${score.toFixed(2)}%`;
 
-export const formatTokens = (n: number, lowerBound: boolean) =>
-	`${lowerBound ? "≥" : ""}${n.toLocaleString("en-GB")}`;
+// null: no captured metric for the selected attempt.
+export const formatTokens = (n: number | null, lowerBound: boolean) =>
+	n === null ? "N/A" : `${lowerBound ? "≥" : ""}${n.toLocaleString("en-GB")}`;
 
-export const formatPrice = (usd: number, lowerBound: boolean) =>
-	`${lowerBound ? "≥" : ""}$${usd.toFixed(4)}`;
-
-/** A result with the method of the run it came from. */
-export type TaskResult = BenchResult & { method: BenchRun["method"] };
-
-/** Every result for a task, across all of its runs. */
-export const taskResults = (task: BenchTask): TaskResult[] =>
-	task.runs.flatMap((run) => run.results.map((r) => ({ ...r, method: run.method })));
-
-/** Date of a task's most recent run (ISO dates sort as strings). */
-export const lastRunDate = (task: BenchTask) =>
-	task.runs.map((r) => r.date).sort().at(-1) as string;
+export const formatPrice = (usd: number | null, lowerBound: boolean) =>
+	usd === null ? "N/A" : `${lowerBound ? "≥" : ""}$${usd.toFixed(4)}`;
 
 export interface PassRecord {
 	attempts: number;
@@ -76,9 +68,9 @@ export interface BenchRow {
 	attempts: number;
 	agentTime: string;
 	totalTime: string;
-	cachedTokens: number;
-	totalTokens: number;
-	price: number;
+	cachedTokens: number | null;
+	totalTokens: number | null;
+	price: number | null;
 	lowerBound: boolean;
 	escaped: boolean;
 	view?: RowView;
@@ -88,16 +80,13 @@ const rank = (h: Harness) => HARNESSES.indexOf(h);
 
 /** One task's results: harness order, newest version first. */
 export function taskRows(task: BenchTask): BenchRow[] {
-	return taskResults(task)
+	return [...task.results]
 		.sort((a, b) => rank(a.harness) - rank(b.harness) || compareVersions(b.version, a.version))
 		.map((r) => ({
 			harness: r.harness,
 			version: r.version,
 			score: r.score,
-			scoreNote:
-				r.method === "mean-of-3"
-					? `± ${r.score_sd?.toFixed(2)} (n=${r.attempts})`
-					: `attempt ${r.best_attempt} of ${r.attempts}`,
+			scoreNote: `attempt ${r.best_attempt} of ${r.attempts}`,
 			passes: r.passes,
 			attempts: r.attempts,
 			agentTime: r.agent_time,
@@ -124,13 +113,17 @@ export function formatDuration(seconds: number): string {
 	return h ? `${h}h ${m}m ${s}s` : m ? `${m}m ${s}s` : `${s}s`;
 }
 
-/** Mean score, summed passes/attempts, and totals for time, tokens and price. */
+/**
+ * Mean score, summed passes/attempts, and totals for time, tokens and price.
+ * The version is the newest one included. Missing metrics are skipped, which
+ * makes those totals lower bounds.
+ */
 function aggregate(harness: Harness, results: BenchResult[], view?: RowView): BenchRow {
-	const sum = (f: (r: BenchResult) => number) => results.reduce((n, r) => n + f(r), 0);
+	const sum = (f: (r: BenchResult) => number | null) => results.reduce((n, r) => n + (f(r) ?? 0), 0);
 	const versions = [...new Set(results.map((r) => r.version))].sort((a, b) => compareVersions(b, a));
 	return {
 		harness,
-		version: versions.join(", "),
+		version: versions[0],
 		score: sum((r) => r.score) / results.length,
 		scoreNote: `mean of ${results.length} task${results.length === 1 ? "" : "s"}`,
 		passes: sum((r) => r.passes),
@@ -140,7 +133,7 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
 		cachedTokens: sum((r) => r.cached_tokens),
 		totalTokens: sum((r) => r.total_tokens),
 		price: sum((r) => r.price),
-		lowerBound: results.some((r) => r.lower_bound),
+		lowerBound: results.some((r) => r.lower_bound || r.total_tokens === null || r.price === null),
 		escaped: false,
 		view,
 	};
@@ -155,17 +148,17 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
  */
 export function aggregateRows(tasks: BenchTask[]): BenchRow[] {
 	return HARNESSES.flatMap((harness) => {
-		const perTask = tasks.map((t) => taskResults(t).filter((r) => r.harness === harness));
+		const perTask = tasks.map((t) => t.results.filter((r) => r.harness === harness));
 		const latest = perTask
 			.map((rs) => rs.sort((a, b) => compareVersions(b.version, a.version))[0])
-			.filter((r): r is TaskResult => r !== undefined);
+			.filter((r): r is BenchResult => r !== undefined);
 		if (latest.length === 0) return [];
 
 		const versions = [...new Set(perTask.flat().map((r) => r.version))].sort((a, b) =>
 			compareVersions(b, a),
 		);
 		const byVersion = versions.map((v) => perTask.flat().filter((r) => r.version === v));
-		const same = (rs: TaskResult[]) => rs.length === latest.length && rs.every((r) => latest.includes(r));
+		const same = (rs: BenchResult[]) => rs.length === latest.length && rs.every((r) => latest.includes(r));
 
 		if (byVersion.some(same)) {
 			return byVersion.map((rs) => aggregate(harness, rs, same(rs) ? undefined : "all"));

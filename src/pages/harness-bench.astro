@@ -6,11 +6,10 @@ import type { BenchTask } from "../content.config";
 import Base from "../layouts/Base.astro";
 import {
 	aggregateRows,
-	lastRunDate,
-	METHOD_LABELS,
+	LAST_RUN,
 	MODEL,
 	SOURCE_URL,
-	taskResults,
+	taskReportUrl,
 	taskRows,
 } from "../utils/harness-bench";
 
@@ -22,11 +21,7 @@ const tasks: Entry[] = (await getCollection("harnessBench")).sort((a: Entry, b: 
 	a.id.localeCompare(b.id),
 );
 
-const harnessCount = new Set(tasks.flatMap((t) => taskResults(t.data).map((r) => r.harness))).size;
-const lastRun = tasks
-	.map((t) => lastRunDate(t.data))
-	.sort()
-	.at(-1);
+const harnessCount = new Set(tasks.flatMap((t) => t.data.results.map((r) => r.harness))).size;
 
 const formatDate = (iso: string) =>
 	new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
@@ -49,7 +44,8 @@ const formatDate = (iso: string) =>
 				on the same model: <code>{MODEL}</code> via OpenRouter at high reasoning.
 			</p>
 			<p class="page-meta">
-				Results from <a href={SOURCE_URL}>ahstn/harness-bench</a>{lastRun && <>, last run {formatDate(lastRun)}</>}.
+				Results from <a href={SOURCE_URL}>ahstn/harness-bench</a>, last run {formatDate(LAST_RUN)}.
+				Pi is vanilla with no extensions, unless specified otherwise.
 			</p>
 		</header>
 
@@ -70,18 +66,19 @@ const formatDate = (iso: string) =>
 			<BenchTable
 				rows={aggregateRows(tasks.map((t) => t.data))}
 				caption="Results by harness across all tasks"
+				versionLabel="Latest version"
 			/>
 		</section>
 
 		<section class="bench-section" aria-labelledby="tasks-heading">
 			<h2 id="tasks-heading">Results by task</h2>
 			<p class="section-description">
+				One row per exact harness version: its best attempt from the newest cohort that ran it.
 				Agent time excludes setup and verification; total time covers the whole trial. ≥ marks
 				token totals and prices that are lower bounds, mostly OpenCode's, whose child sessions
-				aren't counted. Prices are estimates at each cohort's captured reference rates, which
-				differ between cohorts (see each report), not provider bills. Tasks re-run by a later
-				cohort list each run; later offline cohorts aren't controlled comparisons with earlier
-				ones.
+				aren't counted; N/A means the attempt has no captured metric. Prices are estimates at
+				each cohort's captured reference rates, which differ between cohorts, not provider bills.
+				Rows from different cohorts aren't controlled comparisons.
 			</p>
 
 			{
@@ -91,20 +88,17 @@ const formatDate = (iso: string) =>
 							{id}
 						</h3>
 						<p class="task-description">{data.description}</p>
-						{data.runs.map((run) => (
-							<p class="task-meta">
-								{METHOD_LABELS[run.method]} · {run.cohort} cohort · {formatDate(run.date)} ·{" "}
-								<a href={run.report}>Report</a>
-							</p>
-						))}
+						<p class="task-meta">
+							Best of three · <a href={taskReportUrl(id)}>Source table and cohort reports</a>
+						</p>
 						<BenchTable rows={taskRows(data)} caption={`${id} results by harness`} />
 					</article>
 				))
 			}
 
 			<p class="footnotes">
-				Best of three rows report each harness's best attempt and count official passes over the
-				attempts that ran. Mean of three rows report the mean ± sample standard deviation. ‡ marks a
+				Each row reports the harness version's best attempt and counts official passes over the
+				attempts that ran. ‡ marks a
 				pair whose full score or official pass stopped it early, so it ran fewer than three attempts.
 			</p>
 		</section>
@@ -214,13 +208,9 @@ const formatDate = (iso: string) =>
 	}
 
 	.task-meta {
-		margin-top: var(--spacing-1);
+		margin: var(--spacing-1) 0 var(--spacing-4);
 		color: var(--color-muted);
 		font-size: var(--font-size-xs);
-	}
-
-	.task-meta:last-of-type {
-		margin-bottom: var(--spacing-4);
 	}
 
 	.footnotes {
