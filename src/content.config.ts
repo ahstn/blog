@@ -48,6 +48,9 @@ export const adeSchema = z.object({
 	features: z.array(z.enum(FEATURES)).default([]),
 	first_seen: yearMonth.optional(),
 	note: z.string().optional(),
+	// Only count releases tagged with this prefix (monorepos that also release
+	// a CLI or mobile app), see scripts/update-ades.mjs.
+	release_tag_prefix: z.string().optional(),
 	// Written by scripts/update-ades.mjs -- don't edit by hand.
 	stars: z.number().int().nonnegative().optional(),
 	stars_updated_at: isoDate.optional(),
@@ -58,6 +61,8 @@ export const adeSchema = z.object({
 			date: isoDate,
 		})
 		.optional(),
+	last_commit: isoDate.optional(),
+	archived: z.boolean().default(false),
 });
 
 export type Ade = z.output<typeof adeSchema>;

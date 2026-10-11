@@ -7,6 +7,13 @@
  * - `latest_release` ({ version, date }): the repo's latest stable release
  *   (GitHub excludes drafts and pre-releases), e.g. `desktop-v0.44.0` is
  *   stored as version `0.44.0`. Repos without releases are left untouched.
+ *   An entry's `release_tag_prefix` narrows this to tags with that prefix.
+ * - `last_commit`: date of the repo's most recent push (GitHub's `pushed_at`,
+ *   which covers any branch, not just the default one).
+ * - `archived`: written as `true` while the repo is archived, removed otherwise.
+ *
+ * Warns when a repo has been renamed or transferred (GitHub redirects the old
+ * path, so the fetch still succeeds); update `repo:` by hand.
  *
  * Comments, ordering and every other field are preserved. Also lists entries
  * without a hover preview (src/assets/ades/<id>.webp); those are added by hand
@@ -55,14 +62,28 @@ async function github(path) {
 	return res.json();
 }
 
-async function fetchStars(repo) {
+async function fetchRepo(repo) {
 	const data = await github(`repos/${repo}`);
 	if (!data) throw new Error(`${repo}: not found`);
-	return data.stargazers_count;
+	return {
+		fullName: data.full_name,
+		stars: data.stargazers_count,
+		lastCommit: data.pushed_at.slice(0, 10),
+		archived: data.archived,
+	};
 }
 
-async function fetchRelease(repo) {
-	const release = await github(`repos/${repo}/releases/latest`);
+/**
+ * `tagPrefix` (the entry's `release_tag_prefix`) is for monorepos whose
+ * "latest" release is a side package (e.g. `cli-v0.10.0`): it picks the newest
+ * stable release whose tag starts with the prefix instead.
+ */
+async function fetchRelease(repo, tagPrefix) {
+	const release = tagPrefix
+		? (await github(`repos/${repo}/releases?per_page=100`))?.find(
+				(r) => !r.draft && !r.prerelease && r.tag_name.startsWith(tagPrefix),
+			)
+		: await github(`repos/${repo}/releases/latest`);
 	if (!release) return undefined;
 	return {
 		// Drop tag prefixes like "v" or "desktop-v".
@@ -75,12 +96,18 @@ const doc = parseDocument(readFileSync(FILE, "utf8"));
 const today = new Date().toISOString().slice(0, 10);
 let changed = 0;
 let failed = 0;
+const renamed = [];
 
 for (const item of doc.contents.items) {
 	const repo = item.get("repo");
 	if (!repo) continue;
 	try {
-		const [stars, release] = await Promise.all([fetchStars(repo), fetchRelease(repo)]);
+		const [{ fullName, stars, lastCommit, archived }, release] = await Promise.all([
+			fetchRepo(repo),
+			fetchRelease(repo, item.get("release_tag_prefix")),
+		]);
+
+		if (fullName.toLowerCase() !== repo.toLowerCase()) renamed.push(`${repo} → ${fullName}`);
 
 		const prevStars = item.get("stars");
 		if (stars !== prevStars) {
@@ -96,10 +123,28 @@ for (const item of doc.contents.items) {
 			changed++;
 			console.log(`${repo}: release ${prev?.version ?? "—"} → ${release.version} (${release.date})`);
 		}
+
+		const prevCommit = item.get("last_commit");
+		if (lastCommit !== prevCommit) {
+			item.set("last_commit", lastCommit);
+			changed++;
+			console.log(`${repo}: last commit ${prevCommit ?? "—"} → ${lastCommit}`);
+		}
+
+		if (archived !== item.has("archived")) {
+			if (archived) item.set("archived", true);
+			else item.delete("archived");
+			changed++;
+			console.log(`${repo}: ${archived ? "archived" : "unarchived"}`);
+		}
 	} catch (err) {
 		failed++;
 		console.error(`warn: ${err.message}`);
 	}
+}
+
+if (renamed.length) {
+	console.warn(`warn: renamed or transferred, update \`repo:\`: ${renamed.join(", ")}`);
 }
 
 const missingPreviews = doc.contents.items
