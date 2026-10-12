@@ -10,6 +10,7 @@ import cursor from "@lobehub/icons-static-svg/icons/cursor.svg?raw";
 import geminiCli from "@lobehub/icons-static-svg/icons/geminicli-color.svg?raw";
 import githubCopilot from "@lobehub/icons-static-svg/icons/githubcopilot.svg?raw";
 import grok from "@lobehub/icons-static-svg/icons/grok.svg?raw";
+import hermesAgent from "@lobehub/icons-static-svg/icons/hermesagent.svg?raw";
 import kimi from "@lobehub/icons-static-svg/icons/kimi-color.svg?raw";
 import opencode from "@lobehub/icons-static-svg/icons/opencode.svg?raw";
 import pi from "@lobehub/icons-static-svg/icons/pi.svg?raw";
@@ -24,6 +25,7 @@ const AGENT_ICONS: Record<string, string> = {
 	"Cursor CLI": cursor,
 	"Gemini CLI": geminiCli,
 	"Grok Build": grok,
+	"Hermes Agent": hermesAgent,
 	"Kimi CLI": kimi,
 	OpenCode: opencode,
 	Pi: pi,

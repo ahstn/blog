@@ -4,18 +4,28 @@ import type { BenchResult, BenchTask } from "../content.config";
 
 /**
  * Harnesses in display order. The order also fixes each harness's chart
- * colour slot (--series-1 to --series-5), so a harness keeps its colour
- * whatever is filtered.
+ * colour slot (--series-1 to --series-8), so a harness keeps its colour
+ * whatever is filtered. New harnesses go on the end so existing ones keep
+ * their colours.
  */
-export const HARNESSES = ["Claude Code", "Copilot", "OMP", "OpenCode v2", "Pi"] as const;
+export const HARNESSES = [
+	"Claude Code",
+	"Copilot",
+	"OMP",
+	"OpenCode v2",
+	"Pi",
+	"Codex",
+	"Hermes",
+	"Prime Agent",
+] as const;
 export type Harness = (typeof HARNESSES)[number];
 
 export const MODEL = "deepseek/deepseek-v4.1-flash";
-export const SOURCE_URL = "https://github.com/ahstn/harness-bench/tree/feat/resuming-tb4-evals";
+export const SOURCE_URL = "https://github.com/ahstn/harness-bench";
 /** The README's consolidated TB4 task tables, one section per task. */
-export const README_URL = "https://github.com/ahstn/harness-bench/blob/feat/resuming-tb4-evals/README.md";
+export const README_URL = "https://github.com/ahstn/harness-bench/blob/main/README.md";
 /** Newest cohort in src/data/harness-bench.yml; bump when regenerating it. */
-export const LAST_RUN = "2026-10-06";
+export const LAST_RUN = "2026-10-10";
 
 /** GitHub's anchor for a task's README heading, "<id> (best of three)". */
 export const taskReportUrl = (id: string) => `${README_URL}#${id}-best-of-three`;
@@ -86,7 +96,7 @@ export function taskRows(task: BenchTask): BenchRow[] {
 			harness: r.harness,
 			version: r.version,
 			score: r.score,
-			scoreNote: `attempt ${r.best_attempt} of ${r.attempts}`,
+			scoreNote: `best of ${r.attempts}: attempt ${r.best_attempt}`,
 			passes: r.passes,
 			attempts: r.attempts,
 			agentTime: r.agent_time,
@@ -114,9 +124,11 @@ export function formatDuration(seconds: number): string {
 }
 
 /**
- * Mean score, summed passes/attempts, and totals for time, tokens and price.
- * The version is the newest one included. Missing metrics are skipped, which
- * makes those totals lower bounds.
+ * Mean score, tasks passed over tasks run, and totals for time, tokens and
+ * price. A task counts as passed when any of its attempts was an official
+ * pass, so the denominator is the number of tasks, not attempts. The version
+ * is the newest one included. Missing metrics are skipped, which makes those
+ * totals lower bounds.
  */
 function aggregate(harness: Harness, results: BenchResult[], view?: RowView): BenchRow {
 	const sum = (f: (r: BenchResult) => number | null) => results.reduce((n, r) => n + (f(r) ?? 0), 0);
@@ -126,8 +138,8 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
 		version: versions[0],
 		score: sum((r) => r.score) / results.length,
 		scoreNote: `mean of ${results.length} task${results.length === 1 ? "" : "s"}`,
-		passes: sum((r) => r.passes),
-		attempts: sum((r) => r.attempts),
+		passes: results.filter((r) => r.passes > 0).length,
+		attempts: results.length,
 		agentTime: formatDuration(sum((r) => clockSeconds(r.agent_time))),
 		totalTime: formatDuration(sum((r) => clockSeconds(r.total_time))),
 		cachedTokens: sum((r) => r.cached_tokens),
