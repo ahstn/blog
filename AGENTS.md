@@ -61,9 +61,10 @@ A blog with posts, pages, categories, tags, full-text search, and RSS. Designed 
 
 ## Harness Bench
 
-`/harness-bench` renders Terminal-Bench 4 results from `src/data/harness-bench.yml`, a build-time content collection (not EmDash content). The data mirrors the consolidated per-task tables in the [ahstn/harness-bench](https://github.com/ahstn/harness-bench) README: one row per exact harness version, PiG and Empryo rows left out.
+`/harness-bench` renders Terminal-Bench 4 results from `src/data/harness-bench.yml`, a build-time content collection (not EmDash content). The data mirrors the consolidated per-task tables in the [ahstn/harness-bench](https://github.com/ahstn/harness-bench) README (`main` branch): one row per exact harness version. PiG and Empryo rows are left out, as is `photonic-waveguide-routing` until it's complete.
 
-- Harness names are `Claude Code`, `Copilot`, `OMP`, `OpenCode v2` and `Pi` (`HARNESSES` in `src/utils/harness-bench.ts`). Use `Pi`, not "Pi baseline" as the README calls it: Pi is vanilla with no extensions unless a row says otherwise.
+- Harness names are `Claude Code`, `Copilot`, `OMP`, `OpenCode v2`, `Pi`, `Codex`, `Hermes` and `Prime Agent` (`HARNESSES` in `src/utils/harness-bench.ts`). New harnesses go on the end so existing ones keep their chart colour, and each needs a `--series-N` colour in `src/pages/harness-bench.astro`. Use `Pi`, not "Pi baseline" as the README calls it: Pi is vanilla with no extensions unless a row says otherwise.
+- The aggregate table's official pass is tasks with at least one official pass over tasks run, not passes over attempts. Per-task rows keep passes over attempts.
 - When regenerating the data, bump `LAST_RUN` in `src/utils/harness-bench.ts` to the newest cohort date.
 
 ## Schema
