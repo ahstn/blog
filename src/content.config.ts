@@ -20,7 +20,7 @@ const isoDate = z
 
 export const adeSchema = z.object({
 	name: z.string(),
-	category: z.enum(["ui", "terminal"]),
+	category: z.enum(["ui", "agent-terminal", "tui"]),
 	website: z.url(),
 	repo: z
 		.string()

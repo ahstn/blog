@@ -27,7 +27,8 @@ const byStars = (a: Entry, b: Entry) =>
 	(b.data.stars ?? -1) - (a.data.stars ?? -1) || a.data.name.localeCompare(b.data.name);
 
 const ui = all.filter((e) => e.data.category === "ui").sort(byStars);
-const terminal = all.filter((e) => e.data.category === "terminal").sort(byStars);
+const agentTerminals = all.filter((e) => e.data.category === "agent-terminal").sort(byStars);
+const tuis = all.filter((e) => e.data.category === "tui").sort(byStars);
 
 const lastUpdated = all
 	.map((e) => e.data.stars_updated_at)
@@ -104,7 +105,7 @@ const filterFields: FilterField[] = [
 			<h1 class="page-title">Agentic Development Environments</h1>
 			<p class="page-description">
 				Apps for orchestrating coding agents: {all.length} tracked, split into
-				GUI-first and terminal-first tools.
+				GUI apps, agent terminals and TUIs.
 				{lastUpdated && <> Stars last refreshed {lastUpdated}.</>}
 			</p>
 		</header>
@@ -114,20 +115,34 @@ const filterFields: FilterField[] = [
 		<section class="ades-section" aria-labelledby="ui-heading">
 			<h2 id="ui-heading">GUI-focused</h2>
 			<p class="section-description">
-				Desktop, web and mobile apps. Apps that also embed terminal views are
-				listed here.
+				Desktop, web and mobile apps with their own interface for agents, such
+				as chat and diff views. Apps that also embed terminal views are listed
+				here.
 			</p>
 			<AdeTable id="ades-ui" caption="GUI-focused agentic development environments" entries={ui} />
 		</section>
 
-		<section class="ades-section" aria-labelledby="terminal-heading">
-			<h2 id="terminal-heading">Terminal-focused</h2>
-			<p class="section-description">TUIs and terminal multiplexers built around agents.</p>
+		<section class="ades-section" aria-labelledby="agent-terminal-heading">
+			<h2 id="agent-terminal-heading">Agent terminals</h2>
+			<p class="section-description">
+				Native apps that run each agent's own CLI in a real terminal pane, with
+				a multiplexer's persistent sessions and a sidebar that tracks agent
+				status, notifications and worktrees.
+			</p>
 			<AdeTable
-				id="ades-terminal"
-				caption="Terminal-focused agentic development environments"
-				entries={terminal}
+				id="ades-agent-terminal"
+				caption="Agent terminals"
+				entries={agentTerminals}
 			/>
+		</section>
+
+		<section class="ades-section" aria-labelledby="tui-heading">
+			<h2 id="tui-heading">TUIs</h2>
+			<p class="section-description">
+				Tools that run inside the terminal you already use: TUIs and tmux-based
+				multiplexers built around agents.
+			</p>
+			<AdeTable id="ades-tui" caption="Terminal UI agentic development environments" entries={tuis} />
 		</section>
 	</div>
 	<AdePreview />
