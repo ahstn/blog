@@ -1,0 +1,23 @@
+src/content.config.ts
+  s_de40f3dc9dbd88::t_94f90beba210d6 23
+src/data/agentic-dev-envs.yml
+  s_de40f3dc9dbd88::t_ae7f45026e8937 4-9,286,671,851,877,903,927,954,980,1006,1029,1052,1077,1100
+src/pages/agentic-dev-envs.astro
+  s_de40f3dc9dbd88::t_aba345d570fabb 30-31,108,118-120,125-131,133-135,138-146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "13edb5da82cc9bb3bf57b58994192dfd3f4d44fb",
+  "prompts": {},
+  "sessions": {
+    "s_de40f3dc9dbd88": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e30b22c0-7406-4504-977f-cc3bd9577339",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
