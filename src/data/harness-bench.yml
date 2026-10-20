@@ -4,8 +4,8 @@
 # (main):
 # https://github.com/ahstn/harness-bench/blob/main/README.md
 # Model: deepseek/deepseek-v4.1-flash via OpenRouter, high reasoning.
-# The README's PiG and Empryo rows are left out, as is
-# photonic-waveguide-routing (still incomplete).
+# The README's PiG and Empryo rows are left out. Hermes's 2026.9.24 date
+# tag is written as 0.21.5, the release it names, so it sorts before 0.21.7.
 #
 # One row per exact harness version. When a version ran in more than one
 # cohort, the README keeps the newest completed cohort's best attempt.
@@ -31,12 +31,14 @@
     - { harness: Copilot, version: 1.0.91, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "93:50", total_time: "100:15", cached_tokens: 9931776, total_tokens: 12240791, price: 1.1073 }
     - { harness: OMP, version: 18.4.10, score: 90.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "20:31", total_time: "26:35", cached_tokens: 6399232, total_tokens: 6566660, price: 0.255 }
     - { harness: OMP, version: 18.8.4, score: 90.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "10:24", total_time: "12:26", cached_tokens: 7532416, total_tokens: 7691562, price: 0.1943 }
+    - { harness: OMP, version: 18.12.1, score: 90.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "10:12", total_time: "11:42", cached_tokens: 10521600, total_tokens: 10695453, price: 0.0363, escaped: true }
     - { harness: OpenCode v2, version: 2.0.18, score: 100.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "10:17", total_time: "14:13", cached_tokens: 5976576, total_tokens: 6444383, price: 0.2802, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 90.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "20:37", total_time: "24:19", cached_tokens: 8058240, total_tokens: 8961156, price: 0.3392, lower_bound: true, escaped: true }
     - { harness: Pi, version: 1.0.2, score: 90.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "9:16", total_time: "10:39", cached_tokens: 9974784, total_tokens: 10171654, price: 0.337, escaped: true }
     - { harness: Pi, version: 1.1.0, score: 80.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:33", total_time: "14:42", cached_tokens: 5430656, total_tokens: 5603046, price: 0.1879 }
+    - { harness: Pi, version: 1.3.0, score: 80.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:52", total_time: "19:27", cached_tokens: 8747264, total_tokens: 9047855, price: 0.0414 }
     - { harness: Codex, version: 0.153.4, score: 90.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "22:34", total_time: "24:24", cached_tokens: 11298176, total_tokens: 12467599, price: 0.5611, lower_bound: true, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 65.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:26", total_time: "37:23", cached_tokens: 13927552, total_tokens: 14808799, price: 0.5242, lower_bound: true }
+    - { harness: Hermes, version: 0.21.5, score: 65.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:26", total_time: "37:23", cached_tokens: 13927552, total_tokens: 14808799, price: 0.5242, lower_bound: true }
 
 - id: bun-sourcemap-leak
   description: Stop a Bun build leaking source maps and private content, without adding third-party dependencies.
@@ -47,12 +49,15 @@
     - { harness: OMP, version: 18.1.15, score: 57.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "5:21", total_time: "6:27", cached_tokens: 1185920, total_tokens: 1364786, price: 0.0517 }
     - { harness: OMP, version: 18.2.8, score: 73.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "12:54", total_time: "15:19", cached_tokens: 3699072, total_tokens: 3882175, price: 0.0697 }
     - { harness: OMP, version: 18.8.4, score: 57.78, best_attempt: 1, attempts: 3, passes: 0, agent_time: "3:23", total_time: "4:02", cached_tokens: 2167808, total_tokens: 2244056, price: 0.0871 }
+    - { harness: OMP, version: 18.12.1, score: 61.39, best_attempt: 1, attempts: 3, passes: 0, agent_time: "3:08", total_time: "4:00", cached_tokens: 552576, total_tokens: 595528, price: 0.0061 }
     - { harness: OpenCode v2, version: 2.0.3, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "4:25", total_time: "7:17", cached_tokens: 1821312, total_tokens: 2119523, price: 0.1501, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 92.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "4:17", total_time: "7:37", cached_tokens: 1715584, total_tokens: 1933093, price: 0.1278, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 54.31, best_attempt: 3, attempts: 3, passes: 0, agent_time: "4:05", total_time: "5:34", cached_tokens: 2259584, total_tokens: 2337376, price: 0.0125, lower_bound: true }
     - { harness: Pi, version: 0.85.1, score: 84.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "11:21", total_time: "12:17", cached_tokens: 1211520, total_tokens: 1394534, price: 0.0548 }
     - { harness: Pi, version: 1.1.0, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "2:07", total_time: "2:55", cached_tokens: 546816, total_tokens: 588260, price: 0.0428 }
+    - { harness: Pi, version: 1.3.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "3:43", total_time: "4:46", cached_tokens: 1651840, total_tokens: 1720289, price: 0.0107 }
     - { harness: Codex, version: 0.153.4, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "5:06", total_time: "6:51", cached_tokens: 974208, total_tokens: 1329609, price: 0.1522, lower_bound: true }
-    - { harness: Hermes, version: 2026.9.24, score: 50.67, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:34", total_time: "13:25", cached_tokens: 3218304, total_tokens: 3459196, price: 0.1822, lower_bound: true }
+    - { harness: Hermes, version: 0.21.5, score: 50.67, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:34", total_time: "13:25", cached_tokens: 3218304, total_tokens: 3459196, price: 0.1822, lower_bound: true }
 
 - id: cargo-flight-dispatch
   description: Cargo flight planning. Repair route feasibility, navigation and wind, and fuel and weight calculations.
@@ -65,12 +70,14 @@
     - { harness: OMP, version: 18.2.8, score: 75.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "37:30", total_time: "38:49", cached_tokens: 1687496, total_tokens: 1971185, price: 0.0983 }
     - { harness: OMP, version: 18.4.10, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:03", total_time: "7:03", cached_tokens: 1094912, total_tokens: 1247999, price: 0.1221 }
     - { harness: OMP, version: 18.8.4, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "2:55", total_time: "3:45", cached_tokens: 979584, total_tokens: 1046774, price: 0.0632 }
+    - { harness: OMP, version: 18.12.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:41", total_time: "9:43", cached_tokens: 1085568, total_tokens: 1203081, price: 0.0127 }
     - { harness: OpenCode v2, version: 2.0.3, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:44", total_time: "12:57", cached_tokens: 1711890, total_tokens: 2346625, price: 0.138, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 83.33, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:41", total_time: "10:45", cached_tokens: 1667712, total_tokens: 2024394, price: 0.1271, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "8:08", total_time: "10:38", cached_tokens: 1563136, total_tokens: 1757038, price: 0.0186, lower_bound: true }
     - { harness: Pi, version: 0.85.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:44", total_time: "11:49", cached_tokens: 1109640, total_tokens: 1784282, price: 0.1434 }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "7:43", total_time: "8:30", cached_tokens: 2447488, total_tokens: 2600785, price: 0.1854, escaped: true }
     - { harness: Codex, version: 0.153.4, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "7:08", total_time: "8:24", cached_tokens: 1639424, total_tokens: 2010810, price: 0.2011, lower_bound: true }
-    - { harness: Hermes, version: 2026.9.24, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:16", total_time: "13:28", cached_tokens: 1443072, total_tokens: 1859287, price: 0.2338 }
+    - { harness: Hermes, version: 0.21.5, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:16", total_time: "13:28", cached_tokens: 1443072, total_tokens: 1859287, price: 0.2338 }
 
 - id: cumulative-layout-shift
   description: Eliminate cumulative layout shift across a barber shop website while keeping its visible elements, styling and analytics side effects.
@@ -82,7 +89,7 @@
     - { harness: OpenCode v2, version: 2.0.18, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "52:25", total_time: "57:58", cached_tokens: 35028224, total_tokens: 36392609, price: 0.7508, lower_bound: true, escaped: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "84:03", total_time: "90:45", cached_tokens: 21382016, total_tokens: 25073910, price: 0.6916, lower_bound: true, escaped: true }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "35:55", total_time: "40:57", cached_tokens: 13224064, total_tokens: 13504016, price: 0.3521, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "68:02", total_time: "73:50", cached_tokens: 32411520, total_tokens: 33583711, price: 0.7055, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "68:02", total_time: "73:50", cached_tokens: 32411520, total_tokens: 33583711, price: 0.7055, lower_bound: true, escaped: true }
 
 - id: data-anonymization
   description: Build a memory-bounded CLI that anonymises related CSV files to a policy, keeping tokens consistent across files, history rows, subject merges and cross-tenant links.
@@ -90,9 +97,14 @@
     - { harness: Claude Code, version: 2.1.287, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:46", total_time: "38:37", cached_tokens: 9440896, total_tokens: 9762827, price: 0.2466 }
     - { harness: Copilot, version: 1.0.91, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "38:10", total_time: "42:20", cached_tokens: 2082176, total_tokens: 2873968, price: 0.5851 }
     - { harness: OMP, version: 18.8.4, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "17:41", total_time: "22:36", cached_tokens: 2011136, total_tokens: 2174934, price: 0.1116 }
+    - { harness: OMP, version: 18.12.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "13:41", total_time: "19:57", cached_tokens: 2300928, total_tokens: 2446807, price: 0.0151 }
     - { harness: OpenCode v2, version: 2.0.24, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "37:31", total_time: "43:41", cached_tokens: 5157888, total_tokens: 5533926, price: 0.2279, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "29:17", total_time: "41:10", cached_tokens: 6257664, total_tokens: 6605018, price: 0.0323, lower_bound: true }
     - { harness: Pi, version: 1.1.0, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:26", total_time: "19:53", cached_tokens: 2719616, total_tokens: 2838247, price: 0.1138 }
-    - { harness: Hermes, version: 2026.9.24, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:07", total_time: "28:28", cached_tokens: 3274240, total_tokens: 3574073, price: 0.1809 }
+    - { harness: Pi, version: 1.3.0, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:40", total_time: "40:13", cached_tokens: 6291456, total_tokens: 6779567, price: 0.0408 }
+    - { harness: Codex, version: 0.162.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:41", total_time: "28:10", cached_tokens: 3932032, total_tokens: 4379464, price: 0.1174, lower_bound: true }
+    - { harness: Hermes, version: 0.21.5, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:07", total_time: "28:28", cached_tokens: 3274240, total_tokens: 3574073, price: 0.1809 }
+    - { harness: Prime Agent, version: 0.10.0, score: 75.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "16:20", total_time: "21:38", cached_tokens: 5848576, total_tokens: 6198998, price: 0.1078 }
 
 - id: embedding-drift-monitor
   description: Embedding drift monitoring. Repair numerical utilities, reference calibration and alert behaviour.
@@ -108,7 +120,9 @@
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "12:41", total_time: "14:01", cached_tokens: 1633792, total_tokens: 2065100, price: 0.1294, lower_bound: true, escaped: true }
     - { harness: Pi, version: 0.85.1, score: 100.00, best_attempt: 1, attempts: 2, passes: 2, agent_time: "14:33", total_time: "16:21", cached_tokens: 2113536, total_tokens: 2565803, price: 0.1078, escaped: true }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "4:41", total_time: "5:37", cached_tokens: 1771136, total_tokens: 1837811, price: 0.0929, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "15:08", total_time: "17:59", cached_tokens: 1859456, total_tokens: 2316518, price: 0.2166, escaped: true }
+    - { harness: Codex, version: 0.162.1, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "18:53", total_time: "20:18", cached_tokens: 4621056, total_tokens: 5071556, price: 0.1291, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "15:08", total_time: "17:59", cached_tokens: 1859456, total_tokens: 2316518, price: 0.2166, escaped: true }
+    - { harness: Prime Agent, version: 0.10.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "5:14", total_time: "6:25", cached_tokens: 1232000, total_tokens: 1496207, price: 0.0709, escaped: true }
 
 - id: html-js-filter
   description: Write a filter that strips JavaScript from HTML files to prevent XSS, while preserving the rest of the markup.
@@ -119,10 +133,12 @@
     - { harness: OMP, version: 18.8.4, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "9:14", total_time: "11:24", cached_tokens: 5626752, total_tokens: 5785862, price: 0.2023, escaped: true }
     - { harness: OpenCode v2, version: 2.0.18, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:17", total_time: "10:55", cached_tokens: 1670272, total_tokens: 2186390, price: 0.0423, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:57", total_time: "14:33", cached_tokens: 6285312, total_tokens: 6432839, price: 0.2452, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:21", total_time: "14:33", cached_tokens: 6081664, total_tokens: 6260440, price: 0.0253, lower_bound: true }
     - { harness: Pi, version: 1.0.0, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "52:36", total_time: "55:34", cached_tokens: 11274880, total_tokens: 11810436, price: 0.1438 }
     - { harness: Pi, version: 1.0.2, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:25", total_time: "10:52", cached_tokens: 8813824, total_tokens: 8955377, price: 0.2772 }
     - { harness: Pi, version: 1.1.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "3:59", total_time: "7:11", cached_tokens: 2042112, total_tokens: 2119739, price: 0.084, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "37:50", total_time: "41:31", cached_tokens: 11722368, total_tokens: 12306504, price: 0.3825, lower_bound: true }
+    - { harness: Codex, version: 0.162.1, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:03", total_time: "12:10", cached_tokens: 3357056, total_tokens: 3789065, price: 0.1207, lower_bound: true }
+    - { harness: Hermes, version: 0.21.5, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "37:50", total_time: "41:31", cached_tokens: 11722368, total_tokens: 12306504, price: 0.3825, lower_bound: true }
 
 - id: mp-checkpoint-consolidation
   description: Consolidate 16 tensor-, pipeline- and expert-parallel MoE checkpoint shards into one safetensors file whose logits match the reference.
@@ -137,7 +153,8 @@
     - { harness: OpenCode v2, version: 2.0.3, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "117:19", total_time: "121:55", cached_tokens: 22603776, total_tokens: 23165981, price: 0.265, lower_bound: true, escaped: true }
     - { harness: Pi, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "180:00", total_time: "181:03", cached_tokens: 2927872, total_tokens: 3309769, price: 0.1096 }
     - { harness: Pi, version: 1.0.2, score: 40.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "180:02", total_time: "180:59", cached_tokens: 3883520, total_tokens: 4335590, price: 0.2407 }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 3, attempts: 2, passes: 1, agent_time: "23:30", total_time: "26:29", cached_tokens: 4529920, total_tokens: 4794999, price: 0.1978 }
+    - { harness: Pi, version: 1.3.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "115:56", total_time: "117:15", cached_tokens: 18283904, total_tokens: 19002294, price: 0.0805, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 3, attempts: 2, passes: 1, agent_time: "23:30", total_time: "26:29", cached_tokens: 4529920, total_tokens: 4794999, price: 0.1978 }
 
 - id: mvcc-lsm-compaction
   description: MVCC visibility in an LSM store. Fix compaction, add a reproducer and regression test, and survive adversarial interleavings within the storage budget.
@@ -156,8 +173,8 @@
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "2:17", total_time: "5:39", cached_tokens: 299392, total_tokens: 337762, price: 0.0441, escaped: true }
     - { harness: Pi, version: 1.1.0, score: 71.43, best_attempt: 2, attempts: 3, passes: 0, agent_time: "2:08", total_time: "6:17", cached_tokens: 355200, total_tokens: 389564, price: 0.0299 }
     - { harness: Codex, version: 0.153.4, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "3:36", total_time: "7:01", cached_tokens: 391296, total_tokens: 574694, price: 0.0884, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "5:21", total_time: "9:53", cached_tokens: 453888, total_tokens: 653623, price: 0.096, escaped: true }
     - { harness: Prime Agent, version: 0.10.0, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "3:52", total_time: "10:52", cached_tokens: 516736, total_tokens: 636797, price: 0.0682, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "5:21", total_time: "9:53", cached_tokens: 453888, total_tokens: 653623, price: 0.096, escaped: true }
 
 - id: nextjs-performance
   description: Cut page-load and interaction latency across a Next.js warehouse app without changing routes, workflows or appearance.
@@ -170,14 +187,17 @@
     - { harness: OMP, version: 18.2.8, score: 60.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:48", total_time: "12:32", cached_tokens: 5248614, total_tokens: 5497293, price: 0.0792 }
     - { harness: OMP, version: 18.4.10, score: 40.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "16:09", total_time: "18:29", cached_tokens: 2643712, total_tokens: 2916120, price: 0.1555 }
     - { harness: OMP, version: 18.8.4, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:55", total_time: "10:10", cached_tokens: 5092224, total_tokens: 5198486, price: 0.1233 }
+    - { harness: OMP, version: 18.12.1, score: 40.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "10:19", total_time: "12:38", cached_tokens: 3772416, total_tokens: 3932124, price: 0.0183 }
     - { harness: OpenCode v2, version: 2.0.3, score: 40.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:46", total_time: "16:45", cached_tokens: 6440320, total_tokens: 6974003, price: 0.1368, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.18, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "19:07", total_time: "22:49", cached_tokens: 4556288, total_tokens: 4804185, price: 0.0592, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "12:58", total_time: "15:01", cached_tokens: 6691584, total_tokens: 6845765, price: 0.221, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 20.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "7:39", total_time: "9:17", cached_tokens: 3237760, total_tokens: 3444127, price: 0.0189, lower_bound: true }
     - { harness: Pi, version: 0.85.1, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "21:59", total_time: "23:29", cached_tokens: 4282112, total_tokens: 4471215, price: 0.0701 }
     - { harness: Pi, version: 1.0.0, score: 40.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "17:04", total_time: "18:42", cached_tokens: 6320128, total_tokens: 6522237, price: 0.0781 }
     - { harness: Pi, version: 1.0.2, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:21", total_time: "13:38", cached_tokens: 5864448, total_tokens: 5985798, price: 0.1888 }
+    - { harness: Pi, version: 1.3.0, score: 20.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:55", total_time: "11:41", cached_tokens: 4192384, total_tokens: 4279794, price: 0.0159 }
     - { harness: Codex, version: 0.153.4, score: 80.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:35", total_time: "12:10", cached_tokens: 4385152, total_tokens: 4948323, price: 0.2612, lower_bound: true }
-    - { harness: Hermes, version: 2026.9.24, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "18:42", total_time: "21:02", cached_tokens: 8683392, total_tokens: 9093196, price: 0.2577 }
+    - { harness: Hermes, version: 0.21.5, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "18:42", total_time: "21:02", cached_tokens: 8683392, total_tokens: 9093196, price: 0.2577 }
 
 - id: ontology-kg-querying
   description: Merge member-state RDF submissions with a railway OWL ontology into one graph, and write SPARQL queries over its cross-border operational points.
@@ -185,8 +205,14 @@
     - { harness: Claude Code, version: 2.1.287, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:28", total_time: "8:01", cached_tokens: 3113216, total_tokens: 3619913, price: 0.2488 }
     - { harness: Copilot, version: 1.0.91, score: 17.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "36:41", total_time: "37:54", cached_tokens: 4722432, total_tokens: 6257073, price: 0.8282 }
     - { harness: OMP, version: 18.8.4, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:48", total_time: "9:33", cached_tokens: 6635136, total_tokens: 7323103, price: 0.3304 }
+    - { harness: OMP, version: 18.12.1, score: 60.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "14:01", total_time: "14:48", cached_tokens: 8964864, total_tokens: 9454630, price: 0.0453 }
     - { harness: OpenCode v2, version: 2.0.24, score: 57.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "10:19", total_time: "12:00", cached_tokens: 8128896, total_tokens: 8671268, price: 0.2894, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:06", total_time: "13:18", cached_tokens: 15260416, total_tokens: 15726286, price: 0.0538, lower_bound: true }
     - { harness: Pi, version: 1.1.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "5:14", total_time: "6:00", cached_tokens: 5747968, total_tokens: 5932225, price: 0.1574 }
+    - { harness: Pi, version: 1.3.0, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:40", total_time: "12:56", cached_tokens: 13074688, total_tokens: 13331818, price: 0.0431 }
+    - { harness: Codex, version: 0.162.1, score: 60.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "7:28", total_time: "8:42", cached_tokens: 7025664, total_tokens: 7662206, price: 0.1559, lower_bound: true }
+    - { harness: Hermes, version: 0.21.7, score: 57.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "10:24", total_time: "12:47", cached_tokens: 10011392, total_tokens: 10737594, price: 0.1997 }
+    - { harness: Prime Agent, version: 0.10.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:48", total_time: "11:54", cached_tokens: 11665152, total_tokens: 12175291, price: 0.1749 }
 
 - id: payments-pipeline-fix
   description: Speed up a payments worker's startup so overdraft notifications arrive within 5s, without misses or duplicates, during respawns and rolling deploys.
@@ -200,7 +226,20 @@
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "20:59", total_time: "23:27", cached_tokens: 14793600, total_tokens: 15028695, price: 0.467, escaped: true }
     - { harness: Pi, version: 1.1.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "9:08", total_time: "11:41", cached_tokens: 3984768, total_tokens: 4112623, price: 0.1318, escaped: true }
     - { harness: Codex, version: 0.153.4, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "28:49", total_time: "31:34", cached_tokens: 15856384, total_tokens: 16745681, price: 0.5212, lower_bound: true, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "39:51", total_time: "43:32", cached_tokens: 15738112, total_tokens: 16837362, price: 0.655, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "39:51", total_time: "43:32", cached_tokens: 15738112, total_tokens: 16837362, price: 0.655, lower_bound: true, escaped: true }
+
+- id: photonic-waveguide-routing
+  description: Route nine photonic waveguide nets across a board with bends and s-bends, avoiding obstacles and keeping separation, at minimum weighted cost.
+  results:
+    - { harness: Claude Code, version: 2.1.287, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "99:53", total_time: "102:01", cached_tokens: 9354368, total_tokens: 11831522, price: 0.8979, escaped: true }
+    - { harness: Copilot, version: 1.0.91, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "180:02", total_time: "180:46", cached_tokens: 1971840, total_tokens: 4572110, price: 2.4103, lower_bound: true }
+    - { harness: OMP, version: 18.12.1, score: 100.00, best_attempt: 2, attempts: 1, passes: 1, agent_time: "21:25", total_time: "23:18", cached_tokens: 6543232, total_tokens: 6829595, price: 0.0496, escaped: true }
+    - { harness: OpenCode v2, version: 2.0.18, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "33:32", total_time: "37:20", cached_tokens: 6154752, total_tokens: 6704897, price: 0.4285, lower_bound: true, escaped: true }
+    - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "154:10", total_time: "156:27", cached_tokens: 11562752, total_tokens: 13424171, price: 0.7316, lower_bound: true, escaped: true }
+    - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "137:26", total_time: "139:06", cached_tokens: 22541312, total_tokens: 22930951, price: 0.8204, escaped: true }
+    - { harness: Pi, version: 1.1.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "78:21", total_time: "80:06", cached_tokens: 6269824, total_tokens: 6766610, price: 0.2247, escaped: true }
+    - { harness: Codex, version: 0.162.1, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "180:03", total_time: "182:02", cached_tokens: 33671296, total_tokens: 37056845, price: 0.9034, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.7, score: 100.00, best_attempt: 2, attempts: 1, passes: 1, agent_time: "44:17", total_time: "48:13", cached_tokens: 5194496, total_tokens: 5827738, price: 0.2469, escaped: true }
 
 - id: production-planning
   description: "Plan five days of production across ERP, MES and WMS databases through a gateway tool: work orders, dispatch and material reservations."
@@ -208,12 +247,14 @@
     - { harness: Claude Code, version: 2.1.287, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "36:26", total_time: "38:05", cached_tokens: 4242944, total_tokens: 5293574, price: 0.2791 }
     - { harness: Copilot, version: 1.0.91, score: 77.50, best_attempt: 3, attempts: 3, passes: 0, agent_time: "152:10", total_time: "152:55", cached_tokens: 10798720, total_tokens: 15445873, price: 2.2678 }
     - { harness: OMP, version: 18.4.10, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "32:00", total_time: "32:55", cached_tokens: 17531904, total_tokens: 18907774, price: 0.6818 }
+    - { harness: OMP, version: 18.12.1, score: 85.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:49", total_time: "10:33", cached_tokens: 5493504, total_tokens: 5692766, price: 0.0298 }
     - { harness: OpenCode v2, version: 2.0.18, score: 85.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "12:28", total_time: "15:06", cached_tokens: 4044416, total_tokens: 4911956, price: 0.408, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "12:36", total_time: "13:41", cached_tokens: 6877824, total_tokens: 7126991, price: 0.3237, lower_bound: true }
     - { harness: Pi, version: 1.0.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "30:37", total_time: "32:13", cached_tokens: 5270016, total_tokens: 5550708, price: 0.2344, escaped: true }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "8:50", total_time: "9:42", cached_tokens: 3588352, total_tokens: 3819094, price: 0.261, escaped: true }
     - { harness: Pi, version: 1.1.0, score: 85.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:42", total_time: "7:31", cached_tokens: 2996992, total_tokens: 3193616, price: 0.1935 }
-    - { harness: Hermes, version: 2026.9.24, score: 85.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "23:34", total_time: "26:20", cached_tokens: 7753088, total_tokens: 8398713, price: 0.4045 }
+    - { harness: Codex, version: 0.162.1, score: 85.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "57:57", total_time: "59:08", cached_tokens: 10325376, total_tokens: 11530337, price: 0.3431, lower_bound: true }
+    - { harness: Hermes, version: 0.21.5, score: 85.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "23:34", total_time: "26:20", cached_tokens: 7753088, total_tokens: 8398713, price: 0.4045 }
 
 - id: react-lead-form
   description: "Fix a React intake form's shared submission pipeline: validation, normalisation, ledger reconciliation and atomic CRM export."
@@ -229,7 +270,9 @@
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "10:48", total_time: "12:18", cached_tokens: 4135680, total_tokens: 4726155, price: 0.2181, lower_bound: true, escaped: true }
     - { harness: Pi, version: 0.85.1, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "13:55", total_time: "15:09", cached_tokens: 2449920, total_tokens: 2594226, price: 0.0681, escaped: true }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "7:22", total_time: "8:19", cached_tokens: 4725888, total_tokens: 4993083, price: 0.2292, escaped: true }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "11:46", total_time: "14:38", cached_tokens: 3025408, total_tokens: 3494158, price: 0.2636, escaped: true }
+    - { harness: Codex, version: 0.162.1, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "7:21", total_time: "9:04", cached_tokens: 3488640, total_tokens: 3998259, price: 0.1301, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "11:46", total_time: "14:38", cached_tokens: 3025408, total_tokens: 3494158, price: 0.2636, escaped: true }
+    - { harness: Prime Agent, version: 0.10.0, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "6:54", total_time: "7:57", cached_tokens: 2807040, total_tokens: 3144521, price: 0.102, escaped: true }
 
 - id: risk-scorer-replay
   description: Repair a stale offline risk-scorer evaluator so it rebuilds parity reports deterministically, including for unseen same-schema packets.
@@ -246,6 +289,7 @@
     - { harness: Pi, version: 0.85.1, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "52:02", total_time: "52:58", cached_tokens: 18204800, total_tokens: 19561901, price: 0.419 }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "16:04", total_time: "17:11", cached_tokens: 25299328, total_tokens: 25898581, price: 0.7973, escaped: true }
     - { harness: Codex, version: 0.153.4, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "24:29", total_time: "25:39", cached_tokens: 12458112, total_tokens: 14442799, price: 0.9417, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.7, score: 100.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "29:15", total_time: "32:14", cached_tokens: 26515072, total_tokens: 27543927, price: 0.3502 }
 
 - id: session-window-debug
   description: Streaming session windows. Repair retention, merge retractions and totals, and watermark progress.
@@ -258,16 +302,19 @@
     - { harness: OMP, version: 18.2.8, score: 85.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:13", total_time: "12:30", cached_tokens: 1619850, total_tokens: 1886439, price: 0.0754 }
     - { harness: OMP, version: 18.4.10, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "6:06", total_time: "6:51", cached_tokens: 1587072, total_tokens: 1686212, price: 0.1288 }
     - { harness: OMP, version: 18.8.4, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:31", total_time: "8:44", cached_tokens: 2401408, total_tokens: 2501901, price: 0.1186 }
+    - { harness: OMP, version: 18.12.1, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:43", total_time: "9:21", cached_tokens: 804480, total_tokens: 919417, price: 0.0116 }
     - { harness: OpenCode v2, version: 2.0.3, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:30", total_time: "18:57", cached_tokens: 2939648, total_tokens: 3101047, price: 0.0782, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.18, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:19", total_time: "13:46", cached_tokens: 2408320, total_tokens: 2614677, price: 0.1567, lower_bound: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "8:32", total_time: "9:50", cached_tokens: 2688640, total_tokens: 3050345, price: 0.2134, lower_bound: true }
+    - { harness: OpenCode v2, version: 2.0.32, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:55", total_time: "13:14", cached_tokens: 2397056, total_tokens: 2496272, price: 0.0163, lower_bound: true }
     - { harness: Pi, version: 0.85.1, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "12:36", total_time: "13:43", cached_tokens: 1416704, total_tokens: 1530881, price: 0.0586 }
     - { harness: Pi, version: 1.0.0, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "21:22", total_time: "22:21", cached_tokens: 1877760, total_tokens: 2131101, price: 0.1601 }
     - { harness: Pi, version: 1.0.2, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "5:20", total_time: "6:55", cached_tokens: 985600, total_tokens: 1054830, price: 0.0928 }
     - { harness: Pi, version: 1.1.0, score: 55.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "3:24", total_time: "4:12", cached_tokens: 848384, total_tokens: 909863, price: 0.0686 }
+    - { harness: Pi, version: 1.3.0, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "3:46", total_time: "6:06", cached_tokens: 1126784, total_tokens: 1196578, price: 0.0106 }
     - { harness: Codex, version: 0.153.4, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "6:05", total_time: "7:33", cached_tokens: 704768, total_tokens: 918133, price: 0.1223, lower_bound: true }
+    - { harness: Hermes, version: 0.21.5, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:37", total_time: "11:38", cached_tokens: 2441984, total_tokens: 2798127, price: 0.2209 }
     - { harness: Prime Agent, version: 0.10.0, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "13:33", total_time: "14:15", cached_tokens: 3506944, total_tokens: 3724129, price: 0.1699 }
-    - { harness: Hermes, version: 2026.9.24, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:37", total_time: "11:38", cached_tokens: 2441984, total_tokens: 2798127, price: 0.2209 }
 
 - id: sglang-qwen-burst
   description: Fix SGLang tool-call parameter ordering for Qwen and Llama under burst load.
@@ -282,6 +329,7 @@
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "25:21", total_time: "27:42", cached_tokens: 43609088, total_tokens: 43984360, price: 0.9645, lower_bound: true, escaped: true }
     - { harness: Pi, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:07", total_time: "10:15", cached_tokens: 12666240, total_tokens: 12851089, price: 0.0923 }
     - { harness: Pi, version: 1.0.2, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "3:18", total_time: "4:27", cached_tokens: 6084864, total_tokens: 6217987, price: 0.1598 }
+    - { harness: Codex, version: 0.162.1, score: 83.33, best_attempt: 2, attempts: 3, passes: 0, agent_time: "35:20", total_time: "37:33", cached_tokens: 48719232, total_tokens: 50891747, price: 0.6314, lower_bound: true }
 
 - id: vba-userform-port
   description: Port a legacy Excel/VBA app to React, FastAPI and SQLite, preserving its forms, validation, calculations and saves.
@@ -290,8 +338,11 @@
     - { harness: Copilot, version: 1.0.91, score: 82.14, best_attempt: 1, attempts: 3, passes: 0, agent_time: "99:20", total_time: "103:05", cached_tokens: 21876352, total_tokens: 25643467, price: 1.6888 }
     - { harness: OMP, version: 18.4.10, score: 96.43, best_attempt: 1, attempts: 3, passes: 0, agent_time: "41:12", total_time: "43:37", cached_tokens: 14866560, total_tokens: 16242747, price: 0.4788 }
     - { harness: OMP, version: 18.8.4, score: 85.71, best_attempt: 3, attempts: 3, passes: 0, agent_time: "16:47", total_time: "18:42", cached_tokens: 12314688, total_tokens: 12765950, price: 0.3026 }
+    - { harness: OMP, version: 18.12.1, score: 78.57, best_attempt: 3, attempts: 3, passes: 0, agent_time: "11:01", total_time: "13:47", cached_tokens: 5650560, total_tokens: 5894691, price: 0.0265 }
     - { harness: OpenCode v2, version: 2.0.18, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "38:31", total_time: "41:20", cached_tokens: 9870848, total_tokens: 10987964, price: 0.473, lower_bound: true }
     - { harness: Pi, version: 1.0.2, score: 92.86, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:49", total_time: "17:45", cached_tokens: 10516224, total_tokens: 10694465, price: 0.3328 }
+    - { harness: Pi, version: 1.3.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "34:50", total_time: "36:25", cached_tokens: 15417344, total_tokens: 15915726, price: 0.0567, escaped: true }
+    - { harness: Codex, version: 0.162.1, score: 92.86, best_attempt: 1, attempts: 3, passes: 0, agent_time: "26:45", total_time: "28:21", cached_tokens: 16829696, total_tokens: 18251271, price: 0.318, lower_bound: true }
 
 - id: vllm-deepseek-streaming
   description: Fix vLLM's DeepSeek streaming and JSON output without buffering the end token.
@@ -305,6 +356,7 @@
     - { harness: OpenCode v2, version: 2.0.24, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "25:33", total_time: "27:05", cached_tokens: 17086464, total_tokens: 17881552, price: 0.4774, lower_bound: true }
     - { harness: Pi, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:34", total_time: "9:35", cached_tokens: 5181568, total_tokens: 5311555, price: 0.0608 }
     - { harness: Pi, version: 1.0.2, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "2:20", total_time: "3:49", cached_tokens: 406144, total_tokens: 483307, price: 0.0729 }
+    - { harness: Pi, version: 1.3.0, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:41", total_time: "8:10", cached_tokens: 1116544, total_tokens: 1345633, price: 0.0253 }
 
 - id: vpp-loss-divergence
   description: Fix installed Megatron-style framework code so a CPU training run's loss trace matches the reference.
@@ -317,6 +369,9 @@
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "36:14", total_time: "38:15", cached_tokens: 56476032, total_tokens: 57000443, price: 1.3198, lower_bound: true, escaped: true }
     - { harness: Pi, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "101:25", total_time: "103:18", cached_tokens: 29735936, total_tokens: 31318163, price: 0.432 }
     - { harness: Pi, version: 1.0.2, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "27:02", total_time: "28:32", cached_tokens: 56046080, total_tokens: 56515851, price: 1.3002 }
+    - { harness: Pi, version: 1.3.0, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "31:19", total_time: "34:06", cached_tokens: 43070848, total_tokens: 44964104, price: 0.1681 }
+    - { harness: Codex, version: 0.162.1, score: 100.00, best_attempt: 3, attempts: 2, passes: 1, agent_time: "89:46", total_time: "92:37", cached_tokens: 68778240, total_tokens: 72780678, price: 1.0924, lower_bound: true }
+    - { harness: Hermes, version: 0.21.7, score: 100.00, best_attempt: 3, attempts: 1, passes: 1, agent_time: "44:54", total_time: "48:49", cached_tokens: 57371520, total_tokens: 59069999, price: 0.5966 }
 
 - id: wal-recovery-ordering
   description: Write-ahead log recovery. Repair replay semantics, durable commit ordering and detached public views.
@@ -335,5 +390,5 @@
     - { harness: Pi, version: 1.0.2, score: 98.87, best_attempt: 1, attempts: 3, passes: 0, agent_time: "5:40", total_time: "6:36", cached_tokens: 2028288, total_tokens: 2106362, price: 0.112 }
     - { harness: Pi, version: 1.1.0, score: 93.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "2:33", total_time: "4:07", cached_tokens: 1725568, total_tokens: 1800328, price: 0.0842 }
     - { harness: Codex, version: 0.153.4, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "5:39", total_time: "9:25", cached_tokens: 1622656, total_tokens: 1906568, price: 0.149, lower_bound: true, escaped: true }
+    - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "4:50", total_time: "9:09", cached_tokens: 1634688, total_tokens: 1781356, price: 0.1065, escaped: true }
     - { harness: Prime Agent, version: 0.10.0, score: 93.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "5:08", total_time: "6:22", cached_tokens: 1918848, total_tokens: 2070280, price: 0.1089 }
-    - { harness: Hermes, version: 2026.9.24, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "4:50", total_time: "9:09", cached_tokens: 1634688, total_tokens: 1781356, price: 0.1065, escaped: true }
