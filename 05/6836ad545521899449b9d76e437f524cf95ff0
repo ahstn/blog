@@ -1,0 +1,23 @@
+AGENTS.md
+  s_a42bd7d1274c65::t_5fc5271d109a42 64
+src/data/harness-bench.yml
+  s_a42bd7d1274c65::t_22b854fc217153 7-8,34,39,41,52,55,58,60,73,76,80,92,100,102,104-107,123-125,136,140-141,156-157,176,190,194,198,200,208,210,212-215,229-242,250,256-257,273-275,292,305,309,314,316,332,341,344-345,359,372-374,393
+src/utils/harness-bench.ts
+  s_a42bd7d1274c65::t_02e8352056d457 28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "056836ad545521899449b9d76e437f524cf95ff0",
+  "prompts": {},
+  "sessions": {
+    "s_a42bd7d1274c65": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2295f497-08b3-42d6-a247-4f83eddb6396",
+        "model": "unknown"
+      },
+      "human_author": "Adam Houston <phazyy9@gmail.com>"
+    }
+  }
+}
