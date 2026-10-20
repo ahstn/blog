@@ -1,7 +1,12 @@
 # Agentic Development Environments, rendered at /agentic-dev-envs.
 #
 # Schema: src/content.config.ts (validated at build time).
-# category: "ui" or "terminal". GUI apps that also embed terminals are "ui".
+# category: who draws the window, and who draws the agent's interface.
+#   "ui": a native, web or mobile app with its own agent interface (chat,
+#     diffs), even if it also embeds terminals.
+#   "agent-terminal": a native app that runs each agent's own CLI in a real
+#     terminal pane, adding persistent sessions and agent status.
+#   "tui": runs inside the terminal you already use (TUIs, tmux-based tools).
 # tech: language(s) then UI layer only, from TECH in src/utils/ades.ts.
 # features: see FEATURES in src/utils/ades.ts.
 # agents: at most ~8 named; the rest counted in agents_more (total = the
@@ -278,7 +283,7 @@
 
 - id: diri
   name: Diri
-  category: ui
+  category: agent-terminal
   website: https://diri.sh/
   repo: cristicretu/diri
   links:
@@ -663,7 +668,7 @@
 
 - id: supacode
   name: Supacode
-  category: ui
+  category: agent-terminal
   website: https://supacode.sh/
   repo: supabitapp/supacode
   links:
@@ -843,7 +848,7 @@
 
 - id: herdr
   name: herdr
-  category: terminal
+  category: tui
   website: https://herdr.dev/
   repo: herdrdev/herdr
   links:
@@ -869,7 +874,7 @@
 
 - id: luvus
   name: Luvus
-  category: terminal
+  category: tui
   website: https://luvus.dev/
   repo: RizRiyz/luvus
   links:
@@ -895,7 +900,7 @@
 
 - id: tty7
   name: tty7
-  category: terminal
+  category: agent-terminal
   website: https://tty7.io/
   repo: l0ng-ai/tty7
   platforms: [macos, windows, linux]
@@ -919,7 +924,7 @@
 
 - id: warp
   name: Warp
-  category: terminal
+  category: agent-terminal
   website: https://www.warp.dev/
   repo: warpdotdev/warp
   links:
@@ -946,7 +951,7 @@
 
 - id: cmux
   name: cmux
-  category: terminal
+  category: agent-terminal
   website: https://cmux.com/
   repo: manaflow-ai/cmux
   links:
@@ -972,7 +977,7 @@
 
 - id: agent-of-empires
   name: Agent of Empires
-  category: terminal
+  category: tui
   website: https://www.agent-of-empires.com/
   repo: agent-of-empires/agent-of-empires
   links:
@@ -998,7 +1003,7 @@
 
 - id: muxy
   name: Muxy
-  category: terminal
+  category: agent-terminal
   website: https://muxy.app/
   repo: muxy-app/muxy
   platforms: [macos, ios, android]
@@ -1021,7 +1026,7 @@
 
 - id: dmux
   name: dmux
-  category: terminal
+  category: tui
   website: https://dmux.ai/
   repo: standardagents/dmux
   platforms: [macos, linux]
@@ -1044,7 +1049,7 @@
 
 - id: sidecar
   name: Sidecar
-  category: terminal
+  category: tui
   website: https://sidecar.haplab.com/
   repo: marcus/sidecar
   links:
@@ -1069,7 +1074,7 @@
 
 - id: kooky
   name: Kooky
-  category: terminal
+  category: agent-terminal
   website: https://github.com/iAmCorey/kooky
   repo: iAmCorey/kooky
   platforms: [macos]
@@ -1092,7 +1097,7 @@
 
 - id: unpeel
   name: Unpeel
-  category: terminal
+  category: agent-terminal
   website: https://unpeel.com/
   repo: unpeel-com/unpeel
   links:
