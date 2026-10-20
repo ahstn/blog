@@ -25,7 +25,7 @@ export const SOURCE_URL = "https://github.com/ahstn/harness-bench";
 /** The README's consolidated TB4 task tables, one section per task. */
 export const README_URL = "https://github.com/ahstn/harness-bench/blob/main/README.md";
 /** Newest cohort in src/data/harness-bench.yml; bump when regenerating it. */
-export const LAST_RUN = "2026-10-10";
+export const LAST_RUN = "2026-10-18";
 
 /** GitHub's anchor for a task's README heading, "<id> (best of three)". */
 export const taskReportUrl = (id: string) => `${README_URL}#${id}-best-of-three`;
