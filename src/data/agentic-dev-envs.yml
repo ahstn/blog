@@ -32,12 +32,12 @@
     agents: https://github.com/pingdotgg/t3code#installation
   features: [worktrees, remote-control, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-03
-  stars: 26988
-  stars_updated_at: 2026-10-11
+  stars: 30219
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.0.45
-    date: 2026-10-02
-  last_commit: 2026-10-11
+    version: 0.1.2
+    date: 2026-10-22
+  last_commit: 2026-10-26
 
 - id: emdash
   name: Emdash
@@ -58,12 +58,12 @@
     agents: https://emdash.com/docs/providers
   features: [worktrees, automations, browser, diff-review, terminal, cloud-sandboxes]
   first_seen: 2025-09
-  stars: 5953
-  stars_updated_at: 2026-10-11
+  stars: 6079
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.2.8
-    date: 2026-10-10
-  last_commit: 2026-10-10
+    version: 1.2.9
+    date: 2026-10-23
+  last_commit: 2026-10-23
 
 - id: pi-gui
   name: pi-gui
@@ -81,12 +81,12 @@
     agents: https://github.com/minghinmatthewlam/pi-gui#readme
   features: [worktrees, automations, plugins, diff-review, terminal]
   first_seen: 2026-04
-  stars: 1213
-  stars_updated_at: 2026-10-11
+  stars: 1317
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 1.0.1
     date: 2026-09-26
-  last_commit: 2026-10-07
+  last_commit: 2026-10-21
 
 - id: helmor
   name: Helmor
@@ -132,12 +132,12 @@
     agents: https://www.onorca.dev/docs/agents/supported
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-03
-  stars: 89714
-  stars_updated_at: 2026-10-11
+  stars: 106127
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.4.224
-    date: 2026-10-10
-  last_commit: 2026-10-11
+    version: 1.4.241
+    date: 2026-10-26
+  last_commit: 2026-10-26
 
 - id: superconductor
   name: Superconductor
@@ -177,12 +177,12 @@
     agents: https://www.trysynara.com/docs/providers
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal]
   first_seen: 2026-04
-  stars: 2092
-  stars_updated_at: 2026-10-11
+  stars: 2137
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.0.3
-    date: 2026-10-11
-  last_commit: 2026-10-11
+    version: 1.0.9
+    date: 2026-10-25
+  last_commit: 2026-10-26
 
 - id: paseo
   name: Paseo
@@ -202,12 +202,12 @@
     agents: https://paseo.sh/agents
   features: [worktrees, remote-control, mobile-app, automations, plugins, diff-review, terminal]
   first_seen: 2026-02
-  stars: 20509
-  stars_updated_at: 2026-10-11
+  stars: 22040
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.11.2
-    date: 2026-10-09
-  last_commit: 2026-10-11
+    version: 0.13.0
+    date: 2026-10-24
+  last_commit: 2026-10-26
 
 - id: zeron
   name: Zeron
@@ -226,12 +226,12 @@
     agents: https://github.com/zeronsh/zeron/blob/main/crates/proto/src/agent.rs
   features: [remote-control, browser, diff-review, terminal]
   first_seen: 2026-07
-  stars: 3159
-  stars_updated_at: 2026-10-11
+  stars: 3358
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.2.112
-    date: 2026-10-11
-  last_commit: 2026-10-11
+    version: 0.2.125
+    date: 2026-10-25
+  last_commit: 2026-10-26
 
 - id: bb
   name: bb
@@ -251,12 +251,12 @@
     agents: https://getbb.app/
   features: [worktrees, plugins, automations, remote-control, browser, diff-review, cloud-sandboxes]
   first_seen: 2026-05
-  stars: 4238
-  stars_updated_at: 2026-10-11
+  stars: 4608
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.46.0
-    date: 2026-10-09
-  last_commit: 2026-10-11
+    version: 0.47.1
+    date: 2026-10-24
+  last_commit: 2026-10-26
 
 - id: gooey-pi
   name: GooeyPi
@@ -274,12 +274,12 @@
     agents: https://github.com/am-will/gooey-pi#three-harnesses-one-workspace
   features: [worktrees, automations, browser, diff-review, terminal]
   first_seen: 2026-08
-  stars: 943
-  stars_updated_at: 2026-10-11
+  stars: 955
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.1.17
-    date: 2026-09-09
-  last_commit: 2026-09-09
+    version: 1.1.21
+    date: 2026-10-25
+  last_commit: 2026-10-25
 
 - id: diri
   name: Diri
@@ -299,12 +299,12 @@
     agents: https://github.com/cristicretu/diri/tree/main/diri/crates/diri-engine/manifests
   features: [worktrees, remote-control, diff-review, terminal, mobile-app]
   first_seen: 2026-08
-  stars: 432
-  stars_updated_at: 2026-10-11
+  stars: 458
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.9.6
-    date: 2026-10-09
-  last_commit: 2026-10-11
+    version: 0.10.1
+    date: 2026-10-21
+  last_commit: 2026-10-26
 
 - id: waku
   name: Waku
@@ -322,8 +322,8 @@
     agents: https://github.com/egoist/waku/blob/main/docs/providers.md
   features: [diff-review, terminal, browser]
   first_seen: 2026-08
-  stars: 1568
-  stars_updated_at: 2026-10-11
+  stars: 1588
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.1.20
     date: 2026-10-02
@@ -348,12 +348,12 @@
     agents: https://docs.orchestrator.inc/plugins/agents
   features: [worktrees, kanban, remote-control, mobile-app, browser, diff-review, terminal, plugins]
   first_seen: 2026-02
-  stars: 13082
-  stars_updated_at: 2026-10-11
+  stars: 13651
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.13.7
-    date: 2026-10-10
-  last_commit: 2026-10-11
+    version: 0.14.6
+    date: 2026-10-24
+  last_commit: 2026-10-26
 
 - id: openchamber
   name: OpenChamber
@@ -373,12 +373,12 @@
     agents: https://docs.openchamber.dev/opencode-server
   features: [worktrees, remote-control, automations, browser, diff-review, terminal, mobile-app]
   first_seen: 2025-12
-  stars: 11451
-  stars_updated_at: 2026-10-11
+  stars: 12174
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 2.2.0
-    date: 2026-10-08
-  last_commit: 2026-10-11
+    version: 2.5.2
+    date: 2026-10-26
+  last_commit: 2026-10-26
 
 - id: opensession
   name: Open Session
@@ -396,12 +396,12 @@
     agents: https://github.com/tellahq/opensession/blob/main/docs/setup/README.md#minimum-requirements
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, mobile-app, cloud-sandboxes]
   first_seen: 2026-07
-  stars: 395
-  stars_updated_at: 2026-10-11
+  stars: 403
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.4.75
-    date: 2026-10-07
-  last_commit: 2026-10-11
+    version: 0.4.78
+    date: 2026-10-23
+  last_commit: 2026-10-25
 
 - id: monocode
   name: MonoCode
@@ -419,12 +419,12 @@
     agents: https://github.com/hardbeat920/monocode#install
   features: [worktrees, remote-control]
   first_seen: 2026-08
-  stars: 2936
-  stars_updated_at: 2026-10-11
+  stars: 3418
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.12.0
-    date: 2026-10-10
-  last_commit: 2026-10-11
+    version: 0.16.0
+    date: 2026-10-19
+  last_commit: 2026-10-25
 
 - id: fractal
   name: Fractal
@@ -456,12 +456,12 @@
     agents: https://docs.zuse.sh/providers
   features: [worktrees, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-05
-  stars: 225
-  stars_updated_at: 2026-10-11
+  stars: 238
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.23.0
-    date: 2026-09-30
-  last_commit: 2026-10-11
+    version: 0.24.0
+    date: 2026-10-17
+  last_commit: 2026-10-25
 
 - id: dray
   name: Dray
@@ -480,12 +480,12 @@
   features: [worktrees, browser, diff-review, terminal]
   first_seen: 2026-08
   release_tag_prefix: "v"
-  stars: 113
-  stars_updated_at: 2026-10-11
+  stars: 118
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.26.0
-    date: 2026-10-01
-  last_commit: 2026-10-09
+    version: 0.29.7
+    date: 2026-10-23
+  last_commit: 2026-10-26
 
 - id: vibe-kanban
   name: Vibe Kanban
@@ -507,12 +507,12 @@
   features: [worktrees, kanban, remote-control, browser, diff-review, terminal]
   first_seen: 2025-06
   note: Community-maintained since 2026-04.
-  stars: 28327
-  stars_updated_at: 2026-10-11
+  stars: 28457
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.1.44-20260424091429
     date: 2026-04-24
-  last_commit: 2026-09-19
+  last_commit: 2026-10-26
 
 - id: happy
   name: Happy
@@ -532,12 +532,12 @@
     agents: https://github.com/slopus/happy/blob/main/packages/happy-cli/README.md
   features: [worktrees, remote-control, plugins, diff-review, terminal, mobile-app]
   first_seen: 2025-07
-  stars: 24093
-  stars_updated_at: 2026-10-11
+  stars: 24319
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 1.2.5
     date: 2026-09-22
-  last_commit: 2026-10-11
+  last_commit: 2026-10-26
 
 - id: opcode
   name: opcode
@@ -558,8 +558,8 @@
   features: [diff-review]
   first_seen: 2025-06
   note: Formerly Claudia.
-  stars: 22415
-  stars_updated_at: 2026-09-30
+  stars: 22420
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.2.0
     date: 2025-08-31
@@ -584,12 +584,12 @@
     agents: https://github.com/superset-sh/superset#supported-agents
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app]
   first_seen: 2025-10
-  stars: 15079
-  stars_updated_at: 2026-10-11
+  stars: 15556
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.37.0
-    date: 2026-10-08
-  last_commit: 2026-10-11
+    version: 1.40.0
+    date: 2026-10-23
+  last_commit: 2026-10-26
 
 - id: stagewise
   name: stagewise
@@ -610,12 +610,12 @@
   features: [worktrees, plugins, browser, diff-review]
   first_seen: 2025-11
   note: Formerly a browser toolbar.
-  stars: 6828
-  stars_updated_at: 2026-10-11
+  stars: 6831
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 1.30.0
     date: 2026-09-30
-  last_commit: 2026-10-05
+  last_commit: 2026-10-25
 
 - id: hapi
   name: HAPI
@@ -636,12 +636,12 @@
   features: [worktrees, remote-control, diff-review, terminal, mobile-app]
   first_seen: 2025-12
   note: Local-first alternative to Happy.
-  stars: 5212
-  stars_updated_at: 2026-10-11
+  stars: 5303
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.30.7
     date: 2026-09-15
-  last_commit: 2026-10-06
+  last_commit: 2026-10-26
 
 - id: codenomad
   name: CodeNomad
@@ -659,12 +659,12 @@
     agents: https://github.com/NeuralNomadsAI/CodeNomad#readme
   features: [worktrees, remote-control, browser, diff-review]
   first_seen: 2025-11
-  stars: 2620
-  stars_updated_at: 2026-10-11
+  stars: 2647
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.20.1
-    date: 2026-10-03
-  last_commit: 2026-10-11
+    version: 1.0.0
+    date: 2026-10-24
+  last_commit: 2026-10-26
 
 - id: supacode
   name: Supacode
@@ -685,12 +685,12 @@
     agents: https://github.com/supabitapp/supacode/blob/main/SupacodeSettingsShared/Models/SkillAgent.swift
   features: [worktrees, terminal]
   first_seen: 2026-01
-  stars: 2398
-  stars_updated_at: 2026-10-11
+  stars: 2397
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.11.3
-    date: 2026-10-11
-  last_commit: 2026-10-11
+    version: 0.11.6
+    date: 2026-10-25
+  last_commit: 2026-10-25
 
 - id: xum
   name: Xum
@@ -711,12 +711,12 @@
   features: [worktrees, remote-control, diff-review, cloud-sandboxes]
   first_seen: 2025-09
   note: Formerly Mux. Runs its own agent.
-  stars: 2052
-  stars_updated_at: 2026-10-11
+  stars: 2061
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.31.0
-    date: 2026-10-09
-  last_commit: 2026-10-11
+    version: 0.32.0
+    date: 2026-10-24
+  last_commit: 2026-10-26
 
 - id: nimbalyst
   name: Nimbalyst
@@ -737,12 +737,12 @@
     agents: https://docs.nimbalyst.com/setup-nimbalyst/ai-provider-setup-and-notifications
   features: [worktrees, kanban, remote-control, automations, plugins, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2025-10
-  stars: 1867
-  stars_updated_at: 2026-10-11
+  stars: 1974
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.80.6
-    date: 2026-10-09
-  last_commit: 2026-10-11
+    version: 0.81.7
+    date: 2026-10-16
+  last_commit: 2026-10-25
 
 - id: fusion
   name: Fusion
@@ -763,12 +763,12 @@
     agents: https://github.com/Runfusion/Fusion/tree/main/plugins
   features: [worktrees, kanban, remote-control, automations, plugins, diff-review, terminal, mobile-app]
   first_seen: 2026-04
-  stars: 1264
-  stars_updated_at: 2026-10-11
+  stars: 1292
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.77.0
     date: 2026-09-02
-  last_commit: 2026-10-11
+  last_commit: 2026-10-25
 
 - id: jean
   name: Jean
@@ -788,12 +788,12 @@
     agents: https://github.com/coollabsio/jean#features
   features: [worktrees, remote-control, automations, browser, diff-review, terminal]
   first_seen: 2026-01
-  stars: 1321
-  stars_updated_at: 2026-10-11
+  stars: 1361
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.0.9
-    date: 2026-10-07
-  last_commit: 2026-10-11
+    version: 1.0.12
+    date: 2026-10-17
+  last_commit: 2026-10-26
 
 - id: ghostex
   name: Ghostex
@@ -814,12 +814,12 @@
     agents: https://github.com/maddada/Ghostex#supported-agents
   features: [worktrees, kanban, remote-control, automations, plugins, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-04
-  stars: 911
-  stars_updated_at: 2026-10-11
+  stars: 1434
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 10.20.1
-    date: 2026-10-11
-  last_commit: 2026-10-11
+    version: 10.36.0
+    date: 2026-10-26
+  last_commit: 2026-10-26
 
 - id: kandev
   name: Kandev
@@ -839,12 +839,12 @@
     agents: https://github.com/kdlbs/kandev#supported-agent-clis
   features: [worktrees, kanban, remote-control, automations, plugins, browser, diff-review, terminal, cloud-sandboxes]
   first_seen: 2026-01
-  stars: 918
-  stars_updated_at: 2026-10-11
+  stars: 1018
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.97.0
-    date: 2026-10-04
-  last_commit: 2026-10-11
+    version: 0.98.0
+    date: 2026-10-23
+  last_commit: 2026-10-26
 
 - id: herdr
   name: herdr
@@ -865,12 +865,12 @@
     agents: https://herdr.dev/docs/agents/
   features: [plugins, terminal]
   first_seen: 2026-03
-  stars: 43400
-  stars_updated_at: 2026-10-11
+  stars: 45890
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.9.3
-    date: 2026-09-29
-  last_commit: 2026-10-11
+    version: 0.9.5
+    date: 2026-10-14
+  last_commit: 2026-10-23
 
 - id: luvus
   name: Luvus
@@ -891,12 +891,12 @@
     agents: https://luvus.dev/docs/reference/agents/
   features: [worktrees, remote-control, automations, plugins, diff-review, terminal]
   first_seen: 2026-06
-  stars: 959
-  stars_updated_at: 2026-10-11
+  stars: 984
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.14.3
     date: 2026-09-30
-  last_commit: 2026-10-11
+  last_commit: 2026-10-21
 
 - id: tty7
   name: tty7
@@ -915,12 +915,12 @@
   features: [diff-review, terminal]
   first_seen: 2026-07
   release_tag_prefix: "v"
-  stars: 1243
-  stars_updated_at: 2026-10-11
+  stars: 1327
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 26.9.4
-    date: 2026-09-29
-  last_commit: 2026-10-11
+    version: 26.10.0
+    date: 2026-10-12
+  last_commit: 2026-10-24
 
 - id: warp
   name: Warp
@@ -942,12 +942,12 @@
   features: [worktrees, remote-control, automations, diff-review, terminal, cloud-sandboxes]
   first_seen: 2025-06
   note: Also ships its own Warp Agent.
-  stars: 65425
-  stars_updated_at: 2026-10-11
+  stars: 65706
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 0.2026.06.03.09.49.stable_00
     date: 2026-06-03
-  last_commit: 2026-10-11
+  last_commit: 2026-10-23
 
 - id: cmux
   name: cmux
@@ -968,12 +968,12 @@
     agents: https://cmux.com/
   features: [remote-control, browser, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-01
-  stars: 28103
-  stars_updated_at: 2026-10-11
+  stars: 28482
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.65.0
-    date: 2026-10-05
-  last_commit: 2026-10-11
+    version: 0.65.2
+    date: 2026-10-16
+  last_commit: 2026-10-26
 
 - id: agent-of-empires
   name: Agent of Empires
@@ -994,12 +994,12 @@
     agents: https://github.com/agent-of-empires/agent-of-empires/blob/main/src/agents.rs
   features: [worktrees, remote-control, plugins, diff-review, terminal]
   first_seen: 2026-01
-  stars: 3333
-  stars_updated_at: 2026-10-11
+  stars: 3384
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 1.19.0
-    date: 2026-10-08
-  last_commit: 2026-10-11
+    version: 1.21.0
+    date: 2026-10-21
+  last_commit: 2026-10-26
 
 - id: muxy
   name: Muxy
@@ -1017,12 +1017,12 @@
     agents: https://github.com/muxy-app/muxy/tree/main/Muxy/Services/Providers
   features: [worktrees, remote-control, plugins, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-04
-  stars: 2287
-  stars_updated_at: 2026-10-11
+  stars: 2317
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 2.1.0
-    date: 2026-10-09
-  last_commit: 2026-10-11
+    version: 2.2.0
+    date: 2026-10-17
+  last_commit: 2026-10-23
 
 - id: dmux
   name: dmux
@@ -1040,8 +1040,8 @@
     agents: https://github.com/standardagents/dmux/blob/main/src/utils/agentLaunch.ts
   features: [worktrees, diff-review, terminal]
   first_seen: 2025-08
-  stars: 1798
-  stars_updated_at: 2026-10-11
+  stars: 1808
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 5.11.1
     date: 2026-08-16
@@ -1065,8 +1065,8 @@
     agents: https://github.com/marcus/sidecar/tree/main/internal/agentcatalog/families
   features: [worktrees, kanban, diff-review, terminal]
   first_seen: 2025-12
-  stars: 1087
-  stars_updated_at: 2026-10-11
+  stars: 1090
+  stars_updated_at: 2026-10-26
   latest_release:
     version: 1.17.1
     date: 2026-10-08
@@ -1088,12 +1088,12 @@
     agents: https://github.com/iAmCorey/kooky#features
   features: [worktrees, terminal]
   first_seen: 2026-05
-  stars: 653
-  stars_updated_at: 2026-10-11
+  stars: 654
+  stars_updated_at: 2026-10-26
   latest_release:
-    version: 0.51.11
-    date: 2026-09-23
-  last_commit: 2026-09-23
+    version: 0.51.12
+    date: 2026-10-12
+  last_commit: 2026-10-12
 
 - id: unpeel
   name: Unpeel
@@ -1113,6 +1113,6 @@
     agents: https://github.com/unpeel-com/unpeel/tree/main/runtimes
   features: [worktrees, remote-control, plugins, browser, terminal, mobile-app]
   first_seen: 2026-09
-  stars: 140
-  stars_updated_at: 2026-10-11
-  last_commit: 2026-09-24
+  stars: 139
+  stars_updated_at: 2026-10-26
+  last_commit: 2026-10-22
