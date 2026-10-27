@@ -25,7 +25,7 @@ export const SOURCE_URL = "https://github.com/ahstn/harness-bench";
 /** The README's consolidated TB4 task tables, one section per task. */
 export const README_URL = "https://github.com/ahstn/harness-bench/blob/main/README.md";
 /** Newest cohort in src/data/harness-bench.yml; bump when regenerating it. */
-export const LAST_RUN = "2026-10-18";
+export const LAST_RUN = "2026-10-24";
 
 /** GitHub's anchor for a task's README heading, "<id> (best of three)". */
 export const taskReportUrl = (id: string) => `${README_URL}#${id}-best-of-three`;
@@ -52,6 +52,9 @@ export const formatTokens = (n: number | null, lowerBound: boolean) =>
 
 export const formatPrice = (usd: number | null, lowerBound: boolean) =>
 	usd === null ? "N/A" : `${lowerBound ? "≥" : ""}$${usd.toFixed(4)}`;
+
+export const formatShare = (share: number | null) =>
+	share === null ? "N/A" : `${(share * 100).toFixed(1)}%`;
 
 export interface PassRecord {
 	attempts: number;
@@ -80,6 +83,8 @@ export interface BenchRow {
 	totalTime: string;
 	cachedTokens: number | null;
 	totalTokens: number | null;
+	/** Cached tokens over total tokens; aggregate rows only. */
+	cacheRead?: number | null;
 	price: number | null;
 	lowerBound: boolean;
 	escaped: boolean;
@@ -128,10 +133,14 @@ export function formatDuration(seconds: number): string {
  * price. A task counts as passed when any of its attempts was an official
  * pass, so the denominator is the number of tasks, not attempts. The version
  * is the newest one included. Missing metrics are skipped, which makes those
- * totals lower bounds.
+ * totals lower bounds. Cache read share only counts results with both token
+ * metrics.
  */
 function aggregate(harness: Harness, results: BenchResult[], view?: RowView): BenchRow {
-	const sum = (f: (r: BenchResult) => number | null) => results.reduce((n, r) => n + (f(r) ?? 0), 0);
+	const sum = (f: (r: BenchResult) => number | null, rs = results) =>
+		rs.reduce((n, r) => n + (f(r) ?? 0), 0);
+	const metered = results.filter((r) => r.cached_tokens !== null && r.total_tokens !== null);
+	const meteredTotal = sum((r) => r.total_tokens, metered);
 	const versions = [...new Set(results.map((r) => r.version))].sort((a, b) => compareVersions(b, a));
 	return {
 		harness,
@@ -144,6 +153,7 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
 		totalTime: formatDuration(sum((r) => clockSeconds(r.total_time))),
 		cachedTokens: sum((r) => r.cached_tokens),
 		totalTokens: sum((r) => r.total_tokens),
+		cacheRead: meteredTotal ? sum((r) => r.cached_tokens, metered) / meteredTotal : null,
 		price: sum((r) => r.price),
 		lowerBound: results.some((r) => r.lower_bound || r.total_tokens === null || r.price === null),
 		escaped: false,

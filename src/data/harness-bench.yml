@@ -28,6 +28,7 @@
   description: "Repair a batched evaluation harness so it matches single-example scoring: few-shot references, multiple-choice modes, normalisation and PMI variants."
   results:
     - { harness: Claude Code, version: 2.1.287, score: 90.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "23:08", total_time: "25:09", cached_tokens: 6075776, total_tokens: 8053277, price: 0.3377, escaped: true }
+    - { harness: Claude Code, version: 2.1.304, score: 90.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "12:07", total_time: "14:06", cached_tokens: 9873664, total_tokens: 10264793, price: 0.0289 }
     - { harness: Copilot, version: 1.0.91, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "93:50", total_time: "100:15", cached_tokens: 9931776, total_tokens: 12240791, price: 1.1073 }
     - { harness: OMP, version: 18.4.10, score: 90.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "20:31", total_time: "26:35", cached_tokens: 6399232, total_tokens: 6566660, price: 0.255 }
     - { harness: OMP, version: 18.8.4, score: 90.00, best_attempt: 3, attempts: 3, passes: 1, agent_time: "10:24", total_time: "12:26", cached_tokens: 7532416, total_tokens: 7691562, price: 0.1943 }
@@ -38,6 +39,7 @@
     - { harness: Pi, version: 1.1.0, score: 80.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:33", total_time: "14:42", cached_tokens: 5430656, total_tokens: 5603046, price: 0.1879 }
     - { harness: Pi, version: 1.3.0, score: 80.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:52", total_time: "19:27", cached_tokens: 8747264, total_tokens: 9047855, price: 0.0414 }
     - { harness: Codex, version: 0.153.4, score: 90.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "22:34", total_time: "24:24", cached_tokens: 11298176, total_tokens: 12467599, price: 0.5611, lower_bound: true, escaped: true }
+    - { harness: Codex, version: 0.163.0, score: 90.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "7:44", total_time: "9:52", cached_tokens: 6050944, total_tokens: 6239637, price: 0.0166, lower_bound: true, escaped: true }
     - { harness: Hermes, version: 0.21.5, score: 65.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:26", total_time: "37:23", cached_tokens: 13927552, total_tokens: 14808799, price: 0.5242, lower_bound: true }
 
 - id: bun-sourcemap-leak
@@ -57,6 +59,7 @@
     - { harness: Pi, version: 1.1.0, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "2:07", total_time: "2:55", cached_tokens: 546816, total_tokens: 588260, price: 0.0428 }
     - { harness: Pi, version: 1.3.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "3:43", total_time: "4:46", cached_tokens: 1651840, total_tokens: 1720289, price: 0.0107 }
     - { harness: Codex, version: 0.153.4, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "5:06", total_time: "6:51", cached_tokens: 974208, total_tokens: 1329609, price: 0.1522, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "4:36", total_time: "6:54", cached_tokens: 1552896, total_tokens: 1634263, price: 0.0085, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 50.67, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:34", total_time: "13:25", cached_tokens: 3218304, total_tokens: 3459196, price: 0.1822, lower_bound: true }
 
 - id: cargo-flight-dispatch
@@ -64,6 +67,7 @@
   results:
     - { harness: Claude Code, version: 2.1.270, score: 80.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "12:18", total_time: "15:07", cached_tokens: 1488512, total_tokens: 2143381, price: 0.1455 }
     - { harness: Claude Code, version: 2.1.287, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:32", total_time: "10:37", cached_tokens: 1395072, total_tokens: 1983634, price: 0.1443 }
+    - { harness: Claude Code, version: 2.1.304, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "3:15", total_time: "4:39", cached_tokens: 765696, total_tokens: 854562, price: 0.0074 }
     - { harness: Copilot, version: 1.0.83, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:14", total_time: "23:09", cached_tokens: 1235456, total_tokens: 2455964, price: 0.302 }
     - { harness: Copilot, version: 1.0.91, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "32:49", total_time: "33:30", cached_tokens: 1354112, total_tokens: 2059686, price: 0.4393 }
     - { harness: OMP, version: 18.1.15, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "12:38", total_time: "14:00", cached_tokens: 1981068, total_tokens: 2128643, price: 0.0671 }
@@ -77,6 +81,7 @@
     - { harness: Pi, version: 0.85.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "10:44", total_time: "11:49", cached_tokens: 1109640, total_tokens: 1784282, price: 0.1434 }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "7:43", total_time: "8:30", cached_tokens: 2447488, total_tokens: 2600785, price: 0.1854, escaped: true }
     - { harness: Codex, version: 0.153.4, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "7:08", total_time: "8:24", cached_tokens: 1639424, total_tokens: 2010810, price: 0.2011, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 90.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "2:39", total_time: "4:08", cached_tokens: 640896, total_tokens: 735737, price: 0.0069, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:16", total_time: "13:28", cached_tokens: 1443072, total_tokens: 1859287, price: 0.2338 }
 
 - id: cumulative-layout-shift
@@ -89,12 +94,14 @@
     - { harness: OpenCode v2, version: 2.0.18, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "52:25", total_time: "57:58", cached_tokens: 35028224, total_tokens: 36392609, price: 0.7508, lower_bound: true, escaped: true }
     - { harness: OpenCode v2, version: 2.0.24, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "84:03", total_time: "90:45", cached_tokens: 21382016, total_tokens: 25073910, price: 0.6916, lower_bound: true, escaped: true }
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "35:55", total_time: "40:57", cached_tokens: 13224064, total_tokens: 13504016, price: 0.3521, escaped: true }
+    - { harness: Codex, version: 0.163.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "65:02", total_time: "72:07", cached_tokens: 24837504, total_tokens: 25235565, price: 0.0364, lower_bound: true, escaped: true }
     - { harness: Hermes, version: 0.21.5, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "68:02", total_time: "73:50", cached_tokens: 32411520, total_tokens: 33583711, price: 0.7055, lower_bound: true, escaped: true }
 
 - id: data-anonymization
   description: Build a memory-bounded CLI that anonymises related CSV files to a policy, keeping tokens consistent across files, history rows, subject merges and cross-tenant links.
   results:
     - { harness: Claude Code, version: 2.1.287, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:46", total_time: "38:37", cached_tokens: 9440896, total_tokens: 9762827, price: 0.2466 }
+    - { harness: Claude Code, version: 2.1.304, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:43", total_time: "39:08", cached_tokens: 8523392, total_tokens: 8693955, price: 0.0197 }
     - { harness: Copilot, version: 1.0.91, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "38:10", total_time: "42:20", cached_tokens: 2082176, total_tokens: 2873968, price: 0.5851 }
     - { harness: OMP, version: 18.8.4, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "17:41", total_time: "22:36", cached_tokens: 2011136, total_tokens: 2174934, price: 0.1116 }
     - { harness: OMP, version: 18.12.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "13:41", total_time: "19:57", cached_tokens: 2300928, total_tokens: 2446807, price: 0.0151 }
@@ -103,6 +110,7 @@
     - { harness: Pi, version: 1.1.0, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:26", total_time: "19:53", cached_tokens: 2719616, total_tokens: 2838247, price: 0.1138 }
     - { harness: Pi, version: 1.3.0, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "33:40", total_time: "40:13", cached_tokens: 6291456, total_tokens: 6779567, price: 0.0408 }
     - { harness: Codex, version: 0.162.1, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:41", total_time: "28:10", cached_tokens: 3932032, total_tokens: 4379464, price: 0.1174, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 75.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "13:36", total_time: "20:10", cached_tokens: 3371008, total_tokens: 3464793, price: 0.0109, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 75.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "22:07", total_time: "28:28", cached_tokens: 3274240, total_tokens: 3574073, price: 0.1809 }
     - { harness: Prime Agent, version: 0.10.0, score: 75.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "16:20", total_time: "21:38", cached_tokens: 5848576, total_tokens: 6198998, price: 0.1078 }
 
@@ -138,7 +146,14 @@
     - { harness: Pi, version: 1.0.2, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:25", total_time: "10:52", cached_tokens: 8813824, total_tokens: 8955377, price: 0.2772 }
     - { harness: Pi, version: 1.1.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "3:59", total_time: "7:11", cached_tokens: 2042112, total_tokens: 2119739, price: 0.084, escaped: true }
     - { harness: Codex, version: 0.162.1, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:03", total_time: "12:10", cached_tokens: 3357056, total_tokens: 3789065, price: 0.1207, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "4:00", total_time: "6:46", cached_tokens: 1384960, total_tokens: 1613448, price: 0.0132, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 30.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "37:50", total_time: "41:31", cached_tokens: 11722368, total_tokens: 12306504, price: 0.3825, lower_bound: true }
+
+- id: kv-live-surgery
+  description: Make a slow key-value server under live load at least 5x faster, swapping it in without dropping requests, liveness connections or data.
+  results:
+    - { harness: OMP, version: 18.12.6, score: 80.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "23:06", total_time: "24:48", cached_tokens: 23234432, total_tokens: 23568184, price: 0.4584 }
+    - { harness: Pi, version: 1.4.0, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "21:44", total_time: "23:30", cached_tokens: 13899776, total_tokens: 14533633, price: 0.423, escaped: true }
 
 - id: mp-checkpoint-consolidation
   description: Consolidate 16 tensor-, pipeline- and expert-parallel MoE checkpoint shards into one safetensors file whose logits match the reference.
@@ -181,6 +196,7 @@
   results:
     - { harness: Claude Code, version: 2.1.270, score: 20.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "67:25", total_time: "71:16", cached_tokens: 11916800, total_tokens: 14955452, price: 0.5605 }
     - { harness: Claude Code, version: 2.1.287, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "12:57", total_time: "17:22", cached_tokens: 2257152, total_tokens: 3233413, price: 0.1391 }
+    - { harness: Claude Code, version: 2.1.304, score: 20.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "15:39", total_time: "17:27", cached_tokens: 9701632, total_tokens: 9905608, price: 0.0216 }
     - { harness: Copilot, version: 1.0.83, score: 40.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:14", total_time: "14:19", cached_tokens: 2585984, total_tokens: 2884101, price: 0.0822 }
     - { harness: Copilot, version: 1.0.91, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "36:40", total_time: "38:24", cached_tokens: 4919680, total_tokens: 5478104, price: 0.2662 }
     - { harness: OMP, version: 18.1.15, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "78:46", total_time: "80:55", cached_tokens: 3513472, total_tokens: 3748316, price: 0.0654 }
@@ -197,12 +213,14 @@
     - { harness: Pi, version: 1.0.2, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:21", total_time: "13:38", cached_tokens: 5864448, total_tokens: 5985798, price: 0.1888 }
     - { harness: Pi, version: 1.3.0, score: 20.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:55", total_time: "11:41", cached_tokens: 4192384, total_tokens: 4279794, price: 0.0159 }
     - { harness: Codex, version: 0.153.4, score: 80.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:35", total_time: "12:10", cached_tokens: 4385152, total_tokens: 4948323, price: 0.2612, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:55", total_time: "13:26", cached_tokens: 6464256, total_tokens: 6632069, price: 0.0136, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "18:42", total_time: "21:02", cached_tokens: 8683392, total_tokens: 9093196, price: 0.2577 }
 
 - id: ontology-kg-querying
   description: Merge member-state RDF submissions with a railway OWL ontology into one graph, and write SPARQL queries over its cross-border operational points.
   results:
     - { harness: Claude Code, version: 2.1.287, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:28", total_time: "8:01", cached_tokens: 3113216, total_tokens: 3619913, price: 0.2488 }
+    - { harness: Claude Code, version: 2.1.304, score: 17.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:03", total_time: "9:55", cached_tokens: 5097728, total_tokens: 5418633, price: 0.0199 }
     - { harness: Copilot, version: 1.0.91, score: 17.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "36:41", total_time: "37:54", cached_tokens: 4722432, total_tokens: 6257073, price: 0.8282 }
     - { harness: OMP, version: 18.8.4, score: 20.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "8:48", total_time: "9:33", cached_tokens: 6635136, total_tokens: 7323103, price: 0.3304 }
     - { harness: OMP, version: 18.12.1, score: 60.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "14:01", total_time: "14:48", cached_tokens: 8964864, total_tokens: 9454630, price: 0.0453 }
@@ -211,6 +229,7 @@
     - { harness: Pi, version: 1.1.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "5:14", total_time: "6:00", cached_tokens: 5747968, total_tokens: 5932225, price: 0.1574 }
     - { harness: Pi, version: 1.3.0, score: 57.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "11:40", total_time: "12:56", cached_tokens: 13074688, total_tokens: 13331818, price: 0.0431 }
     - { harness: Codex, version: 0.162.1, score: 60.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "7:28", total_time: "8:42", cached_tokens: 7025664, total_tokens: 7662206, price: 0.1559, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "7:16", total_time: "8:47", cached_tokens: 5495680, total_tokens: 5796678, price: 0.0193, lower_bound: true }
     - { harness: Hermes, version: 0.21.7, score: 57.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "10:24", total_time: "12:47", cached_tokens: 10011392, total_tokens: 10737594, price: 0.1997 }
     - { harness: Prime Agent, version: 0.10.0, score: 57.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "10:48", total_time: "11:54", cached_tokens: 11665152, total_tokens: 12175291, price: 0.1749 }
 
@@ -245,6 +264,7 @@
   description: "Plan five days of production across ERP, MES and WMS databases through a gateway tool: work orders, dispatch and material reservations."
   results:
     - { harness: Claude Code, version: 2.1.287, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "36:26", total_time: "38:05", cached_tokens: 4242944, total_tokens: 5293574, price: 0.2791 }
+    - { harness: Claude Code, version: 2.1.304, score: 85.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "22:00", total_time: "23:32", cached_tokens: 7565440, total_tokens: 7905307, price: 0.0331 }
     - { harness: Copilot, version: 1.0.91, score: 77.50, best_attempt: 3, attempts: 3, passes: 0, agent_time: "152:10", total_time: "152:55", cached_tokens: 10798720, total_tokens: 15445873, price: 2.2678 }
     - { harness: OMP, version: 18.4.10, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "32:00", total_time: "32:55", cached_tokens: 17531904, total_tokens: 18907774, price: 0.6818 }
     - { harness: OMP, version: 18.12.1, score: 85.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:49", total_time: "10:33", cached_tokens: 5493504, total_tokens: 5692766, price: 0.0298 }
@@ -254,6 +274,7 @@
     - { harness: Pi, version: 1.0.2, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "8:50", total_time: "9:42", cached_tokens: 3588352, total_tokens: 3819094, price: 0.261, escaped: true }
     - { harness: Pi, version: 1.1.0, score: 85.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "6:42", total_time: "7:31", cached_tokens: 2996992, total_tokens: 3193616, price: 0.1935 }
     - { harness: Codex, version: 0.162.1, score: 85.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "57:57", total_time: "59:08", cached_tokens: 10325376, total_tokens: 11530337, price: 0.3431, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 85.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "20:17", total_time: "21:50", cached_tokens: 12897152, total_tokens: 13408065, price: 0.0478, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 85.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "23:34", total_time: "26:20", cached_tokens: 7753088, total_tokens: 8398713, price: 0.4045 }
 
 - id: react-lead-form
@@ -296,6 +317,7 @@
   results:
     - { harness: Claude Code, version: 2.1.270, score: 40.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "11:34", total_time: "14:05", cached_tokens: 2022144, total_tokens: 2137180, price: 0.059 }
     - { harness: Claude Code, version: 2.1.287, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:02", total_time: "10:58", cached_tokens: 1599872, total_tokens: 2120799, price: 0.1397 }
+    - { harness: Claude Code, version: 2.1.304, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "6:27", total_time: "8:01", cached_tokens: 2238336, total_tokens: 2440058, price: 0.0149 }
     - { harness: Copilot, version: 1.0.83, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "42:41", total_time: "44:08", cached_tokens: 1363968, total_tokens: 1812235, price: 0.197 }
     - { harness: Copilot, version: 1.0.91, score: 40.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "46:27", total_time: "47:17", cached_tokens: 2109952, total_tokens: 2997675, price: 0.6801 }
     - { harness: OMP, version: 18.1.15, score: 70.00, best_attempt: 2, attempts: 3, passes: 0, agent_time: "7:34", total_time: "8:37", cached_tokens: 999936, total_tokens: 1086735, price: 0.0379 }
@@ -313,6 +335,7 @@
     - { harness: Pi, version: 1.1.0, score: 55.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "3:24", total_time: "4:12", cached_tokens: 848384, total_tokens: 909863, price: 0.0686 }
     - { harness: Pi, version: 1.3.0, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "3:46", total_time: "6:06", cached_tokens: 1126784, total_tokens: 1196578, price: 0.0106 }
     - { harness: Codex, version: 0.153.4, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "6:05", total_time: "7:33", cached_tokens: 704768, total_tokens: 918133, price: 0.1223, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "4:54", total_time: "7:15", cached_tokens: 1511936, total_tokens: 1683561, price: 0.0121, lower_bound: true }
     - { harness: Hermes, version: 0.21.5, score: 70.00, best_attempt: 3, attempts: 3, passes: 0, agent_time: "9:37", total_time: "11:38", cached_tokens: 2441984, total_tokens: 2798127, price: 0.2209 }
     - { harness: Prime Agent, version: 0.10.0, score: 70.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "13:33", total_time: "14:15", cached_tokens: 3506944, total_tokens: 3724129, price: 0.1699 }
 
@@ -330,6 +353,7 @@
     - { harness: Pi, version: 0.85.1, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "9:07", total_time: "10:15", cached_tokens: 12666240, total_tokens: 12851089, price: 0.0923 }
     - { harness: Pi, version: 1.0.2, score: 0.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "3:18", total_time: "4:27", cached_tokens: 6084864, total_tokens: 6217987, price: 0.1598 }
     - { harness: Codex, version: 0.162.1, score: 83.33, best_attempt: 2, attempts: 3, passes: 0, agent_time: "35:20", total_time: "37:33", cached_tokens: 48719232, total_tokens: 50891747, price: 0.6314, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 100.00, best_attempt: 2, attempts: 2, passes: 1, agent_time: "23:15", total_time: "25:23", cached_tokens: 31487488, total_tokens: 32569035, price: 0.0633, lower_bound: true, escaped: true }
 
 - id: vba-userform-port
   description: Port a legacy Excel/VBA app to React, FastAPI and SQLite, preserving its forms, validation, calculations and saves.
@@ -343,6 +367,14 @@
     - { harness: Pi, version: 1.0.2, score: 92.86, best_attempt: 1, attempts: 3, passes: 0, agent_time: "15:49", total_time: "17:45", cached_tokens: 10516224, total_tokens: 10694465, price: 0.3328 }
     - { harness: Pi, version: 1.3.0, score: 100.00, best_attempt: 1, attempts: 1, passes: 1, agent_time: "34:50", total_time: "36:25", cached_tokens: 15417344, total_tokens: 15915726, price: 0.0567, escaped: true }
     - { harness: Codex, version: 0.162.1, score: 92.86, best_attempt: 1, attempts: 3, passes: 0, agent_time: "26:45", total_time: "28:21", cached_tokens: 16829696, total_tokens: 18251271, price: 0.318, lower_bound: true }
+    - { harness: Codex, version: 0.163.0, score: 78.57, best_attempt: 1, attempts: 3, passes: 0, agent_time: "44:27", total_time: "46:19", cached_tokens: 18730880, total_tokens: 20203765, price: 0.0636, lower_bound: true }
+
+- id: vf2-speedup-networkx
+  description: Build a drop-in NetworkX subset whose VF2++ graph isomorphism matches NetworkX exactly and runs at least 5000x faster.
+  results:
+    - { harness: OMP, version: 18.12.6, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "61:15", total_time: "66:12", cached_tokens: 16342656, total_tokens: 16673154, price: 0.4588 }
+    - { harness: OpenCode v2, version: 2.1.3, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "32:24", total_time: "34:43", cached_tokens: 43581952, total_tokens: 44897072, price: 0.9084, lower_bound: true }
+    - { harness: Pi, version: 1.4.0, score: 90.00, best_attempt: 1, attempts: 3, passes: 0, agent_time: "53:00", total_time: "55:18", cached_tokens: 17282688, total_tokens: 17837761, price: 0.4436 }
 
 - id: vllm-deepseek-streaming
   description: Fix vLLM's DeepSeek streaming and JSON output without buffering the end token.

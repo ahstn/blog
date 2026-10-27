@@ -63,12 +63,14 @@ const formatDate = (iso: string) =>
 			<h2 id="overall-heading">All tasks aggregated by harness</h2>
 			<p class="section-description">
 				Each harness across the tasks it ran, using the same versions as the chart. Official pass
-				counts the tasks with at least one official pass over the tasks run:
+				counts the tasks with at least one official pass over the tasks run. Cache read is cached
+				tokens as a share of total tokens:
 			</p>
 			<BenchTable
 				rows={aggregateRows(tasks.map((t) => t.data))}
 				caption="Results by harness across all tasks"
 				versionLabel="Latest version"
+				cacheRead
 			/>
 		</section>
 
