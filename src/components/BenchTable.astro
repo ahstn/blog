@@ -4,6 +4,7 @@ import {
 	formatPass,
 	formatPrice,
 	formatScore,
+	formatShare,
 	formatTokens,
 	seriesColor,
 } from "../utils/harness-bench";
@@ -14,9 +15,11 @@ interface Props {
 	caption: string;
 	/** Header for the version column. */
 	versionLabel?: string;
+	/** Show the cache read share column (aggregate rows carry it). */
+	cacheRead?: boolean;
 }
 
-const { rows, caption, versionLabel = "Version" } = Astro.props;
+const { rows, caption, versionLabel = "Version", cacheRead = false } = Astro.props;
 
 // Rows with a view follow the chart's "all versions" toggle (BenchChart sets
 // data-all on every [data-version-scope]). The top score is bolded within
@@ -41,6 +44,7 @@ const topAll = topOf("default");
 				<th scope="col" class="num">Total time</th>
 				<th scope="col" class="num">Cached tokens</th>
 				<th scope="col" class="num">Total tokens</th>
+				{cacheRead && <th scope="col" class="num">Cache read</th>}
 				<th scope="col" class="num">Estimated price (USD)</th>
 			</tr>
 		</thead>
@@ -80,6 +84,7 @@ const topAll = topOf("default");
 						<td class="num">{r.totalTime}</td>
 						<td class="num">{formatTokens(r.cachedTokens, r.lowerBound)}</td>
 						<td class="num">{formatTokens(r.totalTokens, r.lowerBound)}</td>
+						{cacheRead && <td class="num">{formatShare(r.cacheRead ?? null)}</td>}
 						<td class="num">{formatPrice(r.price, r.lowerBound)}</td>
 					</tr>
 				))
