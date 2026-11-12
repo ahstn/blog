@@ -4,11 +4,12 @@
  * src/assets/ades/<id>.webp, at most 1200px wide (2x the largest display
  * size), quality 80.
  *
- * Usage: pnpm ades:preview <id> <image-url> [--frame=N]
+ * Usage: pnpm ades:preview <id> <image-url-or-path> [--frame=N]
+ *   A local path (e.g. a browser screenshot) works as well as a URL.
  *   --frame: for animated images, which frame to keep (default 0).
  */
 
-import { mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { parse } from "yaml";
@@ -17,7 +18,7 @@ const args = process.argv.slice(2);
 const [id, url] = args.filter((a) => !a.startsWith("--"));
 const frame = Number(args.find((a) => a.startsWith("--frame="))?.slice(8) ?? 0);
 if (!id || !url) {
-	console.error("usage: pnpm ades:preview <id> <image-url> [--frame=N]");
+	console.error("usage: pnpm ades:preview <id> <image-url-or-path> [--frame=N]");
 	process.exit(1);
 }
 
@@ -27,13 +28,17 @@ if (!data.some((ade) => ade.id === id)) {
 	process.exit(1);
 }
 
-const res = await fetch(url);
-if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+async function load(source) {
+	if (existsSync(source)) return readFileSync(source);
+	const res = await fetch(source);
+	if (!res.ok) throw new Error(`${source}: HTTP ${res.status}`);
+	return Buffer.from(await res.arrayBuffer());
+}
 
 const dir = fileURLToPath(new URL("../src/assets/ades/", import.meta.url));
 mkdirSync(dir, { recursive: true });
 const out = `${dir}${id}.webp`;
-const info = await sharp(Buffer.from(await res.arrayBuffer()), { page: frame })
+const info = await sharp(await load(url), { page: frame })
 	.resize({ width: 1200, withoutEnlargement: true })
 	.webp({ quality: 80 })
 	.toFile(out);

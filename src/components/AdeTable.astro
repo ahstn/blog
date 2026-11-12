@@ -198,7 +198,7 @@ const pageCount = Math.max(1, Math.ceil(matchCount / DEFAULT_PAGE_SIZE));
 							{ade.latest_release ? (
 								<a
 									class="release"
-									href={`https://github.com/${ade.repo}/releases/latest`}
+									href={`https://github.com/${ade.release_repo ?? ade.repo}/releases/latest`}
 									title={`v${ade.latest_release.version}, released ${ade.latest_release.date}`}
 								>
 									<span class="release-version">v{ade.latest_release.version}</span>

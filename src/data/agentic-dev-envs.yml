@@ -13,6 +13,7 @@
 #   count on references.agents, the page listing supported agents).
 # release_tag_prefix: only for monorepos whose GitHub "latest" release is a
 #   side package (CLI, mobile); limits latest_release to tags with this prefix.
+# release_repo: read latest_release from this repo instead of `repo`.
 # stars / stars_updated_at / latest_release / last_commit / archived: written
 #   by `pnpm ades:update`, don't edit by hand.
 
@@ -32,12 +33,12 @@
     agents: https://github.com/pingdotgg/t3code#installation
   features: [worktrees, remote-control, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-03
-  stars: 30506
-  stars_updated_at: 2026-10-27
+  stars: 57976
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.1.2
-    date: 2026-10-22
-  last_commit: 2026-10-27
+    version: 0.1.9
+    date: 2026-11-11
+  last_commit: 2026-11-12
 
 - id: emdash
   name: Emdash
@@ -58,12 +59,12 @@
     agents: https://emdash.com/docs/providers
   features: [worktrees, automations, browser, diff-review, terminal, cloud-sandboxes]
   first_seen: 2025-09
-  stars: 6091
-  stars_updated_at: 2026-10-27
+  stars: 6238
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.2.9
-    date: 2026-10-23
-  last_commit: 2026-10-26
+    version: 1.2.11
+    date: 2026-11-06
+  last_commit: 2026-11-10
 
 - id: pi-gui
   name: pi-gui
@@ -81,12 +82,12 @@
     agents: https://github.com/minghinmatthewlam/pi-gui#readme
   features: [worktrees, automations, plugins, diff-review, terminal]
   first_seen: 2026-04
-  stars: 1317
-  stars_updated_at: 2026-10-27
+  stars: 1440
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 1.0.1
     date: 2026-09-26
-  last_commit: 2026-10-27
+  last_commit: 2026-11-02
 
 - id: helmor
   name: Helmor
@@ -106,8 +107,8 @@
     agents: https://github.com/dohooo/helmor#features
   features: [worktrees, remote-control, diff-review, terminal]
   first_seen: 2026-04
-  stars: 1309
-  stars_updated_at: 2026-10-11
+  stars: 1306
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.46.0
     date: 2026-07-24
@@ -132,16 +133,15 @@
     agents: https://www.onorca.dev/docs/agents/supported
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-03
-  stars: 107076
-  stars_updated_at: 2026-10-27
+  stars: 123198
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.4.242
-    date: 2026-10-27
-  last_commit: 2026-10-27
+    version: 1.4.257
+    date: 2026-11-12
+  last_commit: 2026-11-12
 
 - id: superconductor
   name: Superconductor
-  note: Now branded super.engineering.
   category: ui
   website: https://super.engineering/
   links:
@@ -177,12 +177,12 @@
     agents: https://www.trysynara.com/docs/providers
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal]
   first_seen: 2026-04
-  stars: 2137
-  stars_updated_at: 2026-10-27
+  stars: 2198
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.0.9
-    date: 2026-10-25
-  last_commit: 2026-10-26
+    version: 1.5.2
+    date: 2026-11-11
+  last_commit: 2026-11-12
 
 - id: paseo
   name: Paseo
@@ -202,12 +202,12 @@
     agents: https://paseo.sh/agents
   features: [worktrees, remote-control, mobile-app, automations, plugins, diff-review, terminal]
   first_seen: 2026-02
-  stars: 22145
-  stars_updated_at: 2026-10-27
+  stars: 23892
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.13.2
-    date: 2026-10-26
-  last_commit: 2026-10-26
+    version: 0.15.4
+    date: 2026-11-10
+  last_commit: 2026-11-12
 
 - id: zeron
   name: Zeron
@@ -226,12 +226,12 @@
     agents: https://github.com/zeronsh/zeron/blob/main/crates/proto/src/agent.rs
   features: [remote-control, browser, diff-review, terminal]
   first_seen: 2026-07
-  stars: 3385
-  stars_updated_at: 2026-10-27
+  stars: 3493
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.2.126
-    date: 2026-10-26
-  last_commit: 2026-10-27
+    version: 0.2.138
+    date: 2026-11-07
+  last_commit: 2026-11-12
 
 - id: bb
   name: bb
@@ -251,12 +251,12 @@
     agents: https://getbb.app/
   features: [worktrees, plugins, automations, remote-control, browser, diff-review, cloud-sandboxes]
   first_seen: 2026-05
-  stars: 4624
-  stars_updated_at: 2026-10-27
+  stars: 5413
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.47.1
-    date: 2026-10-24
-  last_commit: 2026-10-26
+    version: 0.49.0
+    date: 2026-11-06
+  last_commit: 2026-11-12
 
 - id: gooey-pi
   name: GooeyPi
@@ -274,8 +274,8 @@
     agents: https://github.com/am-will/gooey-pi#three-harnesses-one-workspace
   features: [worktrees, automations, browser, diff-review, terminal]
   first_seen: 2026-08
-  stars: 955
-  stars_updated_at: 2026-10-27
+  stars: 972
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 1.1.21
     date: 2026-10-25
@@ -299,12 +299,12 @@
     agents: https://github.com/cristicretu/diri/tree/main/diri/crates/diri-engine/manifests
   features: [worktrees, remote-control, diff-review, terminal, mobile-app]
   first_seen: 2026-08
-  stars: 467
-  stars_updated_at: 2026-10-27
+  stars: 490
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.10.1
-    date: 2026-10-21
-  last_commit: 2026-10-26
+    version: 0.11.5
+    date: 2026-11-09
+  last_commit: 2026-11-12
 
 - id: waku
   name: Waku
@@ -322,8 +322,8 @@
     agents: https://github.com/egoist/waku/blob/main/docs/providers.md
   features: [diff-review, terminal, browser]
   first_seen: 2026-08
-  stars: 1587
-  stars_updated_at: 2026-10-27
+  stars: 1614
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.1.20
     date: 2026-10-02
@@ -348,12 +348,12 @@
     agents: https://docs.orchestrator.inc/plugins/agents
   features: [worktrees, kanban, remote-control, mobile-app, browser, diff-review, terminal, plugins]
   first_seen: 2026-02
-  stars: 13723
-  stars_updated_at: 2026-10-27
+  stars: 14497
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.14.6
-    date: 2026-10-24
-  last_commit: 2026-10-27
+    version: 0.14.10
+    date: 2026-11-06
+  last_commit: 2026-11-12
 
 - id: openchamber
   name: OpenChamber
@@ -373,12 +373,12 @@
     agents: https://docs.openchamber.dev/opencode-server
   features: [worktrees, remote-control, automations, browser, diff-review, terminal, mobile-app]
   first_seen: 2025-12
-  stars: 12212
-  stars_updated_at: 2026-10-27
+  stars: 12842
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 2.5.2
-    date: 2026-10-26
-  last_commit: 2026-10-26
+    version: 2.7.0
+    date: 2026-11-08
+  last_commit: 2026-11-12
 
 - id: opensession
   name: Open Session
@@ -396,12 +396,12 @@
     agents: https://github.com/tellahq/opensession/blob/main/docs/setup/README.md#minimum-requirements
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, mobile-app, cloud-sandboxes]
   first_seen: 2026-07
-  stars: 403
-  stars_updated_at: 2026-10-27
+  stars: 418
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.4.78
-    date: 2026-10-23
-  last_commit: 2026-10-26
+    version: 0.4.82
+    date: 2026-11-09
+  last_commit: 2026-11-12
 
 - id: monocode
   name: MonoCode
@@ -419,12 +419,12 @@
     agents: https://github.com/hardbeat920/monocode#install
   features: [worktrees, remote-control]
   first_seen: 2026-08
-  stars: 3443
-  stars_updated_at: 2026-10-27
+  stars: 3897
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.16.0
     date: 2026-10-19
-  last_commit: 2026-10-26
+  last_commit: 2026-11-12
 
 - id: fractal
   name: Fractal
@@ -456,12 +456,12 @@
     agents: https://docs.zuse.sh/providers
   features: [worktrees, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-05
-  stars: 238
-  stars_updated_at: 2026-10-27
+  stars: 247
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.24.0
     date: 2026-10-17
-  last_commit: 2026-10-26
+  last_commit: 2026-11-12
 
 - id: dray
   name: Dray
@@ -480,12 +480,12 @@
   features: [worktrees, browser, diff-review, terminal]
   first_seen: 2026-08
   release_tag_prefix: "v"
-  stars: 118
-  stars_updated_at: 2026-10-27
+  stars: 130
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.29.10
-    date: 2026-10-26
-  last_commit: 2026-10-26
+    version: 0.30.0
+    date: 2026-11-12
+  last_commit: 2026-11-12
 
 - id: vibe-kanban
   name: Vibe Kanban
@@ -506,13 +506,12 @@
     agents: https://www.vibekanban.com/docs/supported-coding-agents
   features: [worktrees, kanban, remote-control, browser, diff-review, terminal]
   first_seen: 2025-06
-  note: Community-maintained since 2026-04.
-  stars: 28473
-  stars_updated_at: 2026-10-27
+  stars: 28668
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.1.44-20260424091429
     date: 2026-04-24
-  last_commit: 2026-10-26
+  last_commit: 2026-11-12
 
 - id: happy
   name: Happy
@@ -532,12 +531,12 @@
     agents: https://github.com/slopus/happy/blob/main/packages/happy-cli/README.md
   features: [worktrees, remote-control, plugins, diff-review, terminal, mobile-app]
   first_seen: 2025-07
-  stars: 24334
-  stars_updated_at: 2026-10-27
+  stars: 24607
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 1.2.5
     date: 2026-09-22
-  last_commit: 2026-10-27
+  last_commit: 2026-11-12
 
 - id: opcode
   name: opcode
@@ -558,12 +557,12 @@
   features: [diff-review]
   first_seen: 2025-06
   note: Formerly Claudia.
-  stars: 22422
-  stars_updated_at: 2026-10-27
+  stars: 22437
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.2.0
     date: 2025-08-31
-  last_commit: 2026-09-18
+  last_commit: 2026-11-06
 
 - id: paradev
   name: Paradev
@@ -585,12 +584,12 @@
     agents: https://github.com/ParadevAI/Paradev#supported-agents
   features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app]
   first_seen: 2025-10
-  stars: 15591
-  stars_updated_at: 2026-10-27
+  stars: 16246
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 2.0.0
-    date: 2026-10-26
-  last_commit: 2026-10-27
+    version: 2.0.8
+    date: 2026-11-10
+  last_commit: 2026-11-12
 
 - id: stagewise
   name: stagewise
@@ -611,12 +610,12 @@
   features: [worktrees, plugins, browser, diff-review]
   first_seen: 2025-11
   note: Formerly a browser toolbar.
-  stars: 6831
-  stars_updated_at: 2026-10-27
+  stars: 6836
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.30.0
-    date: 2026-09-30
-  last_commit: 2026-10-25
+    version: 1.31.1
+    date: 2026-11-04
+  last_commit: 2026-11-10
 
 - id: hapi
   name: HAPI
@@ -636,13 +635,12 @@
     agents: https://hapi.run/docs/guide/agents
   features: [worktrees, remote-control, diff-review, terminal, mobile-app]
   first_seen: 2025-12
-  note: Local-first alternative to Happy.
-  stars: 5309
-  stars_updated_at: 2026-10-27
+  stars: 5403
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.31.2
-    date: 2026-10-27
-  last_commit: 2026-10-27
+    version: 0.35.0
+    date: 2026-11-12
+  last_commit: 2026-11-12
 
 - id: codenomad
   name: CodeNomad
@@ -660,12 +658,12 @@
     agents: https://github.com/NeuralNomadsAI/CodeNomad#readme
   features: [worktrees, remote-control, browser, diff-review]
   first_seen: 2025-11
-  stars: 2650
-  stars_updated_at: 2026-10-27
+  stars: 2669
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.0.0
-    date: 2026-10-24
-  last_commit: 2026-10-27
+    version: 1.0.1
+    date: 2026-10-29
+  last_commit: 2026-11-12
 
 - id: supacode
   name: Supacode
@@ -686,12 +684,12 @@
     agents: https://github.com/supabitapp/supacode/blob/main/SupacodeSettingsShared/Models/SkillAgent.swift
   features: [worktrees, terminal]
   first_seen: 2026-01
-  stars: 2397
-  stars_updated_at: 2026-10-27
+  stars: 2400
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.11.6
-    date: 2026-10-25
-  last_commit: 2026-10-26
+    version: 0.11.8
+    date: 2026-11-12
+  last_commit: 2026-11-12
 
 - id: xum
   name: Xum
@@ -711,13 +709,13 @@
     agents: https://xum.coder.com/config/providers
   features: [worktrees, remote-control, diff-review, cloud-sandboxes]
   first_seen: 2025-09
-  note: Formerly Mux. Runs its own agent.
-  stars: 2060
-  stars_updated_at: 2026-10-27
+  note: Formerly Mux.
+  stars: 2075
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.32.0
-    date: 2026-10-24
-  last_commit: 2026-10-27
+    version: 0.32.2
+    date: 2026-11-10
+  last_commit: 2026-11-12
 
 - id: nimbalyst
   name: Nimbalyst
@@ -738,12 +736,12 @@
     agents: https://docs.nimbalyst.com/setup-nimbalyst/ai-provider-setup-and-notifications
   features: [worktrees, kanban, remote-control, automations, plugins, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2025-10
-  stars: 1978
-  stars_updated_at: 2026-10-27
+  stars: 2067
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.81.7
-    date: 2026-10-16
-  last_commit: 2026-10-26
+    version: 0.83.0
+    date: 2026-11-10
+  last_commit: 2026-11-11
 
 - id: fusion
   name: Fusion
@@ -764,12 +762,12 @@
     agents: https://github.com/Runfusion/Fusion/tree/main/plugins
   features: [worktrees, kanban, remote-control, automations, plugins, diff-review, terminal, mobile-app]
   first_seen: 2026-04
-  stars: 1296
-  stars_updated_at: 2026-10-27
+  stars: 1327
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.77.0
     date: 2026-09-02
-  last_commit: 2026-10-26
+  last_commit: 2026-11-08
 
 - id: jean
   name: Jean
@@ -789,12 +787,12 @@
     agents: https://github.com/coollabsio/jean#features
   features: [worktrees, remote-control, automations, browser, diff-review, terminal]
   first_seen: 2026-01
-  stars: 1365
-  stars_updated_at: 2026-10-27
+  stars: 1412
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.0.12
-    date: 2026-10-17
-  last_commit: 2026-10-26
+    version: 1.0.15
+    date: 2026-11-12
+  last_commit: 2026-11-12
 
 - id: ghostex
   name: Ghostex
@@ -815,12 +813,12 @@
     agents: https://github.com/maddada/Ghostex#supported-agents
   features: [worktrees, kanban, remote-control, automations, plugins, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-04
-  stars: 1443
-  stars_updated_at: 2026-10-27
+  stars: 1654
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 10.36.0
-    date: 2026-10-26
-  last_commit: 2026-10-26
+    version: 11.5.0
+    date: 2026-11-12
+  last_commit: 2026-11-12
 
 - id: kandev
   name: Kandev
@@ -840,12 +838,12 @@
     agents: https://github.com/kdlbs/kandev#supported-agent-clis
   features: [worktrees, kanban, remote-control, automations, plugins, browser, diff-review, terminal, cloud-sandboxes]
   first_seen: 2026-01
-  stars: 1023
-  stars_updated_at: 2026-10-27
+  stars: 1123
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.98.0
-    date: 2026-10-23
-  last_commit: 2026-10-27
+    version: 0.101.0
+    date: 2026-11-11
+  last_commit: 2026-11-12
 
 - id: herdr
   name: herdr
@@ -866,12 +864,12 @@
     agents: https://herdr.dev/docs/agents/
   features: [plugins, terminal]
   first_seen: 2026-03
-  stars: 46025
-  stars_updated_at: 2026-10-27
+  stars: 50543
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.9.5
     date: 2026-10-14
-  last_commit: 2026-10-26
+  last_commit: 2026-11-07
 
 - id: luvus
   name: Luvus
@@ -892,12 +890,12 @@
     agents: https://luvus.dev/docs/reference/agents/
   features: [worktrees, remote-control, automations, plugins, diff-review, terminal]
   first_seen: 2026-06
-  stars: 985
-  stars_updated_at: 2026-10-27
+  stars: 1015
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.14.3
     date: 2026-09-30
-  last_commit: 2026-10-21
+  last_commit: 2026-11-10
 
 - id: tty7
   name: tty7
@@ -916,12 +914,12 @@
   features: [diff-review, terminal]
   first_seen: 2026-07
   release_tag_prefix: "v"
-  stars: 1332
-  stars_updated_at: 2026-10-27
+  stars: 1486
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 26.10.0
     date: 2026-10-12
-  last_commit: 2026-10-26
+  last_commit: 2026-11-12
 
 - id: warp
   name: Warp
@@ -942,13 +940,12 @@
     agents: https://docs.warp.dev/agents/cli-agents/overview/
   features: [worktrees, remote-control, automations, diff-review, terminal, cloud-sandboxes]
   first_seen: 2025-06
-  note: Also ships its own Warp Agent.
-  stars: 65719
-  stars_updated_at: 2026-10-27
+  stars: 65994
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.2026.06.03.09.49.stable_00
     date: 2026-06-03
-  last_commit: 2026-10-27
+  last_commit: 2026-11-12
 
 - id: cmux
   name: cmux
@@ -969,12 +966,12 @@
     agents: https://cmux.com/
   features: [remote-control, browser, terminal, mobile-app, cloud-sandboxes]
   first_seen: 2026-01
-  stars: 28530
-  stars_updated_at: 2026-10-27
+  stars: 28779
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 0.65.2
-    date: 2026-10-16
-  last_commit: 2026-10-27
+    version: 0.65.2.2
+    date: 2026-10-27
+  last_commit: 2026-11-12
 
 - id: agent-of-empires
   name: Agent of Empires
@@ -995,12 +992,12 @@
     agents: https://github.com/agent-of-empires/agent-of-empires/blob/main/src/agents.rs
   features: [worktrees, remote-control, plugins, diff-review, terminal]
   first_seen: 2026-01
-  stars: 3386
-  stars_updated_at: 2026-10-27
+  stars: 4214
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 1.21.0
-    date: 2026-10-21
-  last_commit: 2026-10-27
+    version: 1.23.0
+    date: 2026-11-11
+  last_commit: 2026-11-12
 
 - id: muxy
   name: Muxy
@@ -1018,12 +1015,12 @@
     agents: https://github.com/muxy-app/muxy/tree/main/Muxy/Services/Providers
   features: [worktrees, remote-control, plugins, browser, diff-review, terminal, mobile-app]
   first_seen: 2026-04
-  stars: 2318
-  stars_updated_at: 2026-10-27
+  stars: 2381
+  stars_updated_at: 2026-11-12
   latest_release:
-    version: 2.2.0
-    date: 2026-10-17
-  last_commit: 2026-10-23
+    version: 2.4.0
+    date: 2026-11-07
+  last_commit: 2026-11-11
 
 - id: dmux
   name: dmux
@@ -1041,8 +1038,8 @@
     agents: https://github.com/standardagents/dmux/blob/main/src/utils/agentLaunch.ts
   features: [worktrees, diff-review, terminal]
   first_seen: 2025-08
-  stars: 1810
-  stars_updated_at: 2026-10-27
+  stars: 1819
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 5.11.1
     date: 2026-08-16
@@ -1066,8 +1063,8 @@
     agents: https://github.com/marcus/sidecar/tree/main/internal/agentcatalog/families
   features: [worktrees, kanban, diff-review, terminal]
   first_seen: 2025-12
-  stars: 1091
-  stars_updated_at: 2026-10-27
+  stars: 1092
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 1.17.1
     date: 2026-10-08
@@ -1089,8 +1086,8 @@
     agents: https://github.com/iAmCorey/kooky#features
   features: [worktrees, terminal]
   first_seen: 2026-05
-  stars: 654
-  stars_updated_at: 2026-10-27
+  stars: 655
+  stars_updated_at: 2026-11-12
   latest_release:
     version: 0.51.12
     date: 2026-10-12
@@ -1114,6 +1111,607 @@
     agents: https://github.com/unpeel-com/unpeel/tree/main/runtimes
   features: [worktrees, remote-control, plugins, browser, terminal, mobile-app]
   first_seen: 2026-09
-  stars: 138
-  stars_updated_at: 2026-10-27
-  last_commit: 2026-10-22
+  stars: 141
+  stars_updated_at: 2026-11-12
+  last_commit: 2026-11-11
+
+- id: conductor
+  name: Conductor
+  category: ui
+  website: https://www.conductor.build/
+  links:
+    x: https://x.com/conductor_build
+    docs: https://www.conductor.build/docs
+  platforms: [macos, ios]
+  price: free
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Cursor CLI]
+  agents_more: 0
+  references:
+    agents: https://www.conductor.build/docs
+  features: [worktrees, remote-control, diff-review, terminal, mobile-app]
+  first_seen: 2025-07
+
+- id: conductive
+  name: Conductive
+  category: ui
+  website: https://conductive.build/
+  links:
+    docs: https://conductive.build/docs
+  platforms: [macos, web]
+  price: waitlist
+  open_source: false
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex]
+  agents_more: 0
+  references:
+    agents: https://github.com/Firna-AI/conductive#what-a-user-needs
+  features: [automations, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2026-11
+
+- id: tembo
+  name: Tembo
+  category: ui
+  website: https://www.tembo.io/
+  links:
+    x: https://x.com/tembo
+    docs: https://docs.tembo.io/
+  platforms: [macos, windows, linux, web]
+  price: paid
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Amp, Grok Build, Antigravity]
+  agents_more: 1
+  references:
+    agents: https://docs.tembo.io/features/agents#agent-harness
+  features: [automations, diff-review, cloud-sandboxes]
+  first_seen: 2025-05
+
+- id: multica
+  name: Multica
+  category: ui
+  website: https://multica.ai/
+  repo: multica-ai/multica
+  links:
+    x: https://x.com/MulticaAI
+    docs: https://multica.ai/docs
+  platforms: [macos, windows, linux, web]
+  price: free
+  open_source: true
+  license: Multica License
+  tech: [Go, TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, OMP, Copilot CLI, Cursor CLI, Hermes Agent]
+  agents_more: 21
+  references:
+    agents: https://github.com/multica-ai/multica#runtimes
+  features: [worktrees, kanban, remote-control, automations, cloud-sandboxes]
+  first_seen: 2026-01
+  stars: 55873
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 0.8.2
+    date: 2026-11-10
+  last_commit: 2026-11-12
+
+- id: continuum
+  name: Continuum
+  category: ui
+  website: https://continuumcode.ai/
+  links:
+    x: https://x.com/ContinuumCode
+    docs: https://continuumcode.ai/docs
+  platforms: [macos, windows, linux, web, ios]
+  price: freemium
+  open_source: false
+  tech: [Swift, Go, Electron]
+  agents: [Claude Code, Codex, OpenCode, Cursor CLI, Grok Build, Antigravity]
+  agents_more: 0
+  references:
+    agents: https://continuumcode.ai/product/providers/
+  features: [worktrees, remote-control, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-06
+
+- id: agentastic
+  name: Agentastic
+  category: ui
+  website: https://www.agentastic.dev/
+  links:
+    x: https://x.com/agentastic
+    docs: https://www.agentastic.dev/docs
+  platforms: [macos, ios]
+  price: free
+  open_source: false
+  tech: [Swift]
+  agents: [Claude Code, Codex, OpenCode, Pi, OMP, Copilot CLI, Cursor CLI, Gemini CLI]
+  agents_more: 47
+  references:
+    agents: https://www.agentastic.dev/agents
+  features: [worktrees, remote-control, automations, plugins, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-01
+
+- id: traycer
+  name: Traycer
+  category: ui
+  website: https://traycer.ai/
+  repo: traycerai/traycer
+  release_tag_prefix: desktop-v
+  links:
+    x: https://x.com/TraycerAI
+    docs: https://docs.traycer.ai/
+  platforms: [macos, windows, linux, ios, android]
+  price: freemium
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, OMP, Copilot CLI, Cursor CLI, Amp]
+  agents_more: 11
+  references:
+    agents: https://docs.traycer.ai/agents-and-models/coding-agents
+  features: [worktrees, remote-control, browser, diff-review, terminal, mobile-app]
+  first_seen: 2026-06
+  stars: 1675
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 1.5.3
+    date: 2026-11-03
+  last_commit: 2026-11-12
+
+- id: kcap
+  name: Kcap
+  note: Formerly Capacitor.
+  category: ui
+  website: https://www.kurrent.io/
+  links:
+    x: https://x.com/kurrent_io
+    docs: https://www.kurrent.io/docs/kcap/get-started/what-kcap-is/
+  platforms: [macos, windows, web]
+  price: waitlist
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Pi, Copilot CLI, Cursor CLI, Gemini CLI, Antigravity]
+  agents_more: 3
+  references:
+    agents: https://www.kurrent.io/docs/capacitor/using/hosted-agents/
+  features: [worktrees, remote-control, terminal]
+  first_seen: 2026-06
+
+- id: openhands
+  name: OpenHands
+  note: Formerly OpenDevin.
+  category: ui
+  website: https://openhands.dev/
+  repo: OpenHands/OpenHands
+  links:
+    x: https://x.com/OpenHandsDev
+    docs: https://docs.openhands.dev/
+  platforms: [macos, windows, linux, web]
+  price: freemium
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron]
+  agents: [OpenHands, Claude Code, Codex, OpenCode, Pi, Gemini CLI]
+  references:
+    agents: https://docs.openhands.dev/openhands/usage/agent-canvas/acp-agents
+  features: [remote-control, automations, plugins, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2024-03
+  stars: 93328
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 1.40.0
+    date: 2026-11-12
+  last_commit: 2026-11-12
+
+- id: replicas
+  name: Replicas
+  category: ui
+  website: https://replicas.dev/
+  links:
+    x: https://x.com/tryreplicas
+    docs: https://docs.replicas.dev/
+  platforms: [macos, windows, linux, web, ios]
+  price: paid
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Muse Code]
+  references:
+    agents: https://replicas.dev/
+  features: [automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2025-10
+
+- id: paperclip
+  name: Paperclip
+  category: ui
+  website: https://paperclip.ing/
+  repo: paperclipai/paperclip
+  links:
+    x: https://x.com/papercliping
+    docs: https://docs.paperclip.ing/
+  platforms: [web]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Gemini CLI, Hermes Agent, Grok Build]
+  agents_more: 2
+  references:
+    agents: https://docs.paperclip.ing/reference/adapters/overview/
+  features: [worktrees, kanban, remote-control, automations, plugins, diff-review, cloud-sandboxes]
+  first_seen: 2026-03
+  stars: 113332
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 2026.1106.0
+    date: 2026-11-06
+  last_commit: 2026-11-12
+
+- id: niteshift
+  name: Niteshift
+  category: ui
+  website: https://niteshift.dev/
+  links:
+    x: https://x.com/niteshiftdev
+    docs: https://docs.niteshift.dev/
+  platforms: [macos, web]
+  price: freemium
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Muse Code]
+  references:
+    agents: https://niteshift.dev/
+  features: [automations, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2026-06
+
+- id: cloudroom
+  name: Cloudroom
+  category: ui
+  website: https://www.cloudroom.dev/
+  repo: davidondrej/cloudroom
+  release_tag_prefix: gui-v
+  links:
+    docs: https://www.cloudroom.dev/docs
+  platforms: [macos, windows, linux]
+  price: freemium
+  open_source: true
+  license: Apache-2.0
+  tech: [TypeScript, Rust, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Droid, Grok Build, Hermes Agent]
+  agents_more: 3
+  references:
+    agents: https://www.cloudroom.dev/
+  features: [worktrees, automations, plugins, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2026-09
+  stars: 1625
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: "151"
+    date: 2026-11-12
+  last_commit: 2026-11-12
+
+- id: podium
+  name: Podium
+  category: ui
+  website: https://podium.do/
+  repo: madeinorbit/podium
+  links:
+    x: https://x.com/podium_ade
+    docs: https://podium.do/docs
+  platforms: [macos, windows, linux, web]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [TypeScript, Tauri]
+  agents: [Claude Code, Codex, OpenCode, Pi, Cursor CLI, Grok Build]
+  agents_more: 0
+  references:
+    agents: https://podium.do/docs
+  features: [worktrees, kanban, remote-control, diff-review, terminal]
+  first_seen: 2026-08
+  stars: 50
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 0.3.1
+    date: 2026-11-06
+  last_commit: 2026-11-12
+
+- id: aq
+  name: AQ
+  category: ui
+  website: https://aq.dev/
+  links:
+    x: https://x.com/aqdotdev
+    docs: https://aq.dev/docs/
+  platforms: [macos, web, ios]
+  price: freemium
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Cursor CLI, Kimi CLI, Grok Build, Antigravity, Devin]
+  agents_more: 2
+  references:
+    agents: https://aq.dev/agents/
+  features: [worktrees, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-07
+
+- id: devin
+  name: Devin
+  category: ui
+  website: https://devin.ai/
+  links:
+    x: https://x.com/cognition
+    docs: https://docs.devin.ai/
+  platforms: [macos, windows, linux, web]
+  price: freemium
+  open_source: false
+  agents: [Devin, Claude Code, Codex, OpenCode, Gemini CLI, Junie]
+  references:
+    agents: https://docs.devin.ai/desktop/acp
+  features: [worktrees, kanban, automations, plugins, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2024-03
+
+- id: ellipsis
+  name: Ellipsis
+  note: Formerly an AI code-review bot.
+  category: ui
+  website: https://www.ellipsis.dev/
+  links:
+    x: https://x.com/ellipsis_dev
+    docs: https://www.ellipsis.dev/docs
+  platforms: [web]
+  price: paid
+  open_source: false
+  agents: [Claude Code, Codex, Gemini CLI]
+  agents_more: 0
+  references:
+    agents: https://www.ellipsis.dev/docs/harnesses
+  features: [automations, cloud-sandboxes]
+  first_seen: 2026-07
+
+- id: maestro
+  name: Maestro
+  category: ui
+  website: https://runmaestro.ai/
+  repo: RunMaestro/Maestro
+  links:
+    x: https://x.com/RunMaestroAI
+    docs: https://docs.runmaestro.ai/
+  platforms: [macos, windows, linux]
+  price: free
+  open_source: true
+  license: AGPL-3.0
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, OMP, Copilot CLI, Droid, Hermes Agent]
+  agents_more: 3
+  references:
+    agents: https://github.com/RunMaestro/Maestro/blob/main/src/shared/agentMetadata.ts
+  features: [worktrees, remote-control, automations, plugins, browser, diff-review, terminal]
+  first_seen: 2025-11
+  stars: 3572
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 1.0.3
+    date: 2026-11-12
+  last_commit: 2026-11-12
+
+- id: boxes
+  name: Boxes
+  category: ui
+  website: https://boxes.dev/
+  links:
+    x: https://x.com/boxesdotdev
+    docs: https://boxes.dev/help
+  platforms: [macos, linux, web, ios, android]
+  price: freemium
+  open_source: false
+  agents: [Codex, Claude Code]
+  agents_more: 0
+  references:
+    agents: https://boxes.dev/help/connect-agents
+  features: [automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-06
+
+- id: cloudcli
+  name: CloudCLI
+  category: ui
+  website: https://cloudcli.ai/
+  repo: siteboon/claudecodeui
+  links:
+    docs: https://cloudcli.ai/docs
+  platforms: [macos, windows, linux, web]
+  price: freemium
+  open_source: true
+  license: AGPL-3.0
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Cursor CLI]
+  agents_more: 0
+  references:
+    agents: https://github.com/siteboon/claudecodeui#which-option-is-right-for-you
+  features: [worktrees, remote-control, automations, plugins, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2025-07
+  stars: 14583
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 1.37.8
+    date: 2026-11-07
+  last_commit: 2026-11-12
+
+- id: qm
+  name: QM
+  category: ui
+  website: https://labs.ycombinator.com/qm/
+  repo: yc-software/qm
+  links:
+    x: https://x.com/qm__dev
+  platforms: [macos, web, ios]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript]
+  agents: [Codex, Claude Code, OpenCode, Pi]
+  agents_more: 0
+  references:
+    agents: https://labs.ycombinator.com/qm/agents.txt
+  features: [automations, mobile-app, cloud-sandboxes]
+  first_seen: 2026-07
+  stars: 15689
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 0.1.18
+    date: 2026-11-11
+  last_commit: 2026-11-12
+
+- id: openclaw
+  name: OpenClaw
+  category: ui
+  website: https://openclaw.ai/
+  repo: openclaw/openclaw
+  links:
+    x: https://x.com/openclaw
+    docs: https://docs.openclaw.ai/
+  platforms: [macos, windows, linux, web, ios, android]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript]
+  agents: [Claude Code, Codex, OpenCode, Copilot CLI, Cursor CLI, Gemini CLI, Droid, Grok Build]
+  agents_more: 10
+  references:
+    agents: https://docs.openclaw.ai/tools/acp-agents/quickstart#supported-harness-targets
+  features: [remote-control, automations, plugins, mobile-app]
+  first_seen: 2025-11
+  stars: 394407
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 2026.11.3
+    date: 2026-11-10
+  last_commit: 2026-11-12
+
+- id: murmell
+  name: Murmell
+  category: ui
+  website: https://murmell.com/
+  links:
+    x: https://x.com/murmell_
+  platforms: [web]
+  price: waitlist
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Cursor CLI, Kimi CLI]
+  agents_more: 0
+  references:
+    agents: https://murmell.com/agents
+  features: [terminal, cloud-sandboxes]
+  first_seen: 2026-08
+
+- id: capy
+  name: Capy
+  note: Formerly Scrapybara.
+  category: ui
+  website: https://capy.ai/
+  links:
+    x: https://x.com/capydotai
+    docs: https://docs.capy.ai/
+  platforms: [macos, windows, linux, web]
+  price: paid
+  open_source: false
+  features: [worktrees, remote-control, automations, plugins, diff-review, cloud-sandboxes]
+  first_seen: 2025-09
+
+- id: rex
+  name: Rex
+  category: agent-terminal
+  website: https://www.superlogical.com/rex
+  links:
+    x: https://x.com/superlogical
+    docs: https://www.superlogical.com/rex/docs
+  platforms: [macos]
+  price: waitlist
+  open_source: false
+  agents: [Claude Code, Codex, OpenCode, Pi]
+  references:
+    agents: https://www.superlogical.com/rex/docs/automate/agent-skill#supported-agents
+  features: [remote-control, plugins, terminal]
+  first_seen: 2026-10
+
+- id: intent
+  name: Intent
+  category: ui
+  website: https://intentapp.dev/
+  repo: intent-hq/intent
+  release_repo: intent-hq/cloudlands-releases
+  links:
+    x: https://x.com/intentcode
+    docs: https://intentapp.dev/docs
+  platforms: [macos, windows, linux, web, ios]
+  price: free
+  open_source: true
+  license: Apache-2.0
+  tech: [Rust, TypeScript, Electron]
+  agents: [Claude Code, Codex, OpenCode, Pi, Antigravity, Grok Build, Auggie]
+  agents_more: 1
+  references:
+    agents: https://intentapp.dev/docs#setup
+  features: [worktrees, kanban, remote-control, automations, browser, diff-review, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-02
+  stars: 426
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 2.264.2
+    date: 2026-11-01
+  last_commit: 2026-11-12
+
+- id: sculptor
+  name: Sculptor
+  category: ui
+  website: https://imbue.com/product/sculptor
+  repo: imbue-ai/sculptor
+  links:
+    x: https://x.com/imbue_ai
+    docs: https://github.com/imbue-ai/sculptor/tree/main/docs/help
+  platforms: [macos, linux]
+  price: free
+  open_source: true
+  license: MIT
+  tech: [TypeScript, Electron]
+  agents: [Claude Code, Pi]
+  references:
+    agents: https://github.com/imbue-ai/sculptor/blob/main/docs/help/integrated_harnesses.md
+  features: [worktrees, automations, plugins, diff-review, terminal]
+  first_seen: 2025-09
+  stars: 246
+  stars_updated_at: 2026-11-12
+  latest_release:
+    version: 0.49.0
+    date: 2026-10-21
+  last_commit: 2026-11-12
+
+- id: darting
+  name: Darting
+  category: ui
+  website: https://darting.dev/
+  links:
+    docs: https://darting.dev/docs/introduction/
+  platforms: [web]
+  price: paid
+  open_source: false
+  features: [automations, browser, diff-review, terminal, cloud-sandboxes]
+  first_seen: 2026-03
+
+- id: vorflux
+  name: Vorflux
+  category: ui
+  website: https://vorflux.com/
+  links:
+    x: https://x.com/vorfluxai
+    docs: https://vorflux.com/docs
+  platforms: [macos, web, ios, android]
+  price: paid
+  open_source: false
+  features: [automations, browser, terminal, mobile-app, cloud-sandboxes]
+  first_seen: 2026-07
+
+- id: arkenos
+  name: ArkenOS
+  category: ui
+  website: https://iaconautonomics.com/
+  links:
+    x: https://x.com/iaconhq
+    docs: https://docs.iaconautonomics.com/
+  platforms: [macos, windows, linux]
+  price: paid
+  open_source: false
+  tech: [Rust]
+  features: [automations]
+  first_seen: 2026-08
