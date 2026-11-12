@@ -7,7 +7,8 @@
  * - `latest_release` ({ version, date }): the repo's latest stable release
  *   (GitHub excludes drafts and pre-releases), e.g. `desktop-v0.44.0` is
  *   stored as version `0.44.0`. Repos without releases are left untouched.
- *   An entry's `release_tag_prefix` narrows this to tags with that prefix.
+ *   An entry's `release_tag_prefix` narrows this to tags with that prefix,
+ *   and `release_repo` reads releases from a separate repo instead.
  * - `last_commit`: date of the repo's most recent push (GitHub's `pushed_at`,
  *   which covers any branch, not just the default one).
  * - `archived`: written as `true` while the repo is archived, removed otherwise.
@@ -104,7 +105,7 @@ for (const item of doc.contents.items) {
 	try {
 		const [{ fullName, stars, lastCommit, archived }, release] = await Promise.all([
 			fetchRepo(repo),
-			fetchRelease(repo, item.get("release_tag_prefix")),
+			fetchRelease(item.get("release_repo") ?? repo, item.get("release_tag_prefix")),
 		]);
 
 		if (fullName.toLowerCase() !== repo.toLowerCase()) renamed.push(`${repo} → ${fullName}`);

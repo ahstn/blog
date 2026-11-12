@@ -51,6 +51,12 @@ export const adeSchema = z.object({
 	// Only count releases tagged with this prefix (monorepos that also release
 	// a CLI or mobile app), see scripts/update-ades.mjs.
 	release_tag_prefix: z.string().optional(),
+	// Releases published from a separate repo (e.g. a public releases repo
+	// for an app whose source repo has none).
+	release_repo: z
+		.string()
+		.regex(/^[\w.-]+\/[\w.-]+$/, "expected owner/name")
+		.optional(),
 	// Written by scripts/update-ades.mjs -- don't edit by hand.
 	stars: z.number().int().nonnegative().optional(),
 	stars_updated_at: isoDate.optional(),
