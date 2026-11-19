@@ -1,27 +1,33 @@
 ---
 import { getCollection } from "astro:content";
 import BenchChart from "../components/BenchChart.astro";
+import BenchHeatmap from "../components/BenchHeatmap.astro";
 import BenchTable from "../components/BenchTable.astro";
+import BenchTradeoffs from "../components/BenchTradeoffs.astro";
 import type { BenchTask } from "../content.config";
 import Base from "../layouts/Base.astro";
 import {
 	aggregateRows,
+	HARNESSES,
 	LAST_RUN,
+	LAST_RUN_V41,
 	MODEL,
 	SOURCE_URL,
 	taskReportUrl,
 	taskRows,
 } from "../utils/harness-bench";
 
-// Repo-backed data (src/data/harness-bench.yml), not EmDash content, so
-// there's no cacheHint to set. Tasks are listed alphabetically.
-// Explicitly typed: astro:content's generated types resolve to `any` here.
-type Entry = { id: string; data: BenchTask };
-const tasks: Entry[] = (await getCollection("harnessBench")).sort((a: Entry, b: Entry) =>
-	a.id.localeCompare(b.id),
-);
-
-const harnessCount = new Set(tasks.flatMap((t) => t.data.results.map((r) => r.harness))).size;
+// Both suites use repo-backed data, not the CMS. Keep v4 as the default so
+// existing /harness-bench#task-* links still point to the original table.
+const isV41 = Astro.url.searchParams.get("version") === "4.1";
+const version = isV41 ? "4.1" : "4";
+type Entry = { id: string; data: BenchTask & { revision?: string } };
+const tasks: Entry[] = (await getCollection(isV41 ? "harnessBenchV41" : "harnessBench"))
+	.sort((a: Entry, b: Entry) => a.id.localeCompare(b.id));
+const harnesses = HARNESSES.filter((h) => tasks.some(({ data }) => data.results.some((r) => r.harness === h)));
+const common = tasks.filter(({ data }) => harnesses.every((h) => data.results.some((r) => r.harness === h)));
+const aggregateSet = isV41 ? common : tasks;
+const pairCount = tasks.reduce((n, { data }) => n + new Set(data.results.map((r) => r.harness)).size, 0);
 
 const formatDate = (iso: string) =>
 	new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
@@ -34,45 +40,79 @@ const formatDate = (iso: string) =>
 
 <Base
 	title="Harness Bench"
-	description="Terminal-Bench 4 results for coding agent harnesses (Claude Code, Copilot, OMP, OpenCode, Pi, Codex, Hermes and Prime Agent) running the same model: fractional score, official pass, time, tokens and estimated cost per task."
+	description="Terminal-Bench 4 and 4.1 results: fractional scores, official passes, time, cache usage, and estimated cost by coding harness and task."
 >
 	<div class="bench-page">
 		<header class="page-header">
 			<h1 class="page-title">Harness Bench</h1>
 			<p class="page-description">
-				{tasks.length} Terminal-Bench 4 tasks, run through {harnessCount} coding agent harnesses on
-				the same model: <code>{MODEL}</code> via OpenRouter at high reasoning. Not every harness has
-				run every task yet.
+				Coding agent harnesses on <code>{MODEL}</code> via OpenRouter at high reasoning.
+				Pi runs without extensions unless noted.
 			</p>
-			<p class="page-meta">
-				Results from <a href={SOURCE_URL}>ahstn/harness-bench</a>, last run {formatDate(LAST_RUN)}.
-				Pi is vanilla with no extensions, unless specified otherwise.
-			</p>
+			<p class="page-meta">Results from <a href={SOURCE_URL}>ahstn/harness-bench</a>.</p>
 		</header>
 
-		<section class="bench-section" aria-labelledby="chart-heading">
-			<h2 id="chart-heading">Scores by task</h2>
-			<p class="section-description">
-				Each bar uses the newest harness version run on that task; show all versions to compare
-				older ones. Fractional score credits partial repairs: weighted feature completion multiplied by regression preservation.
-			</p>
-			<BenchChart tasks={tasks} />
-		</section>
+		<nav class="suite-tabs" aria-label="Terminal-Bench version">
+			<a href="/harness-bench" aria-current={!isV41 ? "page" : undefined}>v4</a>
+			<a href="/harness-bench?version=4.1" aria-current={isV41 ? "page" : undefined}>v4.1</a>
+		</nav>
+		<p class="suite-summary">
+			<strong>Terminal-Bench {version}</strong> · {tasks.length} tasks · {harnesses.length} harnesses
+			{`${isV41 ? ` · ${pairCount}/${tasks.length * harnesses.length} accepted pairs` : ""} · last run ${formatDate(isV41 ? LAST_RUN_V41 : LAST_RUN)}`}
+		</p>
 
 		<section class="bench-section" aria-labelledby="overall-heading">
 			<h2 id="overall-heading">All tasks aggregated by harness</h2>
 			<p class="section-description">
-				Each harness across the tasks it ran, using the same versions as the chart. Official pass
-				counts the tasks with at least one official pass over the tasks run. Cache read is cached
-				tokens as a share of total tokens:
+				{isV41 ? (
+					<>
+						The default view uses the same {common.length} tasks for all five harnesses, taking
+						the newest accepted version per task. Exact-version rows cover only tasks with a result
+						for that version. Official pass counts tasks with a pass over tasks included. Cache rate
+						is summed cached input divided by summed input tokens, using captured calls only.
+						Versions, routing presets and resource limits vary across cohorts.
+					</>
+				) : (
+					<>
+						Each harness across the tasks it ran, using the same versions as the chart. Official pass
+						counts tasks with at least one pass over tasks included. The legacy cache column is
+						cached tokens divided by total tokens, including output.
+					</>
+				)}
 			</p>
+			{isV41 && (
+				<button type="button" class="version-toggle" aria-pressed="false" data-v41-all-versions>
+					Show all harness versions
+				</button>
+			)}
 			<BenchTable
-				rows={aggregateRows(tasks.map((t) => t.data))}
-				caption="Results by harness across all tasks"
-				versionLabel="Latest version"
+				rows={aggregateRows(aggregateSet.map((t) => t.data), isV41 ? "input" : "total")}
+				caption={isV41 ? "Results by harness on the shared task set" : "Results by harness across all tasks"}
+				versionLabel={isV41 ? "Newest version included" : "Latest version"}
 				cacheRead
+				cacheLabel={isV41 ? "Cache rate" : undefined}
 			/>
 		</section>
+
+		<section class="bench-section" aria-labelledby="chart-heading">
+			<h2 id="chart-heading">Scores by task</h2>
+			<p class="section-description">
+				{isV41
+					? "Versions and older results are in the task tables below."
+					: "Each bar uses the newest harness version run on that task. Show all versions to compare older ones."}
+				{" "}
+				Fractional score credits partial repairs: weighted feature completion multiplied by regression preservation.
+			</p>
+			{isV41 ? <BenchHeatmap tasks={tasks} harnesses={harnesses} /> : <BenchChart tasks={tasks} />}
+		</section>
+
+		{isV41 && (
+			<section class="bench-section" aria-labelledby="tradeoffs-heading">
+				<h2 id="tradeoffs-heading">Score, cost and time</h2>
+				<p class="section-description">Compare quality with the cost and agent time of the selected attempt.</p>
+				<BenchTradeoffs tasks={tasks} />
+			</section>
+		)}
 
 		<section class="bench-section" aria-labelledby="tasks-heading">
 			<h2 id="tasks-heading">Results by task</h2>
@@ -83,6 +123,7 @@ const formatDate = (iso: string) =>
 				aren't counted; N/A means the attempt has no captured metric. Prices are estimates at
 				each cohort's captured reference rates, which differ between cohorts, not provider bills.
 				Rows from different cohorts aren't controlled comparisons.
+				{isV41 && " First attempt means the first accepted attempt. Cache rate uses captured input tokens; incomplete usage is not a full-run estimate."}
 			</p>
 
 			{
@@ -93,9 +134,15 @@ const formatDate = (iso: string) =>
 						</h3>
 						<p class="task-description">{data.description}</p>
 						<p class="task-meta">
-							Best of three · <a href={taskReportUrl(id)}>Source table and cohort reports</a>
+							Best of three · <a href={taskReportUrl(id, data.revision)}>Source table and cohort reports</a>
 						</p>
-						<BenchTable rows={taskRows(data)} caption={`${id} results by harness`} />
+						<BenchTable
+							rows={taskRows(data, data.revision)}
+							caption={`${id} results by harness`}
+							cacheRead={isV41}
+							cacheLabel={isV41 ? "Cache rate" : undefined}
+							firstScore={isV41}
+						/>
 					</article>
 				))
 			}
@@ -108,6 +155,17 @@ const formatDate = (iso: string) =>
 		</section>
 	</div>
 </Base>
+
+<script>
+	const v41Toggle = document.querySelector<HTMLButtonElement>("[data-v41-all-versions]");
+	v41Toggle?.addEventListener("click", () => {
+		const all = v41Toggle.getAttribute("aria-pressed") !== "true";
+		v41Toggle.setAttribute("aria-pressed", String(all));
+		for (const scope of v41Toggle.closest(".bench-page")!.querySelectorAll("[data-version-scope]")) {
+			scope.toggleAttribute("data-all", all);
+		}
+	});
+</script>
 
 <style>
 	/* Chart-only categorical palette: one hue per harness, in HARNESSES order,
@@ -177,6 +235,62 @@ const formatDate = (iso: string) =>
 
 	.page-meta a:hover,
 	.task-meta a:hover {
+		color: var(--color-brand);
+	}
+
+	.suite-tabs {
+		display: flex;
+		gap: var(--spacing-2);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.suite-tabs a {
+		min-width: 4.5rem;
+		padding: var(--spacing-2) var(--spacing-4);
+		border-bottom: 2px solid transparent;
+		color: var(--color-text-secondary);
+		font-weight: var(--font-weight-heading);
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.suite-tabs a[aria-current="page"] {
+		border-bottom-color: var(--color-brand);
+		color: var(--color-brand);
+	}
+
+	.suite-tabs a:hover {
+		color: var(--color-brand);
+		background: var(--color-bg-subtle);
+	}
+
+	.suite-tabs a:focus-visible,
+	.version-toggle:focus-visible {
+		outline: 2px solid var(--color-brand);
+		outline-offset: -2px;
+	}
+
+	.suite-summary {
+		margin: var(--spacing-4) 0 var(--spacing-8);
+		color: var(--color-text-secondary);
+		font-size: var(--font-size-sm);
+	}
+
+	.version-toggle {
+		margin-bottom: var(--spacing-4);
+		padding: var(--spacing-2) var(--spacing-3);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		background: var(--color-surface);
+		color: var(--color-text);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		cursor: pointer;
+	}
+
+	.version-toggle[aria-pressed="true"],
+	.version-toggle:hover {
+		border-color: var(--color-brand);
 		color: var(--color-brand);
 	}
 

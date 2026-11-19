@@ -15,15 +15,16 @@ interface Props {
 	caption: string;
 	/** Header for the version column. */
 	versionLabel?: string;
-	/** Show the cache read share column (aggregate rows carry it). */
+	/** Show the cache read share column. */
 	cacheRead?: boolean;
+	cacheLabel?: string;
+	firstScore?: boolean;
 }
 
-const { rows, caption, versionLabel = "Version", cacheRead = false } = Astro.props;
+const { rows, caption, versionLabel = "Version", cacheRead = false, cacheLabel = "Cache read", firstScore = false } = Astro.props;
 
-// Rows with a view follow the chart's "all versions" toggle (BenchChart sets
-// data-all on every [data-version-scope]). The top score is bolded within
-// each view's visible rows.
+// Rows with a view follow the version toggle's [data-version-scope].
+// The top score is bolded within each view's visible rows.
 const toggled = rows.some((r) => r.view);
 const topOf = (hidden: BenchRow["view"]) =>
 	Math.max(...rows.filter((r) => r.view !== hidden).map((r) => r.score));
@@ -39,12 +40,13 @@ const topAll = topOf("default");
 				<th scope="col">Harness</th>
 				<th scope="col">{versionLabel}</th>
 				<th scope="col" class="num">Fractional score</th>
+				{firstScore && <th scope="col" class="num">First attempt</th>}
 				<th scope="col" class="center">Official pass</th>
 				<th scope="col" class="num">Agent time</th>
 				<th scope="col" class="num">Total time</th>
 				<th scope="col" class="num">Cached tokens</th>
 				<th scope="col" class="num">Total tokens</th>
-				{cacheRead && <th scope="col" class="num">Cache read</th>}
+				{cacheRead && <th scope="col" class="num">{cacheLabel}</th>}
 				<th scope="col" class="num">Estimated price (USD)</th>
 			</tr>
 		</thead>
@@ -64,7 +66,9 @@ const topAll = topOf("default");
 								)}
 							</span>
 						</th>
-						<td class="version">{r.version}</td>
+						<td class="version">
+							{r.versionUrl ? <a href={r.versionUrl} title="Source cohort records">{r.version}</a> : r.version}
+						</td>
 						<td class="num">
 							<span
 								class:list={[
@@ -79,6 +83,12 @@ const topAll = topOf("default");
 							</span>
 							{r.scoreNote && <span class="score-note">{r.scoreNote}</span>}
 						</td>
+						{firstScore && (
+							<td class="num">
+								{r.firstScore === undefined ? "N/A" : formatScore(r.firstScore)}
+								{r.firstAttempt && r.firstAttempt > 1 && <span class="score-note">attempt {r.firstAttempt}</span>}
+							</td>
+						)}
 						<td class="center">{formatPass(r)}</td>
 						<td class="num">{r.agentTime}</td>
 						<td class="num">{r.totalTime}</td>

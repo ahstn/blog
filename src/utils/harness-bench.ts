@@ -22,13 +22,15 @@ export type Harness = (typeof HARNESSES)[number];
 
 export const MODEL = "deepseek/deepseek-v4.1-flash";
 export const SOURCE_URL = "https://github.com/ahstn/harness-bench";
-/** The README's consolidated TB4 task tables, one section per task. */
-export const README_URL = "https://github.com/ahstn/harness-bench/blob/main/README.md";
+/** The consolidated v4.0 and earlier task tables. */
+const README_V4_URL = `${SOURCE_URL}/blob/ef9c09d9125a878bb401b5821f9422eafc873187/README-v4.0.md`;
 /** Newest cohort in src/data/harness-bench.yml; bump when regenerating it. */
 export const LAST_RUN = "2026-10-24";
+export const LAST_RUN_V41 = "2026-11-18";
 
 /** GitHub's anchor for a task's README heading, "<id> (best of three)". */
-export const taskReportUrl = (id: string) => `${README_URL}#${id}-best-of-three`;
+export const taskReportUrl = (id: string, revision?: string) =>
+	`${revision ? `${SOURCE_URL}/blob/${revision}/README.md` : README_V4_URL}#${id}-best-of-three`;
 
 export const seriesSlot = (harness: Harness) => HARNESSES.indexOf(harness) + 1;
 export const seriesColor = (harness: Harness) => `var(--series-${seriesSlot(harness)})`;
@@ -76,14 +78,17 @@ export interface BenchRow {
 	harness: Harness;
 	version: string;
 	score: number;
+	versionUrl?: string;
 	scoreNote?: string;
+	firstScore?: number;
+	firstAttempt?: number;
 	passes: number;
 	attempts: number;
 	agentTime: string;
 	totalTime: string;
 	cachedTokens: number | null;
 	totalTokens: number | null;
-	/** Cached tokens over total tokens; aggregate rows only. */
+	/** Read-cache share of the measured tokens; the page names the denominator. */
 	cacheRead?: number | null;
 	price: number | null;
 	lowerBound: boolean;
@@ -94,19 +99,23 @@ export interface BenchRow {
 const rank = (h: Harness) => HARNESSES.indexOf(h);
 
 /** One task's results: harness order, newest version first. */
-export function taskRows(task: BenchTask): BenchRow[] {
+export function taskRows(task: BenchTask, revision?: string): BenchRow[] {
 	return [...task.results]
 		.sort((a, b) => rank(a.harness) - rank(b.harness) || compareVersions(b.version, a.version))
 		.map((r) => ({
 			harness: r.harness,
 			version: r.version,
+			versionUrl: revision && r.cohort ? `${SOURCE_URL}/tree/${revision}/results/${r.cohort}` : undefined,
 			score: r.score,
 			scoreNote: `best of ${r.attempts}: attempt ${r.best_attempt}`,
+			firstScore: r.first_score,
+			firstAttempt: r.first_attempt,
 			passes: r.passes,
 			attempts: r.attempts,
 			agentTime: r.agent_time,
 			totalTime: r.total_time,
 			cachedTokens: r.cached_tokens,
+			cacheRead: cacheShare(r.cached_tokens, r.input_tokens),
 			totalTokens: r.total_tokens,
 			price: r.price,
 			lowerBound: r.lower_bound,
@@ -128,19 +137,24 @@ export function formatDuration(seconds: number): string {
 	return h ? `${h}h ${m}m ${s}s` : m ? `${m}m ${s}s` : `${s}s`;
 }
 
+const cacheShare = (cached: number | null, denominator: number | null | undefined) =>
+	cached !== null && denominator && cached <= denominator ? cached / denominator : null;
+
+type CacheBasis = "total" | "input";
+
 /**
  * Mean score, tasks passed over tasks run, and totals for time, tokens and
  * price. A task counts as passed when any of its attempts was an official
  * pass, so the denominator is the number of tasks, not attempts. The version
  * is the newest one included. Missing metrics are skipped, which makes those
- * totals lower bounds. Cache read share only counts results with both token
- * metrics.
+ * totals lower bounds. Cache read share only counts results with both counts.
  */
-function aggregate(harness: Harness, results: BenchResult[], view?: RowView): BenchRow {
+function aggregate(harness: Harness, results: BenchResult[], basis: CacheBasis, view?: RowView): BenchRow {
 	const sum = (f: (r: BenchResult) => number | null, rs = results) =>
 		rs.reduce((n, r) => n + (f(r) ?? 0), 0);
-	const metered = results.filter((r) => r.cached_tokens !== null && r.total_tokens !== null);
-	const meteredTotal = sum((r) => r.total_tokens, metered);
+	const denominator = (r: BenchResult) => (basis === "input" ? r.input_tokens ?? null : r.total_tokens);
+	const metered = results.filter((r) => cacheShare(r.cached_tokens, denominator(r)) !== null);
+	const meteredTotal = sum(denominator, metered);
 	const versions = [...new Set(results.map((r) => r.version))].sort((a, b) => compareVersions(b, a));
 	return {
 		harness,
@@ -153,7 +167,7 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
 		totalTime: formatDuration(sum((r) => clockSeconds(r.total_time))),
 		cachedTokens: sum((r) => r.cached_tokens),
 		totalTokens: sum((r) => r.total_tokens),
-		cacheRead: meteredTotal ? sum((r) => r.cached_tokens, metered) / meteredTotal : null,
+		cacheRead: cacheShare(sum((r) => r.cached_tokens, metered), meteredTotal),
 		price: sum((r) => r.price),
 		lowerBound: results.some((r) => r.lower_bound || r.total_tokens === null || r.price === null),
 		escaped: false,
@@ -168,7 +182,7 @@ function aggregate(harness: Harness, results: BenchResult[], view?: RowView): Be
  * harness version gets a row over the tasks it ran. When the default row is
  * exactly one version's row, it's a single always-visible row.
  */
-export function aggregateRows(tasks: BenchTask[]): BenchRow[] {
+export function aggregateRows(tasks: BenchTask[], basis: CacheBasis = "total"): BenchRow[] {
 	return HARNESSES.flatMap((harness) => {
 		const perTask = tasks.map((t) => t.results.filter((r) => r.harness === harness));
 		const latest = perTask
@@ -183,8 +197,8 @@ export function aggregateRows(tasks: BenchTask[]): BenchRow[] {
 		const same = (rs: BenchResult[]) => rs.length === latest.length && rs.every((r) => latest.includes(r));
 
 		if (byVersion.some(same)) {
-			return byVersion.map((rs) => aggregate(harness, rs, same(rs) ? undefined : "all"));
+			return byVersion.map((rs) => aggregate(harness, rs, basis, same(rs) ? undefined : "all"));
 		}
-		return [aggregate(harness, latest, "default"), ...byVersion.map((rs) => aggregate(harness, rs, "all"))];
+		return [aggregate(harness, latest, basis, "default"), ...byVersion.map((rs) => aggregate(harness, rs, basis, "all"))];
 	});
 }

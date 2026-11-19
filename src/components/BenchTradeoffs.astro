@@ -1,0 +1,333 @@
+---
+import type { BenchResult, BenchTask } from "../content.config";
+import {
+	compareVersions,
+	formatDuration,
+	formatPrice,
+	formatScore,
+	HARNESSES,
+	seriesColor,
+} from "../utils/harness-bench";
+
+interface Props {
+	tasks: { id: string; data: BenchTask }[];
+}
+
+const { tasks } = Astro.props;
+
+// Select each task/harness independently; a newer version on another task
+// must not remove this task's accepted result. A zero score is still a result.
+const selected = tasks.flatMap(({ id, data }) => {
+	const latest = new Map<BenchResult["harness"], BenchResult>();
+	for (const result of data.results) {
+		const previous = latest.get(result.harness);
+		if (!previous || compareVersions(result.version, previous.version) > 0) {
+			latest.set(result.harness, result);
+		}
+	}
+	return HARNESSES.flatMap((harness) => {
+		const result = latest.get(harness);
+		if (!result) return [];
+		const [minutes, seconds] = result.agent_time.split(":").map(Number);
+		const agentSeconds = minutes * 60 + seconds;
+		return [{
+			id,
+			result,
+			agentSeconds,
+			detail: `${id} — ${harness} ${result.version}; score ${formatScore(result.score)}; selected attempt ${result.best_attempt} of ${result.attempts}; estimated price ${formatPrice(result.price, result.lower_bound)}${result.lower_bound ? " (lower bound, not an exact cost)" : ""}; agent time ${formatDuration(agentSeconds)}.`,
+		}];
+	});
+});
+
+const legend = HARNESSES.filter((harness) => selected.some((point) => point.result.harness === harness));
+const scoreTicks = [0, 25, 50, 75, 100];
+const plots = (["price", "time"] as const).map((metric) => {
+	const isPrice = metric === "price";
+	const points = selected.flatMap((point) => {
+		const value = isPrice ? point.result.price : point.agentSeconds;
+		return value === null ? [] : [{ ...point, value }];
+	});
+	// log1p includes genuine zero values. A cent and a minute are the
+	// respective reference units; only x is transformed, never the score.
+	const unit = isPrice ? 0.01 : 60;
+	const maximum = Math.max(unit, ...points.map((point) => point.value));
+	const extent = Math.log1p(maximum / unit);
+	const position = (value: number) => (Math.log1p(value / unit) / extent) * 100;
+	const ticks = Array.from({ length: 5 }, (_, index) => {
+		const raw = unit * Math.expm1((index / 4) * extent);
+		const displayValue = Number((raw / (isPrice ? 1 : 60)).toPrecision(2));
+		const value = displayValue * (isPrice ? 1 : 60);
+		return {
+			value,
+			x: position(value),
+			label: isPrice ? `$${displayValue}` : `${displayValue}m`,
+		};
+	});
+	return {
+		metric,
+		isPrice,
+		points: points.map((point) => ({ ...point, x: position(point.value) })),
+		ticks,
+		title: isPrice ? "Score vs estimated price" : "Score vs agent time",
+		xLabel: isPrice ? "Selected attempt estimated price (USD)" : "Selected attempt agent time (minutes)",
+		mapping: isPrice ? "ln(1 + price / $0.01)" : "ln(1 + time / 1 minute)",
+	};
+});
+---
+
+<section class="bench-tradeoffs" aria-label="Score, price and time tradeoffs">
+	<p class="tradeoff-intro">
+		Across all {tasks.length} tasks: one point per task and harness, using its newest
+		numeric version and that version’s selected best attempt. Missing results or metrics
+		are omitted; genuine zero scores and costs are included. These charts always show
+		the latest versions, independently of the version toggle.
+	</p>
+	<ul class="tradeoff-legend" aria-label="Harness colors and point styles">
+		{legend.map((harness) => (
+			<li><span class="legend-dot" style={`--c: ${seriesColor(harness)}`} aria-hidden="true"></span>{harness}</li>
+		))}
+		<li><span class="legend-dot lower-bound-key" aria-hidden="true"></span>Outline: price is a lower bound</li>
+	</ul>
+	<div class="tradeoff-plots">
+		{plots.map((plot) => (
+			<figure class="tradeoff-figure">
+				<figcaption>
+					<h3>{plot.title}</h3>
+					<p>
+						{plot.points.length} points. Score uses a linear 0–100% axis;
+						the horizontal axis is compressed using <code>{plot.mapping}</code>,
+						with ticks labelled in original units.
+						{plot.isPrice
+							? " Outlined points show minimum reported costs, not exact prices; actual costs may lie farther right."
+							: " Time is agent execution time for the selected attempt, not the sum of attempts or total evaluation time."}
+					</p>
+				</figcaption>
+				<div class="plot-frame">
+					<div class="scatter-plot" role="group" aria-label={`${plot.title}; each point links to its task breakdown`}>
+						<div class="axes" aria-hidden="true">
+							<span class="score-label">Score</span>
+							{scoreTicks.map((score) => (
+								<div class="score-grid" style={`bottom: ${score}%`}>
+									<span>{score}%</span>
+								</div>
+							))}
+							{plot.ticks.map((tick) => (
+								<div class="x-tick" style={`left: ${tick.x}%`}><span>{tick.label}</span></div>
+							))}
+						</div>
+						{plot.points.map((point) => (
+							<a
+								class:list={["scatter-point", { "lower-bound": plot.isPrice && point.result.lower_bound }]}
+								href={`#task-${point.id}`}
+								aria-label={point.detail}
+								style={`--c: ${seriesColor(point.result.harness)}; left: ${point.x}%; bottom: ${point.result.score}%; --tooltip-shift: ${point.x < 25 ? "0%" : point.x > 75 ? "-100%" : "-50%"}`}
+							>
+								<span class="point-dot" aria-hidden="true"></span>
+								<span class="point-detail" aria-hidden="true">{point.detail}</span>
+							</a>
+						))}
+					</div>
+					<p class="x-label">{plot.xLabel}</p>
+				</div>
+			</figure>
+		))}
+	</div>
+	<p class="tradeoff-note">Hover or focus a point for task, version, score, attempt, price and time; follow it to the task breakdown. Coincident points may overlap.</p>
+</section>
+
+<style>
+	.bench-tradeoffs {
+		margin-block: var(--spacing-6);
+	}
+
+	.tradeoff-intro,
+	.tradeoff-note,
+	.tradeoff-figure figcaption p {
+		color: var(--color-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	.tradeoff-legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-2) var(--spacing-5);
+		padding: 0;
+		margin-block: var(--spacing-4) var(--spacing-6);
+		list-style: none;
+		font-size: var(--font-size-sm);
+	}
+
+	.tradeoff-legend li {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+	}
+
+	.legend-dot {
+		flex: 0 0 auto;
+		width: 0.65rem;
+		height: 0.65rem;
+		border: 2px solid var(--c);
+		border-radius: 50%;
+		background: var(--c);
+	}
+
+	.lower-bound-key {
+		--c: var(--color-text);
+		background: var(--color-bg);
+	}
+
+	.tradeoff-plots {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+		gap: var(--spacing-6);
+	}
+
+	.tradeoff-figure {
+		min-width: 0;
+		margin: 0;
+	}
+
+	@supports (grid-template-rows: subgrid) {
+		.tradeoff-plots {
+			row-gap: 0;
+		}
+
+		.tradeoff-figure {
+			display: grid;
+			grid-row: span 2;
+			grid-template-rows: subgrid;
+		}
+
+		.tradeoff-figure + .tradeoff-figure {
+			margin-top: var(--spacing-4);
+		}
+
+		@media (min-width: 64rem) {
+			.tradeoff-figure + .tradeoff-figure {
+				margin-top: 0;
+			}
+		}
+	}
+
+	.tradeoff-figure h3 {
+		margin: 0 0 var(--spacing-2);
+		font-size: var(--font-size-base);
+	}
+
+	.tradeoff-figure figcaption p {
+		margin: 0;
+	}
+
+	.tradeoff-figure code {
+		white-space: normal;
+	}
+
+	.plot-frame {
+		padding-top: 2rem;
+	}
+
+	.scatter-plot {
+		position: relative;
+		height: clamp(15rem, 36vw, 21rem);
+		margin: 0 1.5rem 2.25rem 3rem;
+		border-left: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.axes {
+		font-size: var(--font-size-xs);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+	}
+
+	.score-label {
+		position: absolute;
+		top: -1.6rem;
+		left: -2.8rem;
+	}
+
+	.score-grid {
+		position: absolute;
+		inset-inline: 0;
+		border-top: 1px solid var(--color-border-subtle);
+	}
+
+	.score-grid span {
+		position: absolute;
+		right: calc(100% + 0.5rem);
+		transform: translateY(-50%);
+	}
+
+	.x-tick {
+		position: absolute;
+		bottom: -0.3rem;
+		height: 0.3rem;
+		border-left: 1px solid var(--color-border);
+	}
+
+	.x-tick span {
+		position: absolute;
+		top: 0.5rem;
+		white-space: nowrap;
+		transform: translateX(-50%);
+	}
+
+	.x-label {
+		margin: 0 0 var(--spacing-3) 1.5rem;
+		text-align: center;
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.scatter-point {
+		position: absolute;
+		width: 1rem;
+		height: 1rem;
+		transform: translate(-50%, 50%);
+		border-radius: 50%;
+		z-index: 1;
+	}
+
+	.point-dot {
+		position: absolute;
+		inset: 0.15rem;
+		border: 2px solid var(--c);
+		border-radius: 50%;
+		background: var(--c);
+	}
+
+	.lower-bound .point-dot {
+		background: var(--color-bg);
+	}
+
+	.scatter-point:hover,
+	.scatter-point:focus-visible {
+		z-index: 3;
+		outline: 2px solid var(--color-text);
+		outline-offset: 2px;
+	}
+
+	.point-detail {
+		display: none;
+		position: absolute;
+		left: 50%;
+		top: 1.4rem;
+		transform: translateX(var(--tooltip-shift));
+		width: max-content;
+		max-width: min(19rem, 65vw);
+		padding: var(--spacing-2) var(--spacing-3);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		background: var(--color-bg);
+		color: var(--color-text);
+		font-size: var(--font-size-xs);
+		line-height: 1.5;
+		pointer-events: none;
+	}
+
+	.scatter-point:hover .point-detail,
+	.scatter-point:focus-visible .point-detail {
+		display: block;
+	}
+</style>

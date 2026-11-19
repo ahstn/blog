@@ -86,6 +86,8 @@ export const benchResultSchema = z.object({
 	// Coerced: YAML would read a bare `1.10` as a number.
 	version: z.coerce.string(),
 	score: z.number().min(0).max(100),
+	first_score: z.number().min(0).max(100).optional(),
+	first_attempt: z.number().int().positive().optional(),
 	best_attempt: z.number().int().positive(),
 	attempts: z.number().int().positive(),
 	passes: z.number().int().nonnegative(),
@@ -93,10 +95,12 @@ export const benchResultSchema = z.object({
 	total_time: clock,
 	// null when the selected attempt has no captured metric (README's N/A).
 	cached_tokens: z.number().int().nonnegative().nullable(),
+	input_tokens: z.number().int().positive().nullable().optional(),
 	total_tokens: z.number().int().nonnegative().nullable(),
 	price: z.number().nonnegative().nullable(),
 	lower_bound: z.boolean().default(false),
 	escaped: z.boolean().default(false),
+	cohort: z.string().regex(/^[a-z0-9-]+$/).optional(),
 });
 
 // One row per exact harness version, each its best attempt (best of three).
@@ -113,4 +117,9 @@ const harnessBench = defineCollection({
 	schema: benchTaskSchema,
 });
 
-export const collections = { agenticDevEnvs, harnessBench };
+const harnessBenchV41 = defineCollection({
+	loader: file("src/data/harness-bench-v41.json"),
+	schema: benchTaskSchema.extend({ revision: z.string().regex(/^[a-f0-9]{40}$/) }),
+});
+
+export const collections = { agenticDevEnvs, harnessBench, harnessBenchV41 };

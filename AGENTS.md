@@ -61,11 +61,12 @@ A blog with posts, pages, categories, tags, full-text search, and RSS. Designed 
 
 ## Harness Bench
 
-`/harness-bench` renders Terminal-Bench 4 results from `src/data/harness-bench.yml`, a build-time content collection (not EmDash content). The data mirrors the consolidated per-task tables in the [ahstn/harness-bench](https://github.com/ahstn/harness-bench) README (`main` branch): one row per exact harness version. PiG and Empryo rows are left out. Hermes's `2026.9.24` date tag is written as `0.21.5`, the release it names, so versions sort correctly.
+`/harness-bench` defaults to Terminal-Bench 4 from `src/data/harness-bench.yml`. The `?version=4.1` tab reads `src/data/harness-bench-v41.json`. Both are build-time collections, not EmDash content. Each row is the best accepted attempt from the newest cohort for that exact harness version. The v4 data omits PiG and Empryo and writes Hermes's `2026.9.24` date tag as `0.21.5`, the release it names.
 
 - Harness names are `Claude Code`, `Copilot`, `OMP`, `OpenCode v2`, `Pi`, `Codex`, `Hermes` and `Prime Agent` (`HARNESSES` in `src/utils/harness-bench.ts`). New harnesses go on the end so existing ones keep their chart colour, and each needs a `--series-N` colour in `src/pages/harness-bench.astro`. Use `Pi`, not "Pi baseline" as the README calls it: Pi is vanilla with no extensions unless a row says otherwise.
 - The aggregate table's official pass is tasks with at least one official pass over tasks run, not passes over attempts. Per-task rows keep passes over attempts.
-- When regenerating the data, bump `LAST_RUN` in `src/utils/harness-bench.ts` to the newest cohort date.
+- The v4.1 headline uses the tasks that have an accepted result for all five harnesses. Its plots and task tables include all tasks. V4.1 cache rate uses cached input divided by input; the aggregate uses sums over rows with both counts. The v4 legacy cache column uses total tokens.
+- To refresh v4.1, from this checkout run `uv run --project /path/to/harness-bench --locked python -B scripts/export-tb41.py /path/to/harness-bench > src/data/harness-bench-v41.json`. Use a harness-bench checkout with the report readers that match the selected revision. The export checks every row against the tracked README. Bump `LAST_RUN_V41` in `src/utils/harness-bench.ts` to the newest cohort date (`LAST_RUN` for v4).
 
 ## Schema
 

@@ -1,0 +1,178 @@
+---
+import type { BenchTask } from "../content.config";
+import {
+	type Harness,
+	compareVersions,
+	formatScore,
+	seriesColor,
+} from "../utils/harness-bench";
+
+interface Props {
+	tasks: { id: string; data: BenchTask }[];
+	harnesses: readonly Harness[];
+}
+
+const { tasks, harnesses } = Astro.props;
+const rows = tasks.map(({ id, data }) => ({
+	id,
+	cells: harnesses.map((harness) => ({
+		harness,
+		result: data.results
+			.filter((result) => result.harness === harness)
+			.sort((a, b) => compareVersions(b.version, a.version))[0],
+	})),
+}));
+---
+
+<div class="bench-heatmap">
+	<div class="heatmap-scroll" role="region" aria-label="Task scores by harness, horizontally scrollable" tabindex="0">
+		<table>
+			<caption>
+				Best accepted score for the newest harness version on each task. Stronger color means a higher score. — means no accepted result, not 0%.
+			</caption>
+			<thead>
+				<tr>
+					<th scope="col">Task</th>
+					{harnesses.map((harness) => (
+						<th scope="col">
+							<span class="harness-name">
+								<span class="swatch" style={`--harness-color: ${seriesColor(harness)}`} aria-hidden="true"></span>
+								{harness}
+							</span>
+						</th>
+					))}
+				</tr>
+			</thead>
+			<tbody>
+				{rows.map(({ id, cells }) => (
+					<tr>
+						<th scope="row"><a href={`#task-${id}`}>{id}</a></th>
+						{cells.map(({ harness, result }) => (
+							<td>
+								{result ? (
+									<span
+										class="score"
+										style={`--harness-color: ${seriesColor(harness)}; --score-strength: ${18 + 0.82 * result.score}%`}
+									>{formatScore(result.score)}</span>
+								) : (
+									<span class="missing" aria-label={`No result for ${harness} on ${id}`}>—</span>
+								)}
+							</td>
+						))}
+					</tr>
+				))}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<style>
+	.bench-heatmap {
+		margin: 0;
+	}
+
+	.heatmap-scroll {
+		overflow-x: auto;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.heatmap-scroll:focus-visible,
+	a:focus-visible {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--font-size-sm);
+		line-height: var(--leading-snug);
+	}
+
+	caption {
+		padding: var(--spacing-3);
+		text-align: left;
+		color: var(--color-text-secondary);
+		background: var(--color-bg-subtle);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	th,
+	td {
+		padding: var(--spacing-2);
+		border-bottom: 1px solid var(--color-border-subtle);
+		vertical-align: top;
+		text-align: center;
+	}
+
+	thead th {
+		background: var(--color-bg-subtle);
+		font-weight: var(--font-weight-heading);
+		vertical-align: bottom;
+	}
+
+	tbody tr:last-child > * {
+		border-bottom: none;
+	}
+
+	th:first-child {
+		min-width: 12rem;
+		text-align: left;
+	}
+
+	tbody th {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-heading);
+		overflow-wrap: anywhere;
+	}
+
+	a {
+		color: var(--color-text);
+		text-decoration-color: var(--color-border);
+		text-underline-offset: 0.2em;
+	}
+
+	a:hover {
+		color: var(--color-brand);
+	}
+
+	.harness-name {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+		white-space: nowrap;
+	}
+
+	.swatch {
+		width: 0.625rem;
+		height: 0.625rem;
+		flex-shrink: 0;
+		border-radius: 2px;
+		background: var(--harness-color);
+	}
+
+	td {
+		min-width: 7rem;
+	}
+
+	.score {
+		display: block;
+		padding: var(--spacing-2);
+		border-radius: 2px;
+		--score-color: light-dark(
+			color-mix(in srgb, var(--harness-color) 74%, white),
+			color-mix(in srgb, var(--harness-color) 70%, black)
+		);
+		background: color-mix(in srgb, var(--score-color) var(--score-strength), var(--color-bg));
+		color: var(--color-text);
+		font-weight: var(--font-weight-heading);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
+
+	.missing {
+		color: var(--color-muted);
+	}
+</style>
